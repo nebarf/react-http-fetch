@@ -1,0 +1,42 @@
+{
+  "name": "react-axios",
+  "version": "1.0.0",
+  "description": "An http library for React JS built on top of axios",
+  "main": "index.js",
+  "module": "./lib/esm/index,js",
+  "types": "./lib/esm/index.d.ts",
+  "repository": "git@github.com:nebarf/react-axios.git",
+  "author": "nebarf <francesco.benedetto@sistinf.it>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/react": "^17.0.27",
+    "@types/react-dom": "^17.0.9",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.26.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.0",
+    "lint-staged": "^11.2.0",
+    "prettier": "^2.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.3"
+  },
+  "scripts": {
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "dependencies": {
+    "axios": "^0.22.0"
+  }
+}
