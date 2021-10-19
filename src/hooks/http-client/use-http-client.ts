@@ -1,28 +1,30 @@
-import { HttpError } from '../../errors/http-error';
 import { AbortableHttpRequestReturn, UseHttpClientReturn } from './types';
 import { PerformHttpRequestParams } from '.';
 import { useCallback } from 'react';
-import { useHttpClientConfig } from '../../providers/http-client-provider';
+import { useHttpClientConfig } from '../..';
 
 export const useHttpClient = (): UseHttpClientReturn => {
-  const { reqOptions: defaultOptions, globalParser, baseUrl } = useHttpClientConfig();
+  const {
+    config: { reqOptions: defaultOptions, responseParser, requestBodySerializer, baseUrl },
+    interceptors,
+  } = useHttpClientConfig();
 
   /**
-   * Performs a fetch.
-   * @param {*} url
-   * @param {*} requestOptions
+   * Perform a fetch request allowing to observe the response stream.
    */
-  const performHttpRequest = useCallback(
-    <HttpResponse>({
+  const performObservableHttpRequest = useCallback(
+    ({
       baseUrlOverride,
-      parser,
       relativeUrl,
       requestOptions,
-    }: PerformHttpRequestParams): Promise<HttpResponse> => {
+    }: Pick<
+      PerformHttpRequestParams,
+      'baseUrlOverride' | 'relativeUrl' | 'requestOptions'
+    >): Promise<Response> => {
       const computedBaseUrl = baseUrlOverride || baseUrl;
       const url = `${computedBaseUrl}/${relativeUrl}`;
 
-      const { body, method, headers = {}, credentials, signal } = requestOptions;
+      const { body, method, headers = {}, credentials, signal } = requestOptions || {};
       const mergedOptions = {
         method: method || defaultOptions.method,
         credentials: credentials || defaultOptions.credentials,
@@ -31,34 +33,56 @@ export const useHttpClient = (): UseHttpClientReturn => {
           ...defaultOptions.headers,
           ...headers,
         },
-        body,
+        body: body ? requestBodySerializer(body) : null,
       };
 
-      return fetch(url, mergedOptions).then((response: Response) => {
-        // Handle any network errors.
+      // Catch network errors and turn them into a rejected promise.
+      const fetchPromise = fetch(url, mergedOptions).then((response: Response) => {
+        // Handle any errors different than the network ones
+        // (e.g. 4xx and 5xx are not network errors).
         if (!response.ok) {
-          return response.text().then((resBody: string) => {
-            const { status, statusText } = response;
-            throw new HttpError(
-              `${statusText || 'Network Error - Unkown Error'}`,
-              status,
-              statusText,
-              resBody
-            );
-          });
+          throw response;
         }
-        // JSON conversion if there were no network error.
-        const computedParser = parser || globalParser;
-        return computedParser<HttpResponse>(response) as Promise<HttpResponse>;
+        return response;
       });
+
+      // Run http interceptors.
+      interceptors.forEach((interceptor) => interceptor(fetchPromise));
+
+      return fetchPromise;
     },
-    [baseUrl, globalParser, defaultOptions]
+    [baseUrl, defaultOptions, interceptors, requestBodySerializer]
   );
 
   /**
-   * Performs an abortable fetch.
-   * @param {*} url
-   * @param {*} requestOptions
+   * Performs a fetch request.
+   */
+  const performHttpRequest = useCallback(
+    <HttpResponse>({
+      baseUrlOverride,
+      parser,
+      relativeUrl,
+      requestOptions,
+    }: PerformHttpRequestParams): Promise<HttpResponse> => {
+      const fetchPromise = performObservableHttpRequest({
+        baseUrlOverride,
+        relativeUrl,
+        requestOptions,
+      });
+
+      return fetchPromise.then((response: Response) => {
+        // JSON conversion if there were no network error.
+        const computedParser = parser || responseParser;
+        return (
+          computedParser ? computedParser<HttpResponse>(response) : response
+        ) as Promise<HttpResponse>;
+      });
+    },
+    [responseParser, performObservableHttpRequest]
+  );
+
+  /**
+   * Performs an abortable fetch request.
    */
   const performAbortableHttpRequest = useCallback(
     <HttpResponse>({
@@ -82,7 +106,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
 
       return [requestPromise, abortController];
     },
-    [baseUrl, globalParser, defaultOptions]
+    [performHttpRequest]
   );
 
   return { performHttpRequest, performAbortableHttpRequest };

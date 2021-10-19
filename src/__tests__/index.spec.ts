@@ -1,7 +1,5 @@
-import { sayHello } from '..';
-
 describe('', () => {
   test('', () => {
-    sayHello('Nebarf');
+    expect(1).toBe(1);
   });
 });

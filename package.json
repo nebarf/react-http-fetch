@@ -1,12 +1,12 @@
 {
-  "name": "react-axios",
+  "name": "react-fetch",
   "version": "1.0.0",
-  "description": "An http library for React JS built on top of axios",
+  "description": "An http library for React JS built on top of native JS fetch",
   "main": "index.js",
-  "module": "./lib/esm/index,js",
+  "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
-  "repository": "git@github.com:nebarf/react-axios.git",
-  "author": "nebarf <francesco.benedetto@sistinf.it>",
+  "repository": "git@github.com:nebarf/react-fetch.git",
+  "author": "nebarf <francesco.benedetto263@gmail.com>",
   "license": "MIT",
   "files": [
     "/lib"
@@ -37,6 +37,7 @@
   },
   "scripts": {
     "build": "yarn build:esm && yarn build:cjs",
+    "build:watch": "yarn build:esm -- -w && yarn build:cjs -- -w",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir lib/cjs",
     "prepare": "husky install",
