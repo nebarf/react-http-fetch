@@ -32,7 +32,7 @@
     "no-console": "error",
     "no-mixed-operators": "warn",
     "no-param-reassign": "warn",
-    "no-shadow": "error",
+    "no-shadow": "off",
     "@typescript-eslint/no-shadow": "error",
     "no-unused-expressions": "error",
     "no-use-before-define": 0,
