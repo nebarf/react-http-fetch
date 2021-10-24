@@ -1,27 +1,39 @@
-import { HttpStatusCode } from '..';
+import { HttpRequestInfo, HttpStatusCode } from '..';
 
-export class HttpError extends Error {
+export class HttpError<T> extends Error {
   /**
    * The http status code.
    */
-  status: HttpStatusCode;
+  status?: HttpStatusCode;
 
   /**
    * The http statsu text.
    */
-  statusText: string;
+  statusText?: string;
 
   /**
    * The stringified response body.
    */
-  body: string;
+  response?: T;
 
-  constructor(message: string, status: HttpStatusCode, statusText: string, body: string) {
+  /**
+   * The request info.
+   */
+  request?: HttpRequestInfo;
+
+  constructor(
+    message: string,
+    status?: HttpStatusCode,
+    requestInfo?: HttpRequestInfo,
+    statusText?: string,
+    response?: T
+  ) {
     super(message);
 
     this.status = status;
+    this.request = requestInfo;
     this.statusText = statusText;
-    this.body = body;
+    this.response = response;
 
     // Set the prototype explicitly.
     Object.setPrototypeOf(this, HttpError.prototype);
