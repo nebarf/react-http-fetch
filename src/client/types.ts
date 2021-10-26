@@ -16,11 +16,27 @@ export interface PerformHttpRequestParams {
   requestOptions: Partial<HttpRequestOptions>;
 }
 
-export interface UseHttpClientReturn<HttpResponse = Response> {
-  performHttpRequest: (params: PerformHttpRequestParams) => Promise<HttpResponse>;
-  performAbortableHttpRequest: (
-    params: PerformHttpRequestParams
-  ) => AbortableHttpRequestReturn<HttpResponse>;
+export type HttpClientRequest = <HttpResponse = Response>(
+  params: PerformHttpRequestParams
+) => Promise<HttpResponse>;
+
+export type HttpClientAbortableRequest = <HttpResponse = Response>(
+  params: PerformHttpRequestParams
+) => AbortableHttpRequestReturn<HttpResponse>;
+
+export interface UseHttpClientReturn {
+  request: HttpClientRequest;
+  get: HttpClientRequest;
+  post: HttpClientRequest;
+  put: HttpClientRequest;
+  patch: HttpClientRequest;
+  deleteReq: HttpClientRequest;
+  abortableRequest: HttpClientAbortableRequest;
+  abortableGet: HttpClientAbortableRequest;
+  abortablePost: HttpClientAbortableRequest;
+  abortablePatch: HttpClientAbortableRequest;
+  abortablePut: HttpClientAbortableRequest;
+  abortableDelete: HttpClientAbortableRequest;
 }
 
 export interface HttpRequestOptions<RequestBody = BodyInit> {
