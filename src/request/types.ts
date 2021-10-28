@@ -1,4 +1,4 @@
-import { HttpRequestOptions, HttpResponseParser } from '../..';
+import { HttpRequestOptions, HttpResponseParser } from '../client';
 import { HttpRequestState } from './state-reducer';
 
 export interface UseHttpRequestParams<T> {

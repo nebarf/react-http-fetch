@@ -1,10 +1,10 @@
 import { Reducer, useCallback, useEffect, useReducer, useRef } from 'react';
-import { PerformHttpRequestParams, useHttpClient } from '../..';
 import { HttpReqActionType, requestError, requestInit, requestSuccess } from './action-creators';
 import { httpRequestReducer, HttpRequestState, initialState } from './state-reducer';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import fastCompare from 'react-fast-compare';
-import { useCompareCallback } from '../../shared/use-compare-callback';
+import { PerformHttpRequestParams, useHttpClient } from '../client';
+import { useCompareCallback } from '../shared/use-compare-callback';
 
 export const useHttpRequest = <HttpResponse>(
   params: UseHttpRequestParams<HttpResponse>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { HttpMethod } from '../..';
+import { HttpMethod } from '../enum';
 import { UseHttpRequestParams } from './types';
 
 export const useOverridedParamsByMethod = <HttpResponse>(

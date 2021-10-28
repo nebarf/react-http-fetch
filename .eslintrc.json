@@ -33,7 +33,7 @@
       "warn",
       {
         "additionalHooks":
-          "(useCustomCompareEffect|useCustomCompareLayoutEffect|useCustomCompareMemo|useCustomCompareCallback)"
+          "(useCompareCallback)"
       }
     ],
     "camelcase": "warn",

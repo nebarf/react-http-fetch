@@ -1,11 +1,11 @@
-import { useHttpRequest } from '..';
-import { HttpMethod } from '../..';
+import { useHttpRequest } from '.';
+import { HttpMethod } from '../enum';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import { useOverridedParamsByMethod } from './use-overrided-params-by-method';
 
-export const useHttpPost = <HttpResponse>(
+export const useHttpDelete = <HttpResponse>(
   params: UseHttpRequestParams<HttpResponse>
 ): UseHttpRequestReturn<HttpResponse> => {
-  const overridedParams = useOverridedParamsByMethod(params, HttpMethod.Post);
+  const overridedParams = useOverridedParamsByMethod(params, HttpMethod.Delete);
   return useHttpRequest<HttpResponse>(overridedParams);
 };

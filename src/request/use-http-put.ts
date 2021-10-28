@@ -1,5 +1,5 @@
-import { useHttpRequest } from '..';
-import { HttpMethod } from '../..';
+import { useHttpRequest } from '.';
+import { HttpMethod } from '../enum';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import { useOverridedParamsByMethod } from './use-overrided-params-by-method';
 
