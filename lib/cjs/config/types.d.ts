@@ -11,10 +11,8 @@ export interface HttpReqConfig {
 export declare type HttpInterceptor = (request: Promise<Response>) => Promise<void>;
 export interface HttpClientContextProps {
     config: HttpReqConfig;
-    interceptors: HttpInterceptor[];
 }
 export interface HttpClientProviderProps {
     children: ReactElement;
     config: HttpReqConfig;
-    interceptors: HttpInterceptor[];
 }

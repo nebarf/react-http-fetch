@@ -50,5 +50,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-fast-compare": "^3.2.0"
+  }
 }

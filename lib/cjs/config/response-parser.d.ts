@@ -1,1 +1,1 @@
-export declare function jsonHttpResponseParser<HttpResponse>(res: Response): Promise<HttpResponse>;
+export declare function httpResponseParser<HttpResponse>(res: Response): Promise<HttpResponse>;

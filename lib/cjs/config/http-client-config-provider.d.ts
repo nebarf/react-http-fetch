@@ -5,7 +5,7 @@ import { HttpClientContextProps, HttpClientProviderProps } from './types';
  */
 export declare const HttpClientContext: React.Context<HttpClientContextProps>;
 declare const memoizedProvider: React.MemoExoticComponent<{
-    ({ config, interceptors, children, }: HttpClientProviderProps): ReactElement;
+    ({ config, children }: HttpClientProviderProps): ReactElement;
     displayName: string;
 }>;
 export { memoizedProvider as HttpClientConfigProvider };

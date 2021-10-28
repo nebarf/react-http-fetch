@@ -1,7 +1,9 @@
+import { HttpError } from '../..';
 import { HttpEvent } from './http-event';
-export declare class RequestErroredEvent extends HttpEvent<void> {
+export declare class RequestErroredEvent<T> extends HttpEvent<HttpError<T>> {
     /**
      * @inheritdoc
      */
-    payload: void;
+    payload: HttpError<T>;
+    constructor(payload: HttpError<T>);
 }

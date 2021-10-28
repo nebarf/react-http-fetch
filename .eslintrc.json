@@ -28,7 +28,14 @@
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
     "react-hooks/rules-of-hooks": "error", // Check hooks rules
-    "react-hooks/exhaustive-deps": "warn", // Check hooks deps
+    // "react-hooks/exhaustive-deps": "warn", // Check hooks deps
+    "react-hooks/exhaustive-deps": [
+      "warn",
+      {
+        "additionalHooks":
+          "(useCustomCompareEffect|useCustomCompareLayoutEffect|useCustomCompareMemo|useCustomCompareCallback)"
+      }
+    ],
     "camelcase": "warn",
     "class-methods-use-this": "off",
     "no-alert": "error",

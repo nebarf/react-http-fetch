@@ -1,7 +1,13 @@
+import { HttpRequestInfo } from '../..';
 import { HttpEvent } from './http-event';
-export declare class RequestSuccededEvent extends HttpEvent<void> {
+export interface RequestSuccededEventPayload<T> {
+    request: HttpRequestInfo;
+    response: T;
+}
+export declare class RequestSuccededEvent<T> extends HttpEvent<RequestSuccededEventPayload<T>> {
     /**
      * @inheritdoc
      */
-    payload: void;
+    payload: RequestSuccededEventPayload<T>;
+    constructor(payload: RequestSuccededEventPayload<T>);
 }
