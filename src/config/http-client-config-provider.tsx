@@ -1,5 +1,5 @@
 import React, { ReactElement, createContext, useContext, memo, useMemo } from 'react';
-import { defaultClientProps, defaultHttpReqConfig, HttpReqConfig } from '.';
+import { defaultClientProps, defaultHttpReqConfig, HttpClientConfig } from '.';
 import { HttpClientContextProps, HttpClientProviderProps } from './types';
 
 /**
@@ -14,13 +14,14 @@ const HttpClientConfigProvider = ({ config, children }: HttpClientProviderProps)
   /**
    * The merged http config.
    */
-  const mergedHttpConfig: HttpReqConfig = useMemo(
+  const mergedHttpConfig: HttpClientConfig = useMemo(
     () => ({
       baseUrl: config.baseUrl || defaultHttpReqConfig.baseUrl,
       responseParser: config.responseParser || defaultHttpReqConfig.responseParser,
       reqOptions: config.reqOptions || defaultHttpReqConfig.reqOptions,
       requestBodySerializer:
         config.requestBodySerializer || defaultHttpReqConfig.requestBodySerializer,
+      cache: config.cache || defaultHttpReqConfig.cache,
     }),
     [config]
   );

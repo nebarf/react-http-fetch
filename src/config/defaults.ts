@@ -1,8 +1,9 @@
-import { HttpClientContextProps, HttpReqConfig } from '.';
+import { HttpClientContextProps, HttpClientConfig } from '.';
 import { httpResponseParser } from './response-parser';
 import { serializeRequestBody } from './request-body-serializer';
+import { HttpInMemoryCacheService } from '@/cache';
 
-export const defaultHttpReqConfig: HttpReqConfig = {
+export const defaultHttpReqConfig: HttpClientConfig = {
   baseUrl: '',
   responseParser: httpResponseParser,
   requestBodySerializer: serializeRequestBody,
@@ -11,6 +12,7 @@ export const defaultHttpReqConfig: HttpReqConfig = {
       'Content-Type': 'application/json',
     },
   },
+  cache: new HttpInMemoryCacheService(),
 };
 
 export const defaultClientProps: HttpClientContextProps = {

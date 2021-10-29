@@ -1,4 +1,4 @@
-import { HttpRequestInfo, HttpStatusCode } from '..';
+import { HttpRequest, HttpStatusCode } from '..';
 export declare class HttpError<T> extends Error {
     /**
      * The http status code.
@@ -15,6 +15,6 @@ export declare class HttpError<T> extends Error {
     /**
      * The request info.
      */
-    request?: HttpRequestInfo;
-    constructor(message: string, status?: HttpStatusCode, requestInfo?: HttpRequestInfo, statusText?: string, response?: T);
+    request?: HttpRequest;
+    constructor(message: string, status?: HttpStatusCode, requestInfo?: HttpRequest, statusText?: string, response?: T);
 }

@@ -1,8 +1,8 @@
-import { HttpRequestInfo } from '../..';
+import { HttpRequest } from '../..';
 import { HttpEvent } from './http-event';
 
 export interface RequestSuccededEventPayload<T> {
-  request: HttpRequestInfo;
+  request: HttpRequest;
   response: T;
 }
 

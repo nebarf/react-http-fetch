@@ -1,4 +1,4 @@
-import { HttpMethod } from '..';
+import { HttpMethod } from '@/enum';
 export interface UseHttpClientParams {
     baseUrl: string;
 }
@@ -30,12 +30,11 @@ export interface UseHttpClientReturn {
 }
 export interface HttpRequestOptions<RequestBody = BodyInit> {
     body: RequestBody | null | undefined;
-    method: HttpMethod;
-    headers: HeadersInit;
     credentials: RequestCredentials | undefined;
-    signal: AbortSignal;
-}
-export interface HttpRequestInfo extends RequestInit {
-    url: string;
+    headers?: HeadersInit;
+    maxAge?: number;
+    method: HttpMethod;
+    queryParams?: Record<string, string>;
+    signal?: AbortSignal;
 }
 export declare type HttpResponseParser = <HttpResponse>(response: Response) => Promise<HttpResponse>;

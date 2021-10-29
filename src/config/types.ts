@@ -1,3 +1,4 @@
+import { HttpCache } from '@/cache';
 import { ReactElement } from 'react';
 import { HttpRequestOptions, HttpResponseParser } from '..';
 
@@ -10,20 +11,21 @@ export type ReqBodySerializerReturn =
   | URLSearchParams;
 export type HttpRequestBodySerializer = (body: BodyInit) => ReqBodySerializerReturn;
 
-export interface HttpReqConfig {
+export interface HttpClientConfig {
   reqOptions: Partial<HttpRequestOptions>;
   baseUrl: string;
   responseParser: HttpResponseParser;
   requestBodySerializer: HttpRequestBodySerializer;
+  cache: HttpCache;
 }
 
 export type HttpInterceptor = (request: Promise<Response>) => Promise<void>;
 
 export interface HttpClientContextProps {
-  config: HttpReqConfig;
+  config: HttpClientConfig;
 }
 
 export interface HttpClientProviderProps {
   children: ReactElement;
-  config: HttpReqConfig;
+  config: HttpClientConfig;
 }

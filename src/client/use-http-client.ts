@@ -1,5 +1,5 @@
 import { AbortableHttpRequestReturn, UseHttpClientReturn } from './types';
-import { HttpRequestInfo, PerformHttpRequestParams } from '.';
+import { HttpRequest, PerformHttpRequestParams } from '.';
 import { useCallback } from 'react';
 import {
   RequestErroredEvent,
@@ -39,25 +39,36 @@ export const useHttpClient = (): UseHttpClientReturn => {
       const computedBaseUrl = baseUrlOverride || baseUrl;
       const url = `${computedBaseUrl}/${relativeUrl}`;
 
-      const { body, method, headers = {}, credentials, signal } = requestOptions || {};
+      const {
+        body,
+        method,
+        headers = {},
+        credentials,
+        signal,
+        maxAge,
+        queryParams,
+      } = requestOptions || {};
       const mergedOptions = {
-        method: method || defaultOptions.method,
+        method: method || defaultOptions.method || HttpMethod.Get,
         credentials: credentials || defaultOptions.credentials,
         signal,
         headers: {
           ...defaultOptions.headers,
           ...headers,
         },
-        body: body ? requestBodySerializer(body) : null,
+        body: body && requestBodySerializer(body),
+        maxAge: maxAge || 0,
+        queryParams,
       };
 
       /**
        * Encapsulate all request info.
        */
-      const requestInfo: HttpRequestInfo = {
-        url,
+      const requestInfo: HttpRequest = new HttpRequest({
         ...mergedOptions,
-      };
+        baseUrl: computedBaseUrl,
+        relativeUrl,
+      });
 
       try {
         /**

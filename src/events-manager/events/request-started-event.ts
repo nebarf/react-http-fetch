@@ -1,13 +1,13 @@
-import { HttpRequestInfo } from '../..';
+import { HttpRequest } from '../..';
 import { HttpEvent } from './http-event';
 
-export class RequestStartedEvent extends HttpEvent<HttpRequestInfo> {
+export class RequestStartedEvent extends HttpEvent<HttpRequest> {
   /**
    * @inheritdoc
    */
-  payload: HttpRequestInfo;
+  payload: HttpRequest;
 
-  constructor(payload: HttpRequestInfo) {
+  constructor(payload: HttpRequest) {
     super();
     this.payload = payload;
   }

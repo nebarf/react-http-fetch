@@ -1,3 +1,3 @@
-import { HttpClientContextProps, HttpReqConfig } from '.';
-export declare const defaultHttpReqConfig: HttpReqConfig;
+import { HttpClientContextProps, HttpClientConfig } from '.';
+export declare const defaultHttpReqConfig: HttpClientConfig;
 export declare const defaultClientProps: HttpClientContextProps;
