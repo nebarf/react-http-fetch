@@ -1,14 +1,15 @@
-import { DependencyList, useCallback } from 'react';
+import { DependencyList, EffectCallback, useEffect } from 'react';
 import { useCompareRef } from './use-compare-ref';
 
 export type DepsAreEqual = (prevDeps: DependencyList, nextDeps: DependencyList) => boolean;
 
-export function useCompareCallback<T extends (...args: unknown[]) => unknown>(
-  callback: T,
+export function useCompareEffect(
+  callback: EffectCallback,
   deps: DependencyList,
   compare: DepsAreEqual
-): T {
+): void {
   const depsRef = useCompareRef(deps, compare);
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  return useCallback(callback, depsRef.current);
+  return useEffect(callback, depsRef.current);
 }

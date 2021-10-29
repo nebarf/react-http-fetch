@@ -1,4 +1,6 @@
-import { useEffect, useRef, useCallback, useContext } from 'react';
+import { useCompareEffect } from '@/shared/use-compare-effect';
+import { useRef, useCallback, useContext } from 'react';
+import fastCompare from 'react-fast-compare';
 import { EventBusContext, HttpEventClassType, HttpEventHandler } from '.';
 
 export const useBusSubscribe = <T>(
@@ -25,13 +27,17 @@ export const useBusSubscribe = <T>(
   /**
    * Setup the event handler.
    */
-  useEffect(() => {
-    // Subscribe to the event and keep track of the subscription.
-    unsubscribeRef.current = eventBus.subscribe(eventName, handler);
+  useCompareEffect(
+    () => {
+      // Subscribe to the event and keep track of the subscription.
+      unsubscribeRef.current = eventBus.subscribe(eventName, handler);
 
-    // Clean up: unsubscribe the previous event handler.
-    return () => {
-      unsubscribe();
-    };
-  }, [eventBus, eventName, handler, unsubscribe]);
+      // Clean up: unsubscribe the previous event handler.
+      return () => {
+        unsubscribe();
+      };
+    },
+    [eventBus, eventName, handler, unsubscribe],
+    fastCompare
+  );
 };

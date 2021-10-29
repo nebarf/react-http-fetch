@@ -7,8 +7,9 @@ import {
   RequestSuccededEvent,
   useEventBus,
 } from '../events-manager';
-import { useHttpClientConfig } from '../config';
-import { HttpError, HttpMethod } from '..';
+import { useHttpClientConfig } from '@/config';
+import { HttpMethod } from '@/enum';
+import { HttpError } from '@/errors';
 
 export const useHttpClient = (): UseHttpClientReturn => {
   /**
