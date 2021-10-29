@@ -1,0 +1,16 @@
+{
+  "git": {
+    "tagName": "v${version}",
+    "commitMessage": "Release v${version}",
+    "requireBranch": "main"
+  },
+  "hooks": {
+    "after:bump": [
+      "npm run changelog",
+      "git add CHANGELOG.md"
+    ]
+  },
+  "npm": {
+    "publish": false
+  }
+}
