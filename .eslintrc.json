@@ -10,6 +10,12 @@
   "settings": {
     "react": {
       "version": "detect" // Tells eslint-plugin-react to automatically detect the version of React to use
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true, // always try to resolve types under `<root>@types` directory even it doesn't contain any source code, like `@types/unist`
+        "project": "."
+      }
     }
   },
   "extends": [
@@ -17,7 +23,9 @@
     "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended", // Uses the recommended rules from @typescript-eslint/eslint-plugin
     "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:prettier/recommended" // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.  
+    "plugin:prettier/recommended", // Enables eslint-plugin-prettier and eslint-config-prettier. This will display prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.  
+    "plugin:import/recommended",
+    "plugin:import/typescript"
   ],
   "ignorePatterns": ["lib/*", "node_modules/*"],
   "rules": {
@@ -56,6 +64,7 @@
       {
         "ignoreTranspilerName": true
       }
-    ]
+    ],
+    "import/no-cycle": [2, { "maxDepth": 1 }]
   }
 }
