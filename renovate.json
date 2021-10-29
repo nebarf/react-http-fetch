@@ -1,5 +1,12 @@
 {
   "extends": [
     "config:base"
-  ]
+  ],
+  "baseBranches": ["main"],
+  "prHourlyLimit": 2,
+  "timezone": "Europe/Rome",
+  "lockFileMaintenance": {
+    "enabled": true
+  },
+  "schedule": ["after 10pm every weekday", "before 4am every weekday", "every weekend"]
 }
