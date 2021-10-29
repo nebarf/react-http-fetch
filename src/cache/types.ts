@@ -10,9 +10,9 @@ export interface HttpCacheEntry<T> {
   response: T;
 
   /**
-   * Keeps track of the time the entry was cached.
+   * Keeps track of the Date the entry was cached.
    */
-  lastRead: number;
+  cachedAt: Date;
 
   /**
    * The max age of entry expressed in ms.

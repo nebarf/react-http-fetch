@@ -6,7 +6,7 @@ import {
   RequestStartedEvent,
   RequestSuccededEvent,
   useEventBus,
-} from '../events-manager';
+} from '@/events-manager';
 import { useHttpClientConfig } from '@/config';
 import { HttpMethod } from '@/enum';
 import { HttpError } from '@/errors';
@@ -16,7 +16,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * The http client config.
    */
   const {
-    config: { reqOptions: defaultOptions, responseParser, requestBodySerializer, baseUrl },
+    config: { reqOptions: defaultOptions, responseParser, requestBodySerializer, baseUrl, cache },
   } = useHttpClientConfig();
 
   /**
@@ -38,7 +38,6 @@ export const useHttpClient = (): UseHttpClientReturn => {
        * Compose the request data.
        */
       const computedBaseUrl = baseUrlOverride || baseUrl;
-      const url = `${computedBaseUrl}/${relativeUrl}`;
 
       const {
         body,
@@ -71,6 +70,14 @@ export const useHttpClient = (): UseHttpClientReturn => {
         relativeUrl,
       });
 
+      /**
+       * Just return the cached response if it is in the cache.
+       */
+      const cachedResponse = cache.get<HttpResponse>(requestInfo);
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+
       try {
         /**
          * Publish the event to tell a new request started.
@@ -81,7 +88,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
         /**
          * Perform the request.
          */
-        const response: Response = await fetch(url, mergedOptions);
+        const response: Response = await fetch(requestInfo.url, mergedOptions);
 
         /**
          * Handle any errors different than the network ones
@@ -134,7 +141,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
         return Promise.reject(error);
       }
     },
-    [baseUrl, defaultOptions, requestBodySerializer, eventBus, responseParser]
+    [baseUrl, defaultOptions, requestBodySerializer, eventBus, responseParser, cache]
   );
 
   /**

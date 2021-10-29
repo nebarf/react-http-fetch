@@ -19,6 +19,30 @@ export class HttpInMemoryCacheService extends HttpCache {
   }
 
   /**
+   * Tells if a cached entry is expired.
+   */
+  private isEntryExpired<T>(entry: HttpCacheEntry<T>): boolean {
+    const nowTime = new Date().getTime();
+    const cachedTime = entry.cachedAt.getTime();
+    return cachedTime + entry.maxAge < nowTime;
+  }
+
+  /**
+   * Gets the cached entry associated with the request.
+   */
+  private getEntry<T>(request: HttpRequest): HttpCacheEntry<T> | undefined {
+    const reqIdentifier = this.getRequestIdentifier(request);
+    return this.store.get(reqIdentifier) as HttpCacheEntry<T>;
+  }
+
+  /**
+   * Removes a cached entry.
+   */
+  private removeEntry<T>(entry: HttpCacheEntry<T>): void {
+    this.store.delete(entry.identifier);
+  }
+
+  /**
    * Determines if for the given request is available a cached response.
    */
   has(request: HttpRequest): boolean {
@@ -27,17 +51,27 @@ export class HttpInMemoryCacheService extends HttpCache {
   }
 
   /**
+   * Tells if the cached request is expired or not.
+   */
+  isExpired(request: HttpRequest): boolean {
+    const cachedEntry = this.getEntry(request);
+    if (!cachedEntry) {
+      return true;
+    }
+
+    return this.isEntryExpired(cachedEntry);
+  }
+
+  /**
    * Gets the cached entry in the map for the given request.
    */
   get<T>(request: HttpRequest): T | undefined {
-    const reqKey = this.getRequestIdentifier(request);
-
-    const cachedEntry = this.store.get(reqKey);
+    const cachedEntry = this.getEntry(request);
     if (!cachedEntry) {
       return undefined;
     }
 
-    const isExpired = cachedEntry.lastRead + cachedEntry.maxAge < Date.now();
+    const isExpired = this.isEntryExpired(cachedEntry);
     return isExpired ? undefined : (cachedEntry.response as T);
   }
 
@@ -46,7 +80,6 @@ export class HttpInMemoryCacheService extends HttpCache {
    */
   put<T>(request: HttpRequest, response: T): void {
     if (!request.maxAge) {
-      this.flush();
       return;
     }
 
@@ -54,13 +87,18 @@ export class HttpInMemoryCacheService extends HttpCache {
     const entry: HttpCacheEntry<T> = {
       response,
       identifier: reqKey,
-      lastRead: Date.now(),
+      cachedAt: new Date(),
       maxAge: request.maxAge,
     };
 
     // Update and flush the cache.
     this.store.set(reqKey, entry);
-    this.flush();
+
+    // Remove the entry from the cache once expired.
+    const timerRef = setTimeout(() => {
+      this.removeEntry(entry);
+      clearTimeout(timerRef);
+    }, request.maxAge);
   }
 
   /**
@@ -68,10 +106,10 @@ export class HttpInMemoryCacheService extends HttpCache {
    */
   flush(): void {
     this.store.forEach((entry) => {
-      const isEntryExpired = entry.lastRead + entry.maxAge < Date.now();
+      const isEntryExpired = this.isEntryExpired(entry);
 
       if (isEntryExpired) {
-        this.store.delete(entry.identifier);
+        this.removeEntry(entry);
       }
     });
   }
