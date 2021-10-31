@@ -5,6 +5,7 @@ import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import fastCompare from 'react-fast-compare';
 import { PerformHttpRequestParams, useHttpClient } from '@/client';
 import { useCompareCallback } from '@/shared/use-compare-callback';
+import { useCompareMemo } from '@/shared/use-compare-memo';
 
 export const useHttpRequest = <HttpResponse>(
   params: UseHttpRequestParams<HttpResponse>
@@ -12,7 +13,8 @@ export const useHttpRequest = <HttpResponse>(
   /**
    * Grabs the "request" function from the http client.
    */
-  const { request: httpClientRequest } = useHttpClient();
+  const { request: httpClientRequest, abortableRequest: httpClientAbortableRequest } =
+    useHttpClient();
 
   // The state of the request.
   const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponse>, HttpReqActionType>>(
@@ -38,20 +40,28 @@ export const useHttpRequest = <HttpResponse>(
   );
 
   /**
+   * Gets the http params needed to perform the request using the http client related method.
+   */
+  const performHttpRequestParams: PerformHttpRequestParams = useCompareMemo(
+    () => ({
+      baseUrlOverride: params.baseUrlOverride,
+      parser: params.parser,
+      relativeUrl: params.relativeUrl,
+      requestOptions: params.requestOptions,
+    }),
+    [params],
+    fastCompare
+  );
+
+  /**
    * Performs the http request.
    */
   const request = useCompareCallback(
-    async () => {
+    async (): Promise<HttpResponse> => {
       safelyDispatch(requestInit());
 
       try {
-        const reqParams: PerformHttpRequestParams = {
-          baseUrlOverride: params.baseUrlOverride,
-          parser: params.parser,
-          relativeUrl: params.relativeUrl,
-          requestOptions: params.requestOptions,
-        };
-        const response = await httpClientRequest<HttpResponse>(reqParams);
+        const response = await httpClientRequest<HttpResponse>(performHttpRequestParams);
         safelyDispatch(requestSuccess(response));
 
         return response;
@@ -61,8 +71,31 @@ export const useHttpRequest = <HttpResponse>(
         throw error;
       }
     },
-    [httpClientRequest, params, safelyDispatch],
-    (prev, actual) => fastCompare(prev, actual)
+    [httpClientRequest, performHttpRequestParams, safelyDispatch],
+    fastCompare
+  );
+
+  /**
+   * Performs the http request allowing to abort it.
+   */
+  const abortableRequest = useCompareCallback(
+    (): [Promise<HttpResponse>, AbortController] => {
+      safelyDispatch(requestInit());
+
+      try {
+        const [reqPromise, abortController] =
+          httpClientAbortableRequest<HttpResponse>(performHttpRequestParams);
+        reqPromise.then((response) => safelyDispatch(requestSuccess(response)));
+
+        return [reqPromise, abortController];
+      } catch (error) {
+        // Dispatch the action handling the errored request.
+        safelyDispatch(requestError(error));
+        throw error;
+      }
+    },
+    [httpClientAbortableRequest, performHttpRequestParams, safelyDispatch],
+    fastCompare
   );
 
   /**
@@ -81,5 +114,5 @@ export const useHttpRequest = <HttpResponse>(
     };
   }, [params, request]);
 
-  return [state, request];
+  return [state, request, abortableRequest];
 };

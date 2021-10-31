@@ -1,4 +1,4 @@
-import { useHttpRequest } from '.';
+import { useHttpRequest } from './use-http-request';
 import { HttpMethod } from '@/enum';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import { useOverridedParamsByMethod } from './use-overrided-params-by-method';
