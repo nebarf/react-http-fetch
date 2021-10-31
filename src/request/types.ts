@@ -12,6 +12,5 @@ export interface UseHttpRequestParams<T> {
 
 export type UseHttpRequestReturn<HttpResponse> = [
   HttpRequestState<HttpResponse>,
-  () => Promise<HttpResponse>,
   () => [Promise<HttpResponse>, AbortController]
 ];

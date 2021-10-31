@@ -13,8 +13,7 @@ export const useHttpRequest = <HttpResponse>(
   /**
    * Grabs the "request" function from the http client.
    */
-  const { request: httpClientRequest, abortableRequest: httpClientAbortableRequest } =
-    useHttpClient();
+  const { abortableRequest: httpClientAbortableRequest } = useHttpClient();
 
   // The state of the request.
   const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponse>, HttpReqActionType>>(
@@ -54,31 +53,9 @@ export const useHttpRequest = <HttpResponse>(
   );
 
   /**
-   * Performs the http request.
-   */
-  const request = useCompareCallback(
-    async (): Promise<HttpResponse> => {
-      safelyDispatch(requestInit());
-
-      try {
-        const response = await httpClientRequest<HttpResponse>(performHttpRequestParams);
-        safelyDispatch(requestSuccess(response));
-
-        return response;
-      } catch (error) {
-        // Dispatch the action handling the errored request.
-        safelyDispatch(requestError(error));
-        throw error;
-      }
-    },
-    [httpClientRequest, performHttpRequestParams, safelyDispatch],
-    fastCompare
-  );
-
-  /**
    * Performs the http request allowing to abort it.
    */
-  const abortableRequest = useCompareCallback(
+  const request = useCompareCallback(
     (): [Promise<HttpResponse>, AbortController] => {
       safelyDispatch(requestInit());
 
@@ -114,5 +91,5 @@ export const useHttpRequest = <HttpResponse>(
     };
   }, [params, request]);
 
-  return [state, request, abortableRequest];
+  return [state, request];
 };
