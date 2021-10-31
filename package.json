@@ -1,5 +1,5 @@
 {
-  "name": "react-fetch",
+  "name": "react-http-fetch",
   "version": "1.0.0",
   "description": "An http library for React JS built on top of native JS fetch",
   "main": "index.js",
@@ -62,5 +62,21 @@
   },
   "dependencies": {
     "react-fast-compare": "^3.2.0"
-  }
+  },
+  "keywords": [
+    "react-http",
+    "react-http-fetch",
+    "react",
+    "fetch",
+    "http",
+    "request",
+    "response",
+    "fetch data",
+    "http client",
+    "react hooks",
+    "react http",
+    "react-http",
+    "react fetch",
+    "react-fetch"
+  ]
 }
