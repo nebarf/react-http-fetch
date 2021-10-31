@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
-  "repository": "git@github.com:nebarf/react-fetch.git",
+  "repository": "git@github.com:nebarf/react-http-fetch.git",
   "author": "nebarf <francesco.benedetto263@gmail.com>",
   "license": "MIT",
   "files": [
