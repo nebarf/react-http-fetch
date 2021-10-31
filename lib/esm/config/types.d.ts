@@ -1,6 +1,6 @@
 import { HttpCache } from '@/cache';
 import { ReactElement } from 'react';
-import { HttpRequestOptions, HttpResponseParser } from '..';
+import { HttpRequestOptions, HttpResponseParser } from '@/client';
 export declare type ReqBodySerializerReturn = string | null | ArrayBuffer | Blob | FormData | URLSearchParams;
 export declare type HttpRequestBodySerializer = (body: BodyInit) => ReqBodySerializerReturn;
 export interface HttpClientConfig {

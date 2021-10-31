@@ -12,9 +12,25 @@ export declare class HttpInMemoryCacheService extends HttpCache {
      */
     private getRequestIdentifier;
     /**
+     * Tells if a cached entry is expired.
+     */
+    private isEntryExpired;
+    /**
+     * Gets the cached entry associated with the request.
+     */
+    private getEntry;
+    /**
+     * Removes a cached entry.
+     */
+    private removeEntry;
+    /**
      * Determines if for the given request is available a cached response.
      */
     has(request: HttpRequest): boolean;
+    /**
+     * Tells if the cached request is expired or not.
+     */
+    isExpired(request: HttpRequest): boolean;
     /**
      * Gets the cached entry in the map for the given request.
      */

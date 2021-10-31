@@ -1,4 +1,4 @@
-import { HttpError } from '../..';
+import { HttpError } from '@/errors';
 import { HttpEvent } from './http-event';
 export declare class RequestErroredEvent<T> extends HttpEvent<HttpError<T>> {
     /**

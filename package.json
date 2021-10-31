@@ -41,9 +41,12 @@
   },
   "scripts": {
     "build": "yarn build:esm && yarn build:cjs",
-    "build:watch": "yarn build:esm -- -w && yarn build:cjs -- -w",
+    "build:prod": "yarn build:prod:esm && yarn build:prod:cjs",
+    "build:watch": "yarn build:esm -w && yarn build:cjs -w",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "build:prod:esm": "tsc -p tsconfig.prod.json",
+    "build:prod:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir lib/cjs",
     "changelog": "auto-changelog -p --template ./changelog.template.hbs",
     "prepare": "husky install",
     "pre-commit": "lint-staged",

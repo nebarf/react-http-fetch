@@ -1,4 +1,4 @@
-import { HttpRequest } from '../..';
+import { HttpRequest } from '@/client';
 import { HttpEvent } from './http-event';
 export declare class RequestStartedEvent extends HttpEvent<HttpRequest> {
     /**

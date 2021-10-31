@@ -1,4 +1,4 @@
-import { HttpRequest } from '../..';
+import { HttpRequest } from '@/client';
 import { HttpEvent } from './http-event';
 export interface RequestSuccededEventPayload<T> {
     request: HttpRequest;
