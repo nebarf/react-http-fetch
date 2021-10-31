@@ -8,6 +8,9 @@
   "repository": "git@github.com:nebarf/react-http-fetch.git",
   "author": "nebarf <francesco.benedetto263@gmail.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "/lib"
   ],
