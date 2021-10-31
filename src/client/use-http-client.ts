@@ -1,5 +1,5 @@
-import { AbortableHttpRequestReturn, UseHttpClientReturn } from './types';
-import { HttpRequest, PerformHttpRequestParams } from '.';
+import { AbortableHttpRequestReturn, UseHttpClientReturn, PerformHttpRequestParams } from './types';
+import { HttpRequest } from './http-request';
 import { useCallback } from 'react';
 import {
   RequestErroredEvent,

@@ -1,6 +1,6 @@
 import React, { ReactElement, createContext, useContext, memo, useMemo } from 'react';
-import { defaultClientProps, defaultHttpReqConfig, HttpClientConfig } from '.';
-import { HttpClientContextProps, HttpClientProviderProps } from './types';
+import { defaultClientProps, defaultHttpReqConfig } from './defaults';
+import { HttpClientContextProps, HttpClientProviderProps, HttpClientConfig } from './types';
 
 /**
  * The context to provide the default http client configuration.

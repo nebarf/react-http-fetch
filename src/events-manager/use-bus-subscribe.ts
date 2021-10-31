@@ -1,7 +1,8 @@
 import { useCompareEffect } from '@/shared/use-compare-effect';
 import { useRef, useCallback, useContext } from 'react';
 import fastCompare from 'react-fast-compare';
-import { EventBusContext, HttpEventClassType, HttpEventHandler } from '.';
+import { HttpEventClassType, HttpEventHandler } from './types';
+import { EventBusContext } from './event-bus-context';
 
 export const useBusSubscribe = <T>(
   eventName: HttpEventClassType<T>,
