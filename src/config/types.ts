@@ -1,6 +1,6 @@
-import { HttpCache } from '@/cache';
+import { HttpCache } from '../cache';
 import { ReactElement } from 'react';
-import { HttpRequestOptions, HttpResponseParser } from '@/client';
+import { HttpRequestOptions, HttpResponseParser } from '../client';
 
 export type ReqBodySerializerReturn =
   | string

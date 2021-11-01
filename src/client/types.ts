@@ -1,4 +1,4 @@
-import { HttpMethod } from '@/enum';
+import { HttpMethod } from '../enum';
 
 export interface UseHttpClientParams {
   baseUrl: string;

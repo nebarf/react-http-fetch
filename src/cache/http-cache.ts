@@ -1,4 +1,4 @@
-import { HttpRequest } from '@/client';
+import { HttpRequest } from '../client';
 
 export abstract class HttpCache {
   /**

@@ -1,4 +1,4 @@
-import { HttpRequest } from '@/client';
+import { HttpRequest } from '../client';
 import { HttpCache } from './http-cache';
 import { HttpCacheEntry } from './types';
 

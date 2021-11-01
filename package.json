@@ -1,6 +1,6 @@
 {
   "name": "react-http-fetch",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "An http library for React JS built on top of native JS fetch",
   "main": "index.js",
   "module": "./lib/esm/index.js",
@@ -8,6 +8,9 @@
   "repository": "git@github.com:nebarf/react-http-fetch.git",
   "author": "nebarf <francesco.benedetto263@gmail.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "files": [
     "/lib"
   ],

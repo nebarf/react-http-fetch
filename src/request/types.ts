@@ -1,4 +1,4 @@
-import { HttpRequestOptions, HttpResponseParser } from '@/client';
+import { HttpRequestOptions, HttpResponseParser } from '../client';
 import { HttpRequestState } from './state-reducer';
 
 export interface UseHttpRequestParams<T> {
@@ -12,5 +12,5 @@ export interface UseHttpRequestParams<T> {
 
 export type UseHttpRequestReturn<HttpResponse> = [
   HttpRequestState<HttpResponse>,
-  () => Promise<HttpResponse>
+  () => [Promise<HttpResponse>, AbortController]
 ];

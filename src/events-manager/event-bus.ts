@@ -1,5 +1,5 @@
-import { HttpEvent, HttpEventClassType } from '.';
-import { HttpEventHandler } from './types';
+import { HttpEvent } from './events';
+import { HttpEventHandler, HttpEventClassType } from './types';
 
 export class EventBus {
   private _subscriptions: Map<HttpEventClassType<unknown>, Set<HttpEventHandler<unknown>>>;

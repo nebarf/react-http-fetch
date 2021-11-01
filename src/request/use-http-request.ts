@@ -3,8 +3,8 @@ import { HttpReqActionType, requestError, requestInit, requestSuccess } from './
 import { httpRequestReducer, HttpRequestState, initialState } from './state-reducer';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import fastCompare from 'react-fast-compare';
-import { PerformHttpRequestParams, useHttpClient } from '@/client';
-import { useCompareCallback } from '@/shared/use-compare-callback';
+import { PerformHttpRequestParams, useHttpClient } from '../client';
+import { useCompareCallback, useCompareMemo } from '../shared';
 
 export const useHttpRequest = <HttpResponse>(
   params: UseHttpRequestParams<HttpResponse>
@@ -12,7 +12,7 @@ export const useHttpRequest = <HttpResponse>(
   /**
    * Grabs the "request" function from the http client.
    */
-  const { request: httpClientRequest } = useHttpClient();
+  const { abortableRequest: httpClientAbortableRequest } = useHttpClient();
 
   // The state of the request.
   const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponse>, HttpReqActionType>>(
@@ -38,31 +38,40 @@ export const useHttpRequest = <HttpResponse>(
   );
 
   /**
-   * Performs the http request.
+   * Gets the http params needed to perform the request using the http client related method.
+   */
+  const performHttpRequestParams: PerformHttpRequestParams = useCompareMemo(
+    () => ({
+      baseUrlOverride: params.baseUrlOverride,
+      parser: params.parser,
+      relativeUrl: params.relativeUrl,
+      requestOptions: params.requestOptions,
+    }),
+    [params],
+    fastCompare
+  );
+
+  /**
+   * Performs the http request allowing to abort it.
    */
   const request = useCompareCallback(
-    async () => {
+    (): [Promise<HttpResponse>, AbortController] => {
       safelyDispatch(requestInit());
 
       try {
-        const reqParams: PerformHttpRequestParams = {
-          baseUrlOverride: params.baseUrlOverride,
-          parser: params.parser,
-          relativeUrl: params.relativeUrl,
-          requestOptions: params.requestOptions,
-        };
-        const response = await httpClientRequest<HttpResponse>(reqParams);
-        safelyDispatch(requestSuccess(response));
+        const [reqPromise, abortController] =
+          httpClientAbortableRequest<HttpResponse>(performHttpRequestParams);
+        reqPromise.then((response) => safelyDispatch(requestSuccess(response)));
 
-        return response;
+        return [reqPromise, abortController];
       } catch (error) {
         // Dispatch the action handling the errored request.
         safelyDispatch(requestError(error));
         throw error;
       }
     },
-    [httpClientRequest, params, safelyDispatch],
-    (prev, actual) => fastCompare(prev, actual)
+    [httpClientAbortableRequest, performHttpRequestParams, safelyDispatch],
+    fastCompare
   );
 
   /**

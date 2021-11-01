@@ -1,4 +1,4 @@
-import { ReqBodySerializerReturn } from '.';
+import { ReqBodySerializerReturn } from './types';
 
 /**
  * Safely assert whether the given value is an ArrayBuffer.

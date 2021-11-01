@@ -1,15 +1,15 @@
-import { AbortableHttpRequestReturn, UseHttpClientReturn } from './types';
-import { HttpRequest, PerformHttpRequestParams } from '.';
+import { AbortableHttpRequestReturn, UseHttpClientReturn, PerformHttpRequestParams } from './types';
+import { HttpRequest } from './http-request';
 import { useCallback } from 'react';
 import {
   RequestErroredEvent,
   RequestStartedEvent,
   RequestSuccededEvent,
   useEventBus,
-} from '@/events-manager';
-import { useHttpClientConfig } from '@/config';
-import { HttpMethod } from '@/enum';
-import { HttpError } from '@/errors';
+} from '../events-manager';
+import { useHttpClientConfig } from '../config';
+import { HttpMethod } from '../enum';
+import { HttpError } from '../errors';
 
 export const useHttpClient = (): UseHttpClientReturn => {
   /**
