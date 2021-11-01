@@ -1,10 +1,10 @@
-import { Reducer, useCallback, useEffect, useReducer, useRef } from 'react';
+import { Reducer, useCallback, useReducer, useRef } from 'react';
 import { HttpReqActionType, requestError, requestInit, requestSuccess } from './action-creators';
 import { httpRequestReducer, HttpRequestState, initialState } from './state-reducer';
 import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import fastCompare from 'react-fast-compare';
 import { PerformHttpRequestParams, useHttpClient } from '../client';
-import { useCompareCallback, useCompareMemo } from '../shared';
+import { useCompareCallback, useCompareMemo, useCompareEffect } from '../shared';
 
 export const useHttpRequest = <HttpResponse>(
   params: UseHttpRequestParams<HttpResponse>
@@ -77,18 +77,22 @@ export const useHttpRequest = <HttpResponse>(
   /**
    * Keeps track of the mounting state of the component.
    */
-  useEffect(() => {
-    isMounted.current = true;
+  useCompareEffect(
+    () => {
+      isMounted.current = true;
 
-    const { fetchOnBootstrap } = params;
-    if (fetchOnBootstrap) {
-      request();
-    }
+      const { fetchOnBootstrap } = params;
+      if (fetchOnBootstrap) {
+        request();
+      }
 
-    return () => {
-      isMounted.current = false;
-    };
-  }, [params, request]);
+      return () => {
+        isMounted.current = false;
+      };
+    },
+    [params, request],
+    fastCompare
+  );
 
   return [state, request];
 };
