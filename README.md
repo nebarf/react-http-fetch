@@ -33,7 +33,6 @@
 ## Documentation
 
 Just follow links below to get an overview of library features.
-
 - [Documentation](#documentation)
 - [Getting started](#getting-started)
 - [Provider](#provider)

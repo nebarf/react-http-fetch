@@ -1,6 +1,8 @@
 import React, { ReactElement, createContext, useContext, memo, useMemo } from 'react';
+import { useCompareMemo } from '../shared';
 import { defaultClientProps, defaultHttpReqConfig } from './defaults';
 import { HttpClientContextProps, HttpClientProviderProps, HttpClientConfig } from './types';
+import fastCompare from 'react-fast-compare';
 
 /**
  * The context to provide the default http client configuration.
@@ -14,7 +16,7 @@ const HttpClientConfigProvider = ({ config, children }: HttpClientProviderProps)
   /**
    * The merged http config.
    */
-  const mergedHttpConfig: HttpClientConfig = useMemo(
+  const mergedHttpConfig: HttpClientConfig = useCompareMemo(
     () => ({
       baseUrl: config.baseUrl || defaultHttpReqConfig.baseUrl,
       responseParser: config.responseParser || defaultHttpReqConfig.responseParser,
@@ -23,7 +25,8 @@ const HttpClientConfigProvider = ({ config, children }: HttpClientProviderProps)
         config.requestBodySerializer || defaultHttpReqConfig.requestBodySerializer,
       cache: config.cache || defaultHttpReqConfig.cache,
     }),
-    [config]
+    [config],
+    fastCompare
   );
 
   const publicApi = useMemo(

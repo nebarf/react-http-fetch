@@ -10,7 +10,12 @@ export interface UseHttpRequestParams<T> {
   fetchOnBootstrap: boolean;
 }
 
+export interface UseHttpAbortableRequestReturn<HttpResponse> {
+  reqResult: Promise<HttpResponse>;
+  abortController: AbortController;
+}
+
 export type UseHttpRequestReturn<HttpResponse> = [
   HttpRequestState<HttpResponse>,
-  () => [Promise<HttpResponse>, AbortController]
+  () => UseHttpAbortableRequestReturn<HttpResponse>
 ];

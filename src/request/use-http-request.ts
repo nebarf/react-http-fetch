@@ -1,7 +1,7 @@
 import { Reducer, useCallback, useReducer, useRef } from 'react';
 import { HttpReqActionType, requestError, requestInit, requestSuccess } from './action-creators';
 import { httpRequestReducer, HttpRequestState, initialState } from './state-reducer';
-import { UseHttpRequestParams, UseHttpRequestReturn } from './types';
+import { UseHttpAbortableRequestReturn, UseHttpRequestParams, UseHttpRequestReturn } from './types';
 import fastCompare from 'react-fast-compare';
 import { PerformHttpRequestParams, useHttpClient } from '../client';
 import { useCompareCallback, useCompareMemo, useCompareEffect } from '../shared';
@@ -55,20 +55,21 @@ export const useHttpRequest = <HttpResponse>(
    * Performs the http request allowing to abort it.
    */
   const request = useCompareCallback(
-    (): [Promise<HttpResponse>, AbortController] => {
+    (): UseHttpAbortableRequestReturn<HttpResponse> => {
       safelyDispatch(requestInit());
 
-      try {
-        const [reqPromise, abortController] =
-          httpClientAbortableRequest<HttpResponse>(performHttpRequestParams);
-        reqPromise.then((response) => safelyDispatch(requestSuccess(response)));
+      const [reqResult, abortController] =
+        httpClientAbortableRequest<HttpResponse>(performHttpRequestParams);
 
-        return [reqPromise, abortController];
-      } catch (error) {
-        // Dispatch the action handling the errored request.
-        safelyDispatch(requestError(error));
-        throw error;
-      }
+      // Listen request to be successfully resolved or reject and
+      // update the state accordingly.
+      reqResult
+        .then((response) => safelyDispatch(requestSuccess(response)))
+        .catch((error) => {
+          safelyDispatch(requestError(error));
+        });
+
+      return { reqResult, abortController };
     },
     [httpClientAbortableRequest, performHttpRequestParams, safelyDispatch],
     fastCompare
