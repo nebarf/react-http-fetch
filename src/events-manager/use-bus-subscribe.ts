@@ -1,4 +1,4 @@
-import { useCompareEffect } from '@/shared/use-compare-effect';
+import { useCompareEffect } from '../shared';
 import { useRef, useCallback, useContext } from 'react';
 import fastCompare from 'react-fast-compare';
 import { HttpEventClassType, HttpEventHandler } from './types';

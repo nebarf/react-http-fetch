@@ -1,7 +1,6 @@
 import { DependencyList, useCallback } from 'react';
+import { DepsAreEqual } from './types';
 import { useCompareRef } from './use-compare-ref';
-
-export type DepsAreEqual = (prevDeps: DependencyList, nextDeps: DependencyList) => boolean;
 
 export function useCompareCallback<T extends (...args: unknown[]) => unknown>(
   callback: T,

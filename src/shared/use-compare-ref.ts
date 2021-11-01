@@ -1,6 +1,5 @@
 import { DependencyList, MutableRefObject, useRef } from 'react';
-
-export type DepsAreEqual = (prevDeps: DependencyList, nextDeps: DependencyList) => boolean;
+import { DepsAreEqual } from './types';
 
 export function useCompareRef(
   deps: DependencyList,

@@ -1,7 +1,7 @@
 import { HttpClientContextProps, HttpClientConfig } from './types';
 import { httpResponseParser } from './response-parser';
 import { serializeRequestBody } from './request-body-serializer';
-import { HttpInMemoryCacheService } from '@/cache';
+import { HttpInMemoryCacheService } from '../cache';
 
 export const defaultHttpReqConfig: HttpClientConfig = {
   baseUrl: '',

@@ -1,5 +1,5 @@
-import { HttpRequest } from '@/client';
-import { HttpStatusCode } from '@/enum';
+import { HttpRequest } from '../client';
+import { HttpStatusCode } from '../enum';
 
 export class HttpError<T> extends Error {
   /**
