@@ -46,9 +46,69 @@ Just follow links below to get an overview of library features.
 
 ## Getting started
 
-<br>
+Install the package by using npm
+
+```
+npm install react-http-fetch
+```
+
+or yarn
+
+```
+yarn add react-http-fetch
+```
 
 ## Provider
+You can override the default configuration used by the http client to peform any request by using the `HttpClientConfigProvider`:
+
+```js
+import { defaultHttpReqConfig, HttpClientConfigProvider } from 'react-http-fetch';
+
+function Child() {
+  return (
+    <div> Child component </div>
+  );
+};
+
+function httpResponseParser(res) {
+  return res.json();
+}
+
+
+function App() {
+  /**
+   * Provided configs are automatically merged to the default one.
+   */
+  const httpReqConfig = {
+    // ...defaultHttpReqConfig,
+    baseUrl: process.env.BACKEND_URL,
+    responseParser: httpResponseParser,
+    reqOptions: {
+      headers: {
+        'Content-Type': 'text/html; charset=UTF-8',
+      },
+    },
+  };
+
+  return (
+    <HttpClientConfigProvider config={httpReqConfig}>
+      <Child />
+    </HttpClientConfigProvider>
+  );
+}
+
+export default App;
+```
+
+Below the complete set of options you can provide to the `HttpClientConfigProvider`:
+
+| Option | Description | Default |
+| --------------------- | --------------------------------------------------------------------------|------------- |
+|baseUrl|description|```''```
+|responseParser|description|```httpResponseParser```
+|requestBodySerializer|description|```serializeRequestBody```
+|reqOptions|description|```{ headers: { 'Content-Type': 'application/json' } }```
+|cache|description|```new ```HttpInMemoryCacheService()
 
 <br>
 
