@@ -41,7 +41,7 @@
       "warn",
       {
         "additionalHooks":
-          "(useCompareCallback, useCompareMemo, useCompareEffect)"
+          "(useCompareCallback, useCompareMemo, useCompareEffect, useCompareLayoutEffect)"
       }
     ],
     "camelcase": "warn",
