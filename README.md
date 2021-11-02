@@ -169,9 +169,9 @@ The complete *public API* exposed by the hook:
 | Method | Description | Params | Return |
 | --------------------- | --------------------------------------------------------------------------| --------------------- | --------------------- | 
 |request | The lowest level method to perform a http request | params| return
-| <ul class="httpRequestsList"><li>get</li><li>post</li><li>put</li><li>patch</li><li>delete</li></ul> | Make use of lower level method `request` by just overriding the http method ([example](#example-get-request)) | params | return
+| <ul class="httpRequestsList"><li>get</li><li>post</li><li>put</li><li>patch</li><li>delete</li></ul> | Make use of lower level method `request` by just overriding the http method ([example](#example--abortable-request)) | params | return
 | abortableRequest | The lowest level method to perform an abortable http request | params | return
-| <ul class="httpRequestsList"><li>abortableGet</li><li>abortablePost</li><li>abortablePut</li><li>abortablePatch</li><li>abortableDelete</li></ul> | Make use of lower level method `abortableRequest` by just overriding the http method ([example](#example&ndash;-abortable-request)) | params | return
+| <ul class="httpRequestsList"><li>abortableGet</li><li>abortablePost</li><li>abortablePut</li><li>abortablePatch</li><li>abortableDelete</li></ul> | Make use of lower level method `abortableRequest` by just overriding the http method ([example](#example--abortable-request)) | params | return
 
 ### Request params
 
