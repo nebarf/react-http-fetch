@@ -30,10 +30,10 @@
 <hr>
 <br>
 
-## Documentation
+## Contents
 
 Just follow links below to get an overview of library features.
-- [Documentation](#documentation)
+- [Contents](#contents)
 - [Getting started](#getting-started)
 - [Provider](#provider)
 - [Http client](#http-client)
@@ -119,7 +119,7 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 <br>
 
 ## Http client
-The `useHttpClient` hook return a set of method to perform http requests. The `request` function is the lowest level one, all other exposed functions are just decorators around it. Below a basic example using `request`:
+The `useHttpClient` hook return a set of methods to perform http requests. The `request` function is the lowest level one, all other exposed functions are just decorators around it. Below a basic example using `request`:
 
 ```js
 import { useHttpClient } from 'react-http-fetch';
@@ -168,20 +168,119 @@ export default App;
 The complete *public API* exposed by the hook:
 | Method | Description | Params | Return |
 | --------------------- | --------------------------------------------------------------------------| --------------------- | --------------------- | 
-|request | The lowest level method to perform a http request | params| return
-| <ul class="httpRequestsList"><li>get</li><li>post</li><li>put</li><li>patch</li><li>delete</li></ul> | Make use of lower level method `request` by just overriding the http method ([example](#example--abortable-request)) | params | return
-| abortableRequest | The lowest level method to perform an abortable http request | params | return
-| <ul class="httpRequestsList"><li>abortableGet</li><li>abortablePost</li><li>abortablePut</li><li>abortablePatch</li><li>abortableDelete</li></ul> | Make use of lower level method `abortableRequest` by just overriding the http method ([example](#example--abortable-request)) | params | return
+|request | The lowest level method to perform a http request | [Request params](#request-params) | [Request return](#request-return)
+| <ul class="httpRequestsList"><li>get</li><li>post</li><li>put</li><li>patch</li><li>delete</li></ul> | Make use of lower level method `request` by just overriding the http method ([example](#example--abortable-request)) | [Request params](#request-params) | [Request return](#request-return)
+| abortableRequest | The lowest level method to perform an abortable http request ([example](#example--abortable-request)) | [Request params](#request-params) | [Abortable request return](#abortable-request-return)
+| <ul class="httpRequestsList"><li>abortableGet</li><li>abortablePost</li><li>abortablePut</li><li>abortablePatch</li><li>abortableDelete</li></ul> | Make use of lower level method `abortableRequest` by just overriding the http method | [Request params](#request-params) | [Abortable request return](#abortable-request-return)
 
 ### Request params
+| Parameter | Type | Description |
+| --------- | ---- | ----------- |
+| baseUrlOverride | string | The base url of the request. If provided, it would override the [provider](#provider) base url.
+| relativeUrl | string | The url relative to the base one (e.g. posts/1).
+| parser | [HttpResponseParser](src/client/types.ts) | An optional response parser that would override the [provider](#provider) global one. |
+| requestOptions | [HttpRequestOptions](./src/client/types.ts) | The options carried by the fetch request. |
 
 ### Request return
+The return value of native JS fetch. If a custom response parser (see [Provider](#provider)) is provided then the return value corresponds to the parsed one.
 
 ### Abortable request return
+| Value | Type |
+| ----- | ---- |
+|[request, abortController]|[[RequestReturn](#request-return), [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)|
 
 ### Example &ndash; Abortable request
+```js
+import React, { useState, useRef } from 'react';
+import { useHttpClient } from 'react-http-fetch';
+
+function App() {
+  const { abortableRequest } = useHttpClient();
+  const abortCtrlRef = useRef();
+  
+  const [todo, setTodo] = useState();
+
+  const fetchTodo = async () => {
+    const [reqPromise, abortController] = abortableRequest({
+      baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+      relativeUrl: 'todos/1',
+    });
+    abortCtrlRef.current = abortController;
+
+    try {
+      const res = await reqPromise;
+      setTodo(res);
+    } catch (error) {
+      // Abort the request will cause the request promise to be rejected with the following error:
+      // "DOMException: The user aborted a request."
+      console.error(error);
+    } finally {
+      abortCtrlRef.current = undefined;
+    }
+  };
+
+  const abortPendingRequest = () => {
+    if (abortCtrlRef.current) {
+      abortCtrlRef.current.abort();
+    }
+  };
+
+  return (
+    <div style={{ margin: '20px' }}>
+      <div>{`Todo name: ${todo && todo.title}`}</div>
+      <button
+        style={{ marginRight: '10px' }}
+        type="button"
+        onClick={fetchTodo}
+      >
+        Do request
+      </button>
+      <button
+        type="button"
+        onClick={abortPendingRequest}
+      >
+        Abort
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
 
 ### Example &ndash; Get request
+```js
+import React, { useState, useEffect } from 'react';
+import { useHttpClient } from 'react-http-fetch';
+
+
+function App() {
+  const { get } = useHttpClient();
+
+  const [todo, setTodo] = useState();
+
+  useEffect(
+    () => {
+      const fetchTodo = async () => {
+        const res = await get({
+          baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+          relativeUrl: 'todos/1',
+        });
+        setTodo(res);
+      };
+
+      fetchTodo();
+    },
+    [get]
+  );
+
+  return (
+    <div>{`Todo name: ${todo && todo.title}`}</div>
+  );
+}
+
+export default App;
+```
 
 <br>
 
