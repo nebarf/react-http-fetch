@@ -104,11 +104,11 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 
 | Option | Description | Default |
 | --------------------- | --------------------------------------------------------------------------|------------- |
-|baseUrl|description|```''```
-|responseParser|description|```httpResponseParser```
-|requestBodySerializer|description|```serializeRequestBody```
-|reqOptions|description|```{ headers: { 'Content-Type': 'application/json' } }```
-|cache|description|```new ```HttpInMemoryCacheService()
+|baseUrl|The base url used by the client to perform any http request (e.g. http://localhost:8000)|```''```
+|responseParser|A function that maps the native fetch response. The default parser transform the fetch response stream into a json (https://developer.mozilla.org/en-US/docs/Web/API/Response/json)|[httpResponseParser](src/config/response-parser.ts)
+|requestBodySerializer|A function used to serialize request body. The default serializer take into account a wide range of data types to figure out which type of serialization to perform|[serializeRequestBody](src/config/request-body-serializer.ts)
+|reqOptions|The default request option that will be carried by any request dispatched by the client. See [HttpRequestOptions](src/client/types.ts)|```{ headers: { 'Content-Type': 'application/json' } }```
+|cache|A service used to cache http responses. [HttpCache](src/cache/http-cache.ts) can be used as reference to provide your own implementation. By default it uses an in-memory cache.|[HttpInMemoryCacheService](src/cache/http-in-memory-cache.ts)
 
 <br>
 
