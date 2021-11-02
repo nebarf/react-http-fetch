@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-alpha.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.0...v1.0.0-alpha.1)
+## [v1.0.0-alpha.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
+
+
+### Merged
+
+- Subscribe fix [`#21`](https://github.com/nebarf/react-http-fetch/pull/21)
+
+
+### Commits
+
+- temp [`7b9990e`](https://github.com/nebarf/react-http-fetch/commit/7b9990e7bcf73f4475ebf47fd6501586973b58a5)
+- Bus subscription: switch to layout effetch to perform event subscriptions [`35673e4`](https://github.com/nebarf/react-http-fetch/commit/35673e4e02e67ebf9f14dee05c44acd285abf249)
+- Add useCompareLayoutEffect to linting rules [`20836d1`](https://github.com/nebarf/react-http-fetch/commit/20836d17254a05f3554d5a747b98b105f902f38a)
+
+## [v1.0.0-alpha.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) - 2021-11-01
 
 
 
@@ -13,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Commits
 
 - use-http-request: replace use-effect with use-compare-effect [`96ea896`](https://github.com/nebarf/react-http-fetch/commit/96ea896cf2b346ba85428882705e9e79f71ae3a9)
+- Release v1.0.0-alpha.1 [`e6cb290`](https://github.com/nebarf/react-http-fetch/commit/e6cb2902c64a0011f673238c355498fae86511e0)
 
 ## [v1.0.0-alpha.0](https://github.com/nebarf/react-http-fetch/compare/v0.0.1...v1.0.0-alpha.0) - 2021-11-01
 
