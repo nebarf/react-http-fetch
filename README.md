@@ -37,6 +37,12 @@ Just follow links below to get an overview of library features.
 - [Getting started](#getting-started)
 - [Provider](#provider)
 - [Http client](#http-client)
+  - [Public API](#public-api)
+  - [Request params](#request-params)
+  - [Request return](#request-return)
+  - [Abortable request return](#abortable-request-return)
+  - [Example &ndash; Abortable request](#example--abortable-request)
+  - [Example &ndash; Get request](#example--get-request)
 - [Request hooks](#request-hooks)
 - [Events](#events)
 - [Caching](#caching)
@@ -113,6 +119,69 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 <br>
 
 ## Http client
+The `useHttpClient` hook return a set of method to perform http requests. The `request` function is the lowest level one, all other exposed functions are just decorators around it. Below a basic example using `request`:
+
+```js
+import { useHttpClient } from 'react-http-fetch';
+
+
+function App() {
+  const { request } = useHttpClient();
+
+  const [todo, setTodo] = useState();
+
+  useEffect(
+    () => {
+      const fetchTodo = async () => {
+        const res = await request({
+          baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+          relativeUrl: 'todos/1',
+          requestOptions: {
+            method: 'GET',
+          },
+        });
+        setTodo(res);
+      };
+
+      fetchTodo();
+    },
+    [request]
+  );
+
+  return (
+    <div>{`Todo name: ${todo && todo.title}`}</div>
+  );
+}
+
+export default App;
+```
+
+<style>
+.httpRequestsList li {
+  margin-left: -22px
+}
+</style>
+
+
+### Public API
+
+The complete *public API* exposed by the hook:
+| Method | Description | Params | Return |
+| --------------------- | --------------------------------------------------------------------------| --------------------- | --------------------- | 
+|request | The lowest level method to perform a http request | params| return
+| <ul class="httpRequestsList"><li>get</li><li>post</li><li>put</li><li>patch</li><li>delete</li></ul> | Make use of lower level method `request` by just overriding the http method ([example](#example-get-request)) | params | return
+| abortableRequest | The lowest level method to perform an abortable http request | params | return
+| <ul class="httpRequestsList"><li>abortableGet</li><li>abortablePost</li><li>abortablePut</li><li>abortablePatch</li><li>abortableDelete</li></ul> | Make use of lower level method `abortableRequest` by just overriding the http method ([example](#example&ndash;-abortable-request)) | params | return
+
+### Request params
+
+### Request return
+
+### Abortable request return
+
+### Example &ndash; Abortable request
+
+### Example &ndash; Get request
 
 <br>
 
