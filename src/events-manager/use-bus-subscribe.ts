@@ -1,15 +1,15 @@
-import { useCompareEffect } from '../shared';
-import { useRef, useCallback, useContext } from 'react';
+import { useRef, useCallback } from 'react';
 import fastCompare from 'react-fast-compare';
 import { HttpEventClassType, HttpEventHandler } from './types';
-import { EventBusContext } from './event-bus-context';
+import { useEventBus } from './event-bus-context';
+import { useCompareLayoutEffect } from '../shared/use-compare-layout-effect';
 
 export const useBusSubscribe = <T>(
   eventName: HttpEventClassType<T>,
   handler: HttpEventHandler<T>
 ): void => {
   // The event bus.
-  const eventBus = useContext(EventBusContext);
+  const eventBus = useEventBus();
 
   // A ref to unsubscribe from the event. It helps to avoid
   // registering the same event handler multiple times.
@@ -28,7 +28,7 @@ export const useBusSubscribe = <T>(
   /**
    * Setup the event handler.
    */
-  useCompareEffect(
+  useCompareLayoutEffect(
     () => {
       // Subscribe to the event and keep track of the subscription.
       unsubscribeRef.current = eventBus.subscribe(eventName, handler);
