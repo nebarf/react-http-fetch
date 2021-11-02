@@ -1,8 +1,8 @@
-import { useCompareEffect } from '../shared';
 import { useRef, useCallback } from 'react';
 import fastCompare from 'react-fast-compare';
 import { HttpEventClassType, HttpEventHandler } from './types';
 import { useEventBus } from './event-bus-context';
+import { useCompareLayoutEffect } from '../shared/use-compare-layout-effect';
 
 export const useBusSubscribe = <T>(
   eventName: HttpEventClassType<T>,
@@ -14,18 +14,6 @@ export const useBusSubscribe = <T>(
   // A ref to unsubscribe from the event. It helps to avoid
   // registering the same event handler multiple times.
   const unsubscribeRef = useRef<() => void>();
-
-  // Keeps track of the first run of the hook and the related subscription.
-  const firstRunRef = useRef(true);
-  const unsubcribeFirstRunRef = useRef<() => void>();
-
-  // Subscribe to the event on first hook run. "useEffect" hook will first
-  // run after component rendering, if child components cause http events to
-  // be triggered they want be receveived from this subscriber.
-  if (firstRunRef.current) {
-    unsubcribeFirstRunRef.current = eventBus.subscribe(eventName, handler);
-    firstRunRef.current = false;
-  }
 
   /**
    * Detach the handler for the event.
@@ -40,12 +28,8 @@ export const useBusSubscribe = <T>(
   /**
    * Setup the event handler.
    */
-  useCompareEffect(
+  useCompareLayoutEffect(
     () => {
-      if (unsubcribeFirstRunRef.current) {
-        unsubcribeFirstRunRef.current();
-        unsubcribeFirstRunRef.current = undefined;
-      }
       // Subscribe to the event and keep track of the subscription.
       unsubscribeRef.current = eventBus.subscribe(eventName, handler);
 
