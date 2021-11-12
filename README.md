@@ -156,12 +156,6 @@ function App() {
 export default App;
 ```
 
-<style>
-.httpRequestsList li {
-  margin-left: -22px
-}
-</style>
-
 
 ### Public API
 
@@ -182,12 +176,12 @@ The complete *public API* exposed by the hook:
 | requestOptions | [HttpRequestOptions](./src/client/types.ts) | The options carried by the fetch request. |
 
 ### Request return
-The return value of native JS fetch. If a custom response parser (see [Provider](#provider)) is provided then the return value corresponds to the parsed one.
+The jsonified return value of native JS fetch. If a custom response parser (see [Provider](#provider)) is provided then the return value corresponds to the parsed one.
 
 ### Abortable request return
 | Value | Type |
 | ----- | ---- |
-|[request, abortController]|[[RequestReturn](#request-return), [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)|
+|[request, abortController]|[[RequestReturn](#request-return), [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController)]|
 
 ### Example &ndash; Abortable request
 ```js
