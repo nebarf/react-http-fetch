@@ -4,8 +4,8 @@ import { HttpEventClassType, HttpEventHandler } from './types';
 import { useEventBus } from './event-bus-context';
 import { useCompareLayoutEffect } from '../shared/use-compare-layout-effect';
 
-export const useBusSubscribe = <T>(
-  eventName: HttpEventClassType<T>,
+export const useHttpEvent = <T>(
+  eventType: HttpEventClassType<T>,
   handler: HttpEventHandler<T>
 ): void => {
   // The event bus.
@@ -31,14 +31,14 @@ export const useBusSubscribe = <T>(
   useCompareLayoutEffect(
     () => {
       // Subscribe to the event and keep track of the subscription.
-      unsubscribeRef.current = eventBus.subscribe(eventName, handler);
+      unsubscribeRef.current = eventBus.subscribe(eventType, handler);
 
       // Clean up: unsubscribe the previous event handler.
       return () => {
         unsubscribe();
       };
     },
-    [eventBus, eventName, handler, unsubscribe],
+    [eventBus, eventType, handler, unsubscribe],
     fastCompare
   );
 };
