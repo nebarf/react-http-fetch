@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-alpha.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
+## [v1.0.0-beta.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.2...v1.0.0-beta.0)
+
+
+### Merged
+
+- Improve readme [`#20`](https://github.com/nebarf/react-http-fetch/pull/20)
+- readme hooks and events sections [`#28`](https://github.com/nebarf/react-http-fetch/pull/28)
+
+
+### Commits
+
+- Readme: caching [`7a6e845`](https://github.com/nebarf/react-http-fetch/commit/7a6e8453d849a7480c34d9546b8a8540823ebb47)
+- readme hooks and events section [`7817564`](https://github.com/nebarf/react-http-fetch/commit/78175640fe0805fb2c7358c0eda7d87edcccd2c0)
+- Http client doc (followup) [`a25ca63`](https://github.com/nebarf/react-http-fetch/commit/a25ca6338cddae7eb36075dddab02f40c1a7ed13)
+
+## [v1.0.0-alpha.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) - 2021-11-02
 
 
 ### Merged
@@ -17,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - temp [`7b9990e`](https://github.com/nebarf/react-http-fetch/commit/7b9990e7bcf73f4475ebf47fd6501586973b58a5)
 - Bus subscription: switch to layout effetch to perform event subscriptions [`35673e4`](https://github.com/nebarf/react-http-fetch/commit/35673e4e02e67ebf9f14dee05c44acd285abf249)
-- Add useCompareLayoutEffect to linting rules [`20836d1`](https://github.com/nebarf/react-http-fetch/commit/20836d17254a05f3554d5a747b98b105f902f38a)
+- Release v1.0.0-alpha.2 [`d318400`](https://github.com/nebarf/react-http-fetch/commit/d3184003e54344fac54239a77bc955d0d82cfc08)
 
 ## [v1.0.0-alpha.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) - 2021-11-01
 
