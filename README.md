@@ -468,7 +468,7 @@ export default App;
 <br>
 
 ## Caching
-Any request can be cached by setting the `maxAge` (expressed in milliseconds) parameter as part of the reuqest options as shown below:
+Any request can be cached by setting the `maxAge` (expressed in milliseconds) parameter as part of the request options as shown below:
 
 ```js
 import { useHttpRequest } from 'react-http-fetch';
@@ -501,7 +501,7 @@ function App() {
 export default App;
 ```
 
-By default the http client uses an in-memory cache, so it will be flushed everytime a full app refresh is performed. You can override the default caching strategy by providing your own cache. The example below a http cache based on session storage:
+By default the http client uses an in-memory cache, so it will be flushed everytime a full app refresh is performed. You can override the default caching strategy by providing your own cache. The example below shows a http cache based on session storage:
 
 ```js
 import React from 'react';
