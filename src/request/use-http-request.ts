@@ -52,14 +52,49 @@ export const useHttpRequest = <HttpResponse>(
   );
 
   /**
+   * Merges the overrided http params into the source one.
+   */
+  const mergeParams = useCallback(
+    (
+      source: Partial<PerformHttpRequestParams>,
+      override: Partial<PerformHttpRequestParams>
+    ): Partial<PerformHttpRequestParams> => {
+      const { baseUrlOverride, parser, relativeUrl, requestOptions } = override;
+
+      return {
+        baseUrlOverride: baseUrlOverride || source.baseUrlOverride,
+        parser: parser || source.parser,
+        relativeUrl: relativeUrl || source.relativeUrl,
+        requestOptions: {
+          body: requestOptions?.body || source.requestOptions?.body,
+          credentials: requestOptions?.credentials || source.requestOptions?.credentials,
+          headers: {
+            ...(source.requestOptions?.headers || {}),
+            ...(requestOptions?.headers || {}),
+          },
+          maxAge: requestOptions?.maxAge || source.requestOptions?.maxAge,
+          method: requestOptions?.method || source.requestOptions?.method,
+          queryParams: requestOptions?.queryParams || source.requestOptions?.queryParams,
+          signal: requestOptions?.signal || source.requestOptions?.signal,
+        },
+      };
+    },
+    []
+  );
+
+  /**
    * Performs the http request allowing to abort it.
    */
   const request = useCompareCallback(
-    (): UseHttpAbortableRequestReturn<HttpResponse> => {
+    (
+      paramsOverride?: Partial<PerformHttpRequestParams>
+    ): UseHttpAbortableRequestReturn<HttpResponse> => {
       safelyDispatch(requestInit());
 
-      const [reqResult, abortController] =
-        httpClientAbortableRequest<HttpResponse>(performHttpRequestParams);
+      const mergedParams = paramsOverride
+        ? mergeParams(performHttpRequestParams, paramsOverride)
+        : performHttpRequestParams;
+      const [reqResult, abortController] = httpClientAbortableRequest<HttpResponse>(mergedParams);
 
       // Listen request to be successfully resolved or reject and
       // update the state accordingly.

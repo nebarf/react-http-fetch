@@ -17,11 +17,11 @@ export interface PerformHttpRequestParams {
 }
 
 export type HttpClientRequest = <HttpResponse = Response>(
-  params: PerformHttpRequestParams
+  params: Partial<PerformHttpRequestParams>
 ) => Promise<HttpResponse>;
 
 export type HttpClientAbortableRequest = <HttpResponse = Response>(
-  params: PerformHttpRequestParams
+  params: Partial<PerformHttpRequestParams>
 ) => AbortableHttpRequestReturn<HttpResponse>;
 
 export interface UseHttpClientReturn {

@@ -74,6 +74,7 @@ yarn add react-http-fetch
 You can override the default configuration used by the http client to perform any request by using the `HttpClientConfigProvider`:
 
 ```js
+import React from 'react';
 import { defaultHttpReqConfig, HttpClientConfigProvider } from 'react-http-fetch';
 
 function Child() {
@@ -128,8 +129,8 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 The `useHttpClient` hook return a set of methods to perform http requests. The `request` function is the lowest level one, all other exposed functions are just decorators around it. Below a basic example using `request`:
 
 ```js
+import React from 'react';
 import { useHttpClient } from 'react-http-fetch';
-
 
 function App() {
   const { request } = useHttpClient();
@@ -311,6 +312,7 @@ Returns an array of two elements, the first one embeds the state of the http req
 
 ### Example &ndash; Http request hook triggered automatically on component mount
 ```js
+import React from 'react';
 import { useHttpRequest } from 'react-http-fetch';
 
 function App() {
@@ -335,7 +337,7 @@ export default App;
 ### Example &ndash; Http request hook triggered manually on component mount
 ```js
 import { useHttpRequest } from 'react-http-fetch';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 function App() {
   const [state, request] = useHttpRequest({
@@ -355,6 +357,74 @@ export default App;
 
 ### Example &ndash; Http post request hook
 
+```js
+import React, { useState } from 'react';
+import { useHttpPost } from 'react-http-fetch';
+
+function App() {
+  const [inputs, setInputs] = useState({});
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+    setInputs(values => ({...values, [name]: value}))
+  }
+
+  const [, createPostRequest] = useHttpPost({
+    baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+    relativeUrl: 'posts',
+  });
+
+  const createPost = async (event) => {
+    event.preventDefault();
+    const { postTitle, postBody } = inputs;
+
+    const reqBody = { title: postTitle, body: postBody };
+    try {
+      // Providing request options when running the request.
+      // Provided options will be merged to the one provided
+      // to the hook useHttpPost.
+      await createPostRequest({
+        requestOptions: { body: reqBody }
+      });
+      alert('Post created!');
+    } catch (error) {
+      console.error(error);
+      alert('An error occured. Check the browser console.');
+    }
+  };
+
+  return (
+    <form onSubmit={createPost}>
+      <label style={{ display: 'block' }}>
+        Title:
+        <input
+          type="text"
+          name="postTitle"
+          value={inputs.postTitle || ""}
+          onChange={handleChange}
+        />
+      </label>
+      <label style={{ display: 'block' }}>
+        Body:
+        <input
+          type="text"
+          name="postBody"
+          value={inputs.postBody || ""}
+          onChange={handleChange}
+        />
+      </label>
+      <button type="submit">
+        Create Post
+      </button>
+    </form>
+  );
+}
+
+export default App;
+```
+
+
 <br>
 
 ## Events
@@ -366,7 +436,7 @@ Every time a request is executed the events shown below will be emitted. Each ev
 |  [RequestErroredEvent](src/events-manager/events/request-errored-event.ts)  | [HttpError](src/errors/http-error.ts) |
 |  [RequestSuccededEvent](src/events-manager/events/request-succeded-event.ts)  |[RequestSuccededEventPayload](src/events-manager/events/request-succeded-event.ts)  |
 
-It's possible to subscribe a specific event using the [useHttpEvent](src/events-manager/use-http-event.ts) hook as shown below:
+You can subscribe a specific event using the [useHttpEvent](src/events-manager/use-http-event.ts) hook as shown below:
 
 ```js
 import { useState } from 'react';
@@ -398,6 +468,207 @@ export default App;
 <br>
 
 ## Caching
+Any request can be cached by setting the `maxAge` (expressed in milliseconds) parameter as part of the reuqest options as shown below:
+
+```js
+import { useHttpRequest } from 'react-http-fetch';
+import React from 'react';
+
+function App() {
+  const [state, request] = useHttpRequest({
+    baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+    relativeUrl: 'todos/1',
+    requestOptions: { maxAge: 60000 } // Cache for 1 minute
+  });
+
+  const fetchTodo = () => {
+    const { reqResult } = request();
+    reqResult.then(res => console.log(res))
+  };
+
+  return (
+    <>
+      <div>
+        {`Todo name: ${(state && state.data && state.data.title) || ''}`}
+      </div>
+      <button type="button" onClick={fetchTodo}>
+        Make request
+      </button>
+    </>
+  );
+}
+
+export default App;
+```
+
+By default the http client uses an in-memory cache, so it will be flushed everytime a full app refresh is performed. You can override the default caching strategy by providing your own cache. The example below a http cache based on session storage:
+
+```js
+import React from 'react';
+import { HttpClientConfigProvider, HttpCache, useHttpRequest } from 'react-http-fetch';
+
+export class HttpSessionStorageCacheService extends HttpCache {
+  /**
+   * The local cache providing for a request identifier
+   * the corresponding parsed response.
+   */
+  store = window.sessionStorage;
+
+  /**
+   * Gets the unique key used as idenitifier to store
+   * a cached response for the given http request.
+   */
+  _getRequestIdentifier(request) {
+    const fullUrl = request.urlWithParams;
+    return fullUrl;
+  }
+
+  /**
+   * Tells if a cached entry is expired.
+   */
+  _isEntryExpired(entry) {
+    const nowTime = new Date().getTime();
+    const cachedAt = entry.cachedAt instanceof Date ? entry.cachedAt : new Date(entry.cachedAt);
+    const cachedTime = cachedAt.getTime();
+    return cachedTime + entry.maxAge < nowTime;
+  }
+
+  /**
+   * Gets the cached entry associated with the request.
+   */
+  _getEntry(request) {
+    const reqIdentifier = this._getRequestIdentifier(request);
+    const storedEntry = this.store.getItem(reqIdentifier);
+
+    try {
+      const parsedEntry = JSON.parse(storedEntry);
+      return parsedEntry;
+    } catch(err) {
+      return null;
+    }
+  }
+
+  /**
+   * Removes a cached entry.
+   */
+  _removeEntry(entry) {
+    this.store.removeItem(entry.identifier);
+  }
+
+  /**
+   * Determines if for the given request is available a cached response.
+   */
+  _has(request) {
+    const key = this._getRequestIdentifier(request);
+    return this.store.hasOwnProperty(key);
+  }
+
+  /**
+   * Tells if the cached request is expired or not.
+   */
+  _isExpired(request) {
+    const cachedEntry = this._getEntry(request);
+    if (!cachedEntry) {
+      return true;
+    }
+
+    return this._isEntryExpired(cachedEntry);
+  }
+
+  /**
+   * Gets the cached entry in the map for the given request.
+   */
+  get(request) {
+    const cachedEntry = this._getEntry(request);
+    if (!cachedEntry) {
+      return undefined;
+    }
+
+    const isExpired = this._isEntryExpired(cachedEntry);
+    return isExpired ? undefined : cachedEntry.response;
+  }
+
+  /**
+   * Puts a new cached response for the given request.
+   */
+  put(request, response) {
+    if (!request.maxAge) {
+      return;
+    }
+
+    const reqKey = this._getRequestIdentifier(request);
+    const entry = {
+      response,
+      identifier: reqKey,
+      cachedAt: new Date(),
+      maxAge: request.maxAge,
+    };
+
+    // Update and flush the cache.
+    this.store.setItem(reqKey, JSON.stringify(entry));
+
+    // Remove the entry from the cache once expired.
+    const timerRef = setTimeout(() => {
+      this._removeEntry(entry);
+      clearTimeout(timerRef);
+    }, request.maxAge);
+  }
+
+  /**
+   * Founds all expired entry and deletes them from the cache.
+   */
+  flush() {
+    this.store.forEach((entry) => {
+      const isEntryExpired = this._isEntryExpired(entry);
+
+      if (isEntryExpired) {
+        this._removeEntry(entry);
+      }
+    });
+  }
+}
+
+const httpCache = new HttpSessionStorageCacheService();
+
+function Child() {
+  const [state, request] = useHttpRequest({
+    baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+    relativeUrl: 'todos/1',
+    requestOptions: { maxAge: 60000 } // Cache for 1 minute
+  });
+
+  console.log('Request state:', state.data);
+
+  const fetchTodo = () => {
+    const { reqResult } = request();
+    reqResult.then(res => console.log('Request res: ', res))
+  };
+
+  return (
+    <>
+      <div>
+        {`Todo name: ${(state && state.data && state.data.title) || ''}`}
+      </div>
+      <button type="button" onClick={fetchTodo}>
+        Make request
+      </button>
+    </>
+  );
+};
+
+
+function App() {
+  const httpReqConfig = { cache: httpCache };
+
+  return (
+    <HttpClientConfigProvider config={httpReqConfig}>
+      <Child />
+    </HttpClientConfigProvider>
+  );
+}
+
+export default App;
+```
 
 <br>
 
