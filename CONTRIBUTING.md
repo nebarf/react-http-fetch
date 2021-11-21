@@ -21,18 +21,18 @@ Contributing
   ```sh
   $ cd ..
   $ create-react-app react-http-fetch-sandbox
-  $ cd react-http-sandbox
+  $ cd react-http-fetch-sandbox
   $ yarn
   ```
 6. Link the local library to the sanbox:
   ```sh
-  $ yarnk link react-http-fetch
+  $ yarn link react-http-fetch
   ```
 7. Link react peer deps to local library
   ```sh
   $ cd ../react-http-fetch
-  $ yarnk link ../react-http-fetch-sandbox/node_modules/react
-  $ yarnk link ../react-http-fetch-sandbox/node_modules/react-dom
+  $ yarn link ../react-http-fetch-sandbox/node_modules/react
+  $ yarn link ../react-http-fetch-sandbox/node_modules/react-dom
   ```
 8. Start library build in watch mode:
   ```sh
@@ -50,4 +50,4 @@ Contributing
 Bu sure to cover any changes to the source code by integrating the tests suite.
 
 ## **Submit your changes**
-Push your changes against your forke repo and make a PR against `nebarf/react-http-fetch:main`.
+Push your changes against your forked repo and make a PR against `nebarf/react-http-fetch:main`.
