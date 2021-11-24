@@ -5,7 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-beta.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.2...v1.0.0-beta.0)
+## [v1.0.0-beta.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.0...v1.0.0-beta.1)
+
+
+### Merged
+
+- Http cache store [`#29`](https://github.com/nebarf/react-http-fetch/pull/29)
+
+
+### Commits
+
+- Allow to provide a custom http cache store in provider config in place of cache service override [`d51d465`](https://github.com/nebarf/react-http-fetch/commit/d51d465c50a721abad542d8d0796a624de6bbac5)
+- Add configurable prefix and separator to http cache store [`875b19b`](https://github.com/nebarf/react-http-fetch/commit/875b19b8a39f334333c0f31e0df9b7060fb24049)
+- Update readme for http cache store [`51801f0`](https://github.com/nebarf/react-http-fetch/commit/51801f0441bbf79a49a1eb9aa818dac805d198bd)
+
+## [v1.0.0-beta.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.2...v1.0.0-beta.0) - 2021-11-21
 
 
 ### Merged
