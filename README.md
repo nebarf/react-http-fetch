@@ -121,7 +121,9 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 |responseParser|A function that maps the native fetch response. The default parser transform the fetch response stream into a json (https://developer.mozilla.org/en-US/docs/Web/API/Response/json)|[httpResponseParser](src/config/response-parser.ts)
 |requestBodySerializer|A function used to serialize request body. The default serializer take into account a wide range of data types to figure out which type of serialization to perform|[serializeRequestBody](src/config/request-body-serializer.ts)
 |reqOptions|The default request option that will be carried by any request dispatched by the client. See [HttpRequestOptions](src/client/types.ts)|```{ headers: { 'Content-Type': 'application/json' } }```
-|cache|A service used to cache http responses. [HttpCache](src/cache/http-cache.ts) can be used as reference to provide your own implementation. By default it uses an in-memory cache.|[HttpInMemoryCacheService](src/cache/http-in-memory-cache.ts)
+|cacheStore|The store for cached http responses. By default an in-memory cache store is used.|[HttpInMemoryCacheService](src/cache/http-in-memory-cache.ts)
+|cacheStorePrefix|The prefix concatenated to any cached entry.|`rfh`
+|cacheStoreSeparator|Separates the store prefix and the cached entry identifier|`__`
 
 <br>
 
@@ -501,134 +503,90 @@ function App() {
 export default App;
 ```
 
-By default the http client uses an in-memory cache, so it will be flushed everytime a full app refresh is performed. You can override the default caching strategy by providing your own cache. The example below shows a http cache based on session storage:
+By default the http client uses an in-memory cache, so it will be flushed everytime a full app refresh is performed. You can override the default caching strategy by providing your own cache store. The example below shows a http cache store based on session storage:
 
 ```js
 import React from 'react';
-import { HttpClientConfigProvider, HttpCache, useHttpRequest } from 'react-http-fetch';
+import { useHttpRequest, HttpClientConfigProvider } from 'react-http-fetch';
 
-export class HttpSessionStorageCacheService extends HttpCache {
+export class HttpSessionStorageCacheStore {
   /**
    * The local cache providing for a request identifier
-   * the corresponding parsed response.
+   * the corresponding cached entry.
    */
-  store = window.sessionStorage;
+  _store = window.sessionStorage;
 
   /**
-   * Gets the unique key used as idenitifier to store
-   * a cached response for the given http request.
+   * @inheritdoc
    */
-  _getRequestIdentifier(request) {
-    const fullUrl = request.urlWithParams;
-    return fullUrl;
-  }
-
-  /**
-   * Tells if a cached entry is expired.
-   */
-  _isEntryExpired(entry) {
-    const nowTime = new Date().getTime();
-    const cachedAt = entry.cachedAt instanceof Date ? entry.cachedAt : new Date(entry.cachedAt);
-    const cachedTime = cachedAt.getTime();
-    return cachedTime + entry.maxAge < nowTime;
-  }
-
-  /**
-   * Gets the cached entry associated with the request.
-   */
-  _getEntry(request) {
-    const reqIdentifier = this._getRequestIdentifier(request);
-    const storedEntry = this.store.getItem(reqIdentifier);
-
-    try {
-      const parsedEntry = JSON.parse(storedEntry);
-      return parsedEntry;
-    } catch(err) {
-      return null;
-    }
-  }
-
-  /**
-   * Removes a cached entry.
-   */
-  _removeEntry(entry) {
-    this.store.removeItem(entry.identifier);
-  }
-
-  /**
-   * Determines if for the given request is available a cached response.
-   */
-  _has(request) {
-    const key = this._getRequestIdentifier(request);
-    return this.store.hasOwnProperty(key);
-  }
-
-  /**
-   * Tells if the cached request is expired or not.
-   */
-  _isExpired(request) {
-    const cachedEntry = this._getEntry(request);
-    if (!cachedEntry) {
-      return true;
-    }
-
-    return this._isEntryExpired(cachedEntry);
-  }
-
-  /**
-   * Gets the cached entry in the map for the given request.
-   */
-  get(request) {
-    const cachedEntry = this._getEntry(request);
-    if (!cachedEntry) {
-      return undefined;
-    }
-
-    const isExpired = this._isEntryExpired(cachedEntry);
-    return isExpired ? undefined : cachedEntry.response;
-  }
-
-  /**
-   * Puts a new cached response for the given request.
-   */
-  put(request, response) {
-    if (!request.maxAge) {
+  get(identifier) {
+    const stringifiedEntry = this._store.getItem(identifier);
+    if (!stringifiedEntry) {
       return;
     }
 
-    const reqKey = this._getRequestIdentifier(request);
-    const entry = {
-      response,
-      identifier: reqKey,
-      cachedAt: new Date(),
-      maxAge: request.maxAge,
-    };
-
-    // Update and flush the cache.
-    this.store.setItem(reqKey, JSON.stringify(entry));
-
-    // Remove the entry from the cache once expired.
-    const timerRef = setTimeout(() => {
-      this._removeEntry(entry);
-      clearTimeout(timerRef);
-    }, request.maxAge);
+    try {
+      const parsedEntry = JSON.parse(stringifiedEntry);
+      return parsedEntry;
+    } catch (err) {
+      return;
+    }
   }
 
   /**
-   * Founds all expired entry and deletes them from the cache.
+   * @inheritdoc
+   */
+  put(identifier, entry) {
+    try {
+      const stringifiedEntry = JSON.stringify(entry);
+      this._store.setItem(identifier, stringifiedEntry);
+
+      return () => this.delete(identifier);
+    } catch (err) {
+      return () => {};
+    }
+  }
+
+  /**
+   * @inheritdoc
+   */
+  has(identifier) {
+    return this._store.has(identifier);
+  }
+
+  /**
+   * @inheritdoc
+   */
+  delete(identifier) {
+    this._store.removeItem(identifier);
+  }
+
+  /**
+   * Gets all entry keys.
+   */
+  _keys() {
+    return Object.keys(this._store);
+  }
+
+  /**
+   * Gets all stored entries.
+   */
+  entries() {
+    return this._keys()
+      .map(entryKey => this._store.getItem(entryKey));
+  }
+
+  /**
+   * @inheritdoc
    */
   flush() {
-    this.store.forEach((entry) => {
-      const isEntryExpired = this._isEntryExpired(entry);
-
-      if (isEntryExpired) {
-        this._removeEntry(entry);
-      }
+    this._keys().forEach((entry) => {
+      this.delete(entry.identifier);
     });
   }
 }
 
-const httpCache = new HttpSessionStorageCacheService();
+const httpCacheStore = new HttpSessionStorageCacheStore();
 
 function Child() {
   const [state, request] = useHttpRequest({
@@ -641,7 +599,7 @@ function Child() {
 
   const fetchTodo = () => {
     const { reqResult } = request();
-    reqResult.then(res => console.log('Request res: ', res))
+    reqResult.then(res => console.log('Request response: ', res))
   };
 
   return (
@@ -658,7 +616,13 @@ function Child() {
 
 
 function App() {
-  const httpReqConfig = { cache: httpCache };
+  const httpReqConfig = {
+    cacheStore: httpCacheStore,
+    // "prefix" and "separator" are not mandatory,
+    // if not provided the default ones will be used.
+    cacheStorePrefix: 'customPrefix',
+    cacheStoreSeparator: '-'
+  };
 
   return (
     <HttpClientConfigProvider config={httpReqConfig}>

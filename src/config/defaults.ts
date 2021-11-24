@@ -1,7 +1,10 @@
 import { HttpClientContextProps, HttpClientConfig } from './types';
 import { httpResponseParser } from './response-parser';
 import { serializeRequestBody } from './request-body-serializer';
-import { HttpInMemoryCacheService } from '../cache';
+import { HttpCacheService, HttpInMemoryCacheStore } from '../cache';
+import { HttpCacheStorePrefixDecorator } from '../cache/prefix-decorator';
+
+export const defaultCacheStore = new HttpInMemoryCacheStore();
 
 export const defaultHttpReqConfig: HttpClientConfig = {
   baseUrl: '',
@@ -12,7 +15,7 @@ export const defaultHttpReqConfig: HttpClientConfig = {
       'Content-Type': 'application/json',
     },
   },
-  cache: new HttpInMemoryCacheService(),
+  cache: new HttpCacheService(new HttpCacheStorePrefixDecorator(defaultCacheStore)),
 };
 
 export const defaultClientProps: HttpClientContextProps = {
