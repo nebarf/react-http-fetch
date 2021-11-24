@@ -31,9 +31,11 @@ export interface HttpClientProviderConfig {
   responseParser: HttpResponseParser;
   requestBodySerializer: HttpRequestBodySerializer;
   cacheStore: HttpCacheStore;
+  cacheStorePrefix: string;
+  cacheStoreSeparator: string;
 }
 
 export interface HttpClientProviderProps {
   children: ReactElement;
-  config: HttpClientProviderConfig;
+  config: Partial<HttpClientProviderConfig>;
 }

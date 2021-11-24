@@ -1,7 +1,7 @@
 import { HttpCacheEntry } from './types';
 import { HttpCacheStore } from './http-cache-store';
 
-export class HttpInMemoryCacheStore extends HttpCacheStore {
+export class HttpInMemoryCacheStore implements HttpCacheStore {
   /**
    * The local cache providing for a request identifier
    * the corresponding cached entry.
@@ -18,9 +18,9 @@ export class HttpInMemoryCacheStore extends HttpCacheStore {
   /**
    * @inheritdoc
    */
-  put<T>(entry: HttpCacheEntry<T>): () => void {
-    this.store.set(entry.identifier, entry);
-    return () => this.delete(entry.identifier);
+  put<T>(identifier: string, entry: HttpCacheEntry<T>): () => void {
+    this.store.set(identifier, entry);
+    return () => this.delete(identifier);
   }
 
   /**

@@ -1,33 +1,33 @@
 import { HttpCacheEntry } from './types';
 
-export abstract class HttpCacheStore<Identifier = string> {
+export interface HttpCacheStore {
   /**
    * Gets the cached entry for the given identifier.
    */
-  abstract get<T>(identifier: Identifier): HttpCacheEntry<T> | undefined;
+  get<T>(identifier: string): HttpCacheEntry<T> | undefined;
 
   /**
    * Stores the entry.
    */
-  abstract put<T>(entry: HttpCacheEntry<T>): () => void;
+  put<T>(identifier: string, entry: HttpCacheEntry<T>): () => void;
 
   /**
    * Determines if the entry is in the store.
    */
-  abstract has(idenitifier: Identifier): boolean;
+  has(identifier: string): boolean;
 
   /**
    * Deletes the cached entry for the given identifier.
    */
-  abstract delete(idenitifier: Identifier): void;
+  delete(identifier: string): void;
 
   /**
    * Gets all stored entries.
    */
-  abstract entries(): HttpCacheEntry<unknown>[];
+  entries(): HttpCacheEntry<unknown>[];
 
   /**
    * Flushes the store by deleting all entries.
    */
-  abstract flush(): void;
+  flush(): void;
 }

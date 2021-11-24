@@ -1,9 +1,13 @@
-import { HttpCacheStore } from './http-cache-store';
 import { HttpRequest } from '../client';
 import { HttpCacheEntry } from './types';
+import { HttpCacheStorePrefixDecorator } from './prefix-decorator';
 
 export class HttpCacheService {
-  constructor(private store: HttpCacheStore) {}
+  private prefixedStore: HttpCacheStorePrefixDecorator;
+
+  constructor(store: HttpCacheStorePrefixDecorator) {
+    this.prefixedStore = store;
+  }
 
   /**
    * Gets the unique key used as idenitifier to store
@@ -29,14 +33,14 @@ export class HttpCacheService {
    */
   private getEntry<T>(request: HttpRequest): HttpCacheEntry<T> | undefined {
     const reqIdentifier = this.getRequestIdentifier(request);
-    return this.store.get(reqIdentifier) as HttpCacheEntry<T>;
+    return this.prefixedStore.get(reqIdentifier) as HttpCacheEntry<T>;
   }
 
   /**
    * Removes a cached entry.
    */
   private removeEntry<T>(entry: HttpCacheEntry<T>): void {
-    this.store.delete(entry.identifier);
+    this.prefixedStore.delete(entry.identifier);
   }
 
   /**
@@ -44,7 +48,7 @@ export class HttpCacheService {
    */
   has(request: HttpRequest): boolean {
     const key = this.getRequestIdentifier(request);
-    return this.store.has(key);
+    return this.prefixedStore.has(key);
   }
 
   /**
@@ -89,7 +93,7 @@ export class HttpCacheService {
     };
 
     // Update the store.
-    this.store.put(entry);
+    this.prefixedStore.put(entry.identifier, entry);
 
     // Remove the entry from the cache once expired.
     const timerRef = setTimeout(() => {
@@ -102,7 +106,7 @@ export class HttpCacheService {
    * Founds all expired entry and deletes them from the cache.
    */
   prune(): void {
-    const entries = this.store.entries();
+    const entries = this.prefixedStore.entries();
     entries.forEach((entry) => {
       const isEntryExpired = this.isEntryExpired(entry);
 
@@ -116,6 +120,6 @@ export class HttpCacheService {
    * Flush the cache by removing all entries.
    */
   flush(): void {
-    this.store.flush();
+    this.prefixedStore.flush();
   }
 }
