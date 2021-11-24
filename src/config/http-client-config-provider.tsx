@@ -3,6 +3,7 @@ import { useCompareMemo } from '../shared';
 import { defaultClientProps, defaultHttpReqConfig } from './defaults';
 import { HttpClientContextProps, HttpClientProviderProps, HttpClientConfig } from './types';
 import fastCompare from 'react-fast-compare';
+import { HttpCacheService } from '..';
 
 /**
  * The context to provide the default http client configuration.
@@ -23,7 +24,9 @@ const HttpClientConfigProvider = ({ config, children }: HttpClientProviderProps)
       reqOptions: config.reqOptions || defaultHttpReqConfig.reqOptions,
       requestBodySerializer:
         config.requestBodySerializer || defaultHttpReqConfig.requestBodySerializer,
-      cache: config.cache || defaultHttpReqConfig.cache,
+      cache: config.cacheStore
+        ? new HttpCacheService(config.cacheStore)
+        : defaultHttpReqConfig.cache,
     }),
     [config],
     fastCompare

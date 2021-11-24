@@ -1,4 +1,4 @@
-import { HttpCacheService } from '../cache';
+import { HttpCacheService, HttpCacheStore } from '../cache';
 import { ReactElement } from 'react';
 import { HttpRequestOptions, HttpResponseParser } from '../client';
 
@@ -25,7 +25,15 @@ export interface HttpClientContextProps {
   config: HttpClientConfig;
 }
 
+export interface HttpClientProviderConfig {
+  reqOptions: Partial<HttpRequestOptions>;
+  baseUrl: string;
+  responseParser: HttpResponseParser;
+  requestBodySerializer: HttpRequestBodySerializer;
+  cacheStore: HttpCacheStore;
+}
+
 export interface HttpClientProviderProps {
   children: ReactElement;
-  config: HttpClientConfig;
+  config: HttpClientProviderConfig;
 }
