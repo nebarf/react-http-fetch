@@ -31,8 +31,8 @@ Contributing
 7. Link react peer deps to local library
   ```sh
   $ cd ../react-http-fetch
-  $ yarn link ../react-http-fetch-sandbox/node_modules/react
-  $ yarn link ../react-http-fetch-sandbox/node_modules/react-dom
+  $ npm link ../react-http-fetch-sandbox/node_modules/react
+  $ npm link ../react-http-fetch-sandbox/node_modules/react-dom
   ```
 8. Start library build in watch mode:
   ```sh
