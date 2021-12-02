@@ -133,7 +133,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
         const httpError = new HttpError(
           error?.message || 'Http Error',
           error?.status || undefined,
-          requestInfo
+          requestInfo,
+          undefined,
+          undefined,
+          error
         );
         /**
          * Publish an event to tell the request errored.
@@ -141,7 +144,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
         const requestErroredEvent = new RequestErroredEvent(httpError);
         eventBus.publish(requestErroredEvent);
 
-        return Promise.reject(error);
+        return Promise.reject(httpError);
       }
     },
     [baseUrl, defaultOptions, requestBodySerializer, eventBus, responseParser, cache]

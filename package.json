@@ -34,6 +34,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^7.0.0",
     "jest": "^27.2.4",
+    "jest-fetch-mock": "^3.0.3",
     "lint-staged": "^11.2.0",
     "prettier": "^2.4.1",
     "react": "^17.0.2",
@@ -60,8 +61,8 @@
     "release:patch": "release-it patch",
     "release:minor": "release-it minor",
     "release:major": "release-it major",
-    "test": "jest -c ./jest.config.js",
-    "test:watch": "jest -c ./jest.config.js --watch"
+    "test": "jest -c ./jest.config.js --env=jsdom",
+    "test:watch": "jest -c ./jest.config.js --watch --env=jsdom"
   },
   "peerDependencies": {
     "react": "^17.0.2",
