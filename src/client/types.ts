@@ -39,7 +39,7 @@ export interface UseHttpClientReturn {
   abortableDelete: HttpClientAbortableRequest;
 }
 
-export interface HttpRequestOptions<RequestBody = BodyInit> {
+export interface HttpRequestOptions<RequestBody = unknown> {
   body: RequestBody | null | undefined;
   credentials: RequestCredentials | undefined;
   headers?: HeadersInit;

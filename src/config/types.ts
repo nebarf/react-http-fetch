@@ -2,14 +2,8 @@ import { HttpCacheService, HttpCacheStore } from '../cache';
 import { ReactElement } from 'react';
 import { HttpRequestOptions, HttpResponseParser } from '../client';
 
-export type ReqBodySerializerReturn =
-  | string
-  | null
-  | ArrayBuffer
-  | Blob
-  | FormData
-  | URLSearchParams;
-export type HttpRequestBodySerializer = (body: BodyInit) => ReqBodySerializerReturn;
+export type ReqBodySerializerReturn = BodyInit | null;
+export type HttpRequestBodySerializer = (body: unknown) => ReqBodySerializerReturn;
 
 export interface HttpClientConfig {
   reqOptions: Partial<HttpRequestOptions>;

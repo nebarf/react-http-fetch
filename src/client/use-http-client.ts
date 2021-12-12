@@ -56,7 +56,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
           ...defaultOptions.headers,
           ...headers,
         },
-        body: body && requestBodySerializer(body),
+        body: body ? requestBodySerializer(body) : null,
         maxAge: maxAge || 0,
         queryParams,
       };
@@ -66,6 +66,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
        */
       const requestInfo: HttpRequest = new HttpRequest({
         ...mergedOptions,
+        body,
         baseUrl: computedBaseUrl,
         relativeUrl: relativeUrl || '',
       });

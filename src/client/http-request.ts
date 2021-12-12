@@ -2,7 +2,7 @@ import { HttpMethod } from '../enum';
 
 export interface HttpRequestProps {
   baseUrl: string;
-  body?: BodyInit | null;
+  body?: unknown;
   credentials?: RequestCredentials;
   headers?: HeadersInit;
   maxAge?: number;
@@ -28,7 +28,7 @@ export class HttpRequest implements HttpRequestProps {
   /**
    * The request body.
    */
-  private _body?: BodyInit;
+  private _body?: unknown;
 
   /**
    * The request credentials.
@@ -88,7 +88,7 @@ export class HttpRequest implements HttpRequestProps {
     return this._baseUrl;
   }
 
-  get body(): BodyInit | null {
+  get body(): unknown {
     return this._body || null;
   }
 
