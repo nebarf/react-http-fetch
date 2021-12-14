@@ -4,3 +4,4 @@ export * from './use-http-get';
 export * from './use-http-patch';
 export * from './use-http-post';
 export * from './use-http-put';
+export * from './types';
