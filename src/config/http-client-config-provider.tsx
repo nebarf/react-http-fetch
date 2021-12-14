@@ -3,7 +3,7 @@ import { useCompareMemo } from '../shared';
 import { defaultClientProps, defaultHttpReqConfig, defaultCacheStore } from './defaults';
 import { HttpClientContextProps, HttpClientProviderProps, HttpClientConfig } from './types';
 import fastCompare from 'react-fast-compare';
-import { HttpCacheService } from '..';
+import { HttpCacheService } from '../cache';
 import { HttpCacheStorePrefixDecorator } from '../cache/prefix-decorator';
 
 /**

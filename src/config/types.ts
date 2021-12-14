@@ -13,8 +13,6 @@ export interface HttpClientConfig<HttpRequestBodyT> {
   cache: HttpCacheService;
 }
 
-export type HttpInterceptor = (request: Promise<Response>) => Promise<void>;
-
 export interface HttpClientContextProps<HttpRequestBodyT> {
   config: HttpClientConfig<HttpRequestBodyT>;
 }
