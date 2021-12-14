@@ -6,6 +6,6 @@ export enum HttpEventIdentifier {
   RequestErrored = 'RequestErrored',
 }
 
-export type HttpEventHandler<T> = (payload: T) => void;
+export type HttpEventHandler<PayloadT> = (payload: PayloadT) => void;
 
-export type HttpEventClassType<T> = new (...args: unknown[]) => HttpEvent<T>;
+export type HttpEventClassType<PayloadT> = new (...args: unknown[]) => HttpEvent<PayloadT>;

@@ -1,13 +1,15 @@
 import { HttpError } from '../../errors';
 import { HttpEvent } from './http-event';
 
-export class RequestErroredEvent<T> extends HttpEvent<HttpError<T>> {
+export class RequestErroredEvent<HttpResponseT, HttpRequestBodyT> extends HttpEvent<
+  HttpError<HttpResponseT, HttpRequestBodyT>
+> {
   /**
    * @inheritdoc
    */
-  payload: HttpError<T>;
+  payload: HttpError<HttpResponseT, HttpRequestBodyT>;
 
-  constructor(payload: HttpError<T>) {
+  constructor(payload: HttpError<HttpResponseT, HttpRequestBodyT>) {
     super();
     this.payload = payload;
   }

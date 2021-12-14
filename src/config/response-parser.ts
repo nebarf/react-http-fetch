@@ -1,3 +1,3 @@
-export function httpResponseParser<HttpResponse>(res: Response): Promise<HttpResponse> {
+export function httpResponseParser<HttpResponseT>(res: Response): Promise<HttpResponseT> {
   return res.json();
 }

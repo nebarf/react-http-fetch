@@ -4,9 +4,9 @@ import { HttpEventClassType, HttpEventHandler } from './types';
 import { useEventBus } from './event-bus-context';
 import { useCompareLayoutEffect } from '../shared/use-compare-layout-effect';
 
-export const useHttpEvent = <T>(
-  eventType: HttpEventClassType<T>,
-  handler: HttpEventHandler<T>
+export const useHttpEvent = <PayloadT>(
+  eventType: HttpEventClassType<PayloadT>,
+  handler: HttpEventHandler<PayloadT>
 ): void => {
   // The event bus.
   const eventBus = useEventBus();

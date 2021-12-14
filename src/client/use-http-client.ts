@@ -28,12 +28,12 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Perform a fetch request allowing to observe the response stream.
    */
   const request = useCallback(
-    async <HttpResponse>({
+    async <HttpResponseT, HttpRequestBodyT = unknown>({
       baseUrlOverride,
       parser,
       relativeUrl,
       requestOptions,
-    }: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
+    }: Partial<PerformHttpRequestParams<HttpRequestBodyT>>): Promise<HttpResponseT> => {
       /**
        * Compose the request data.
        */
@@ -56,7 +56,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
           ...defaultOptions.headers,
           ...headers,
         },
-        body: body && requestBodySerializer(body),
+        body: body ? requestBodySerializer(body) : null,
         maxAge: maxAge || 0,
         queryParams,
       };
@@ -64,8 +64,9 @@ export const useHttpClient = (): UseHttpClientReturn => {
       /**
        * Encapsulate all request info.
        */
-      const requestInfo: HttpRequest = new HttpRequest({
+      const requestInfo: HttpRequest<HttpRequestBodyT> = new HttpRequest({
         ...mergedOptions,
+        body: body || undefined,
         baseUrl: computedBaseUrl,
         relativeUrl: relativeUrl || '',
       });
@@ -73,7 +74,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
       /**
        * Just return the cached response if it is in the cache.
        */
-      const cachedResponse = cache.get<HttpResponse>(requestInfo);
+      const cachedResponse = cache.get<HttpResponseT, HttpRequestBodyT>(requestInfo);
       if (cachedResponse) {
         return cachedResponse;
       }
@@ -113,8 +114,8 @@ export const useHttpClient = (): UseHttpClientReturn => {
          */
         const computedParser = parser || responseParser;
         const parsedResponse = (await (computedParser
-          ? computedParser<HttpResponse>(response)
-          : response)) as HttpResponse;
+          ? computedParser<HttpResponseT>(response)
+          : response)) as HttpResponseT;
 
         /**
          * Publish an event to tell the request succeded.
@@ -151,16 +152,18 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable fetch request.
    */
   const abortableRequest = useCallback(
-    <HttpResponse>({
+    <HttpResponseT, HttpRequestBodyT = unknown>({
       baseUrlOverride,
       parser,
       relativeUrl,
       requestOptions,
-    }: Partial<PerformHttpRequestParams>): AbortableHttpRequestReturn<HttpResponse> => {
+    }: Partial<
+      PerformHttpRequestParams<HttpRequestBodyT>
+    >): AbortableHttpRequestReturn<HttpResponseT> => {
       const abortController = new AbortController();
       const { signal } = abortController;
 
-      const requestPromise = request<HttpResponse>({
+      const requestPromise = request<HttpResponseT, HttpRequestBodyT>({
         baseUrlOverride,
         parser,
         relativeUrl,
@@ -179,13 +182,13 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Override the http method of the provided request params.
    */
   const overrideHttpMethod = useCallback(
-    (
-      params: Partial<PerformHttpRequestParams>,
+    <HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
       method: HttpMethod
-    ): Partial<PerformHttpRequestParams> => {
+    ): Partial<PerformHttpRequestParams<HttpRequestBodyT>> => {
       const { baseUrlOverride, parser, relativeUrl, requestOptions } = params;
 
-      const overridedParams: Partial<PerformHttpRequestParams> = {
+      const overridedParams: Partial<PerformHttpRequestParams<HttpRequestBodyT>> = {
         baseUrlOverride,
         parser,
         relativeUrl,
@@ -204,12 +207,13 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Perform a http request with the given http method.
    */
   const requestByMethod = useCallback(
-    async <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>,
+    async <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
       method: HttpMethod
-    ): Promise<HttpResponse> => {
-      const overridedParams: Partial<PerformHttpRequestParams> = overrideHttpMethod(params, method);
-      return request<HttpResponse>(overridedParams);
+    ): Promise<HttpResponseT> => {
+      const overridedParams: Partial<PerformHttpRequestParams<HttpRequestBodyT>> =
+        overrideHttpMethod(params, method);
+      return request<HttpResponseT, HttpRequestBodyT>(overridedParams);
     },
     [request, overrideHttpMethod]
   );
@@ -218,8 +222,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs a get http request.
    */
   const get = useCallback(
-    async <HttpResponse>(params: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
-      return requestByMethod(params, HttpMethod.Get);
+    async <HttpResponseT, HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Promise<HttpResponseT> => {
+      return requestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Get);
     },
     [requestByMethod]
   );
@@ -228,8 +234,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs a post http request.
    */
   const post = useCallback(
-    async <HttpResponse>(params: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
-      return requestByMethod(params, HttpMethod.Post);
+    async <HttpResponseT, HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Promise<HttpResponseT> => {
+      return requestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Post);
     },
     [requestByMethod]
   );
@@ -238,8 +246,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs a put http request.
    */
   const put = useCallback(
-    async <HttpResponse>(params: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
-      return requestByMethod(params, HttpMethod.Get);
+    async <HttpResponseT, HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Promise<HttpResponseT> => {
+      return requestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Get);
     },
     [requestByMethod]
   );
@@ -248,8 +258,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs a patch http request.
    */
   const patch = useCallback(
-    async <HttpResponse>(params: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
-      return requestByMethod(params, HttpMethod.Get);
+    async <HttpResponseT, HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Promise<HttpResponseT> => {
+      return requestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Get);
     },
     [requestByMethod]
   );
@@ -258,8 +270,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs a delete http request.
    */
   const deleteReq = useCallback(
-    async <HttpResponse>(params: Partial<PerformHttpRequestParams>): Promise<HttpResponse> => {
-      return requestByMethod(params, HttpMethod.Get);
+    async <HttpResponseT, HttpRequestBodyT>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Promise<HttpResponseT> => {
+      return requestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Get);
     },
     [requestByMethod]
   );
@@ -268,12 +282,13 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Perform a http request with the given http method.
    */
   const abortableRequestByMethod = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>,
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
       method: HttpMethod
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      const overridedParams: Partial<PerformHttpRequestParams> = overrideHttpMethod(params, method);
-      return abortableRequest<HttpResponse>(overridedParams);
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      const overridedParams: Partial<PerformHttpRequestParams<HttpRequestBodyT>> =
+        overrideHttpMethod(params, method);
+      return abortableRequest<HttpResponseT, HttpRequestBodyT>(overridedParams);
     },
     [abortableRequest, overrideHttpMethod]
   );
@@ -282,10 +297,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable http get vrequest.
    */
   const abortableGet = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      return abortableRequestByMethod<HttpResponse>(params, HttpMethod.Get);
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      return abortableRequestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Get);
     },
     [abortableRequestByMethod]
   );
@@ -294,10 +309,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable http post request.
    */
   const abortablePost = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      return abortableRequestByMethod<HttpResponse>(params, HttpMethod.Post);
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      return abortableRequestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Post);
     },
     [abortableRequestByMethod]
   );
@@ -306,10 +321,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable http patch request.
    */
   const abortablePatch = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      return abortableRequestByMethod<HttpResponse>(params, HttpMethod.Patch);
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      return abortableRequestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Patch);
     },
     [abortableRequestByMethod]
   );
@@ -318,10 +333,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable http put request.
    */
   const abortablePut = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      return abortableRequestByMethod<HttpResponse>(params, HttpMethod.Put);
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      return abortableRequestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Put);
     },
     [abortableRequestByMethod]
   );
@@ -330,10 +345,10 @@ export const useHttpClient = (): UseHttpClientReturn => {
    * Performs an abortable http delete request.
    */
   const abortableDelete = useCallback(
-    <HttpResponse>(
-      params: Partial<PerformHttpRequestParams>
-    ): AbortableHttpRequestReturn<HttpResponse> => {
-      return abortableRequestByMethod<HttpResponse>(params, HttpMethod.Delete);
+    <HttpResponseT, HttpRequestBodyT = unknown>(
+      params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): AbortableHttpRequestReturn<HttpResponseT> => {
+      return abortableRequestByMethod<HttpResponseT, HttpRequestBodyT>(params, HttpMethod.Delete);
     },
     [abortableRequestByMethod]
   );

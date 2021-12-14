@@ -1,6 +1,6 @@
-export abstract class HttpEvent<T> {
+export abstract class HttpEvent<PayloadT> {
   /**
    * A payload.
    */
-  abstract payload: T;
+  abstract payload: PayloadT;
 }
