@@ -29,7 +29,7 @@ describe('http-fetch', () => {
     const cachedResponse = { name: 'Phelony' };
 
     httpCache.put(httpRequest, cachedResponse);
-    const expiredCachedResponse = httpCache.get<{ name: string }>(httpRequest);
+    const expiredCachedResponse = httpCache.get<{ name: string }, void>(httpRequest);
 
     expect(expiredCachedResponse).toEqual(cachedResponse);
     expect(setTimeout).toHaveBeenCalledTimes(1);
@@ -46,14 +46,14 @@ describe('http-fetch', () => {
     const httpResponse = { name: 'Phelony' };
 
     httpCache.put(httpRequest, httpResponse);
-    const cachedResponse = httpCache.get<{ name: string }>(httpRequest);
+    const cachedResponse = httpCache.get<{ name: string }, void>(httpRequest);
 
     expect(cachedResponse).toEqual(httpResponse);
     expect(setTimeout).toHaveBeenCalledTimes(1);
     expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 6000);
 
     jest.runOnlyPendingTimers();
-    const expiredCachedResponse = httpCache.get<{ name: string }>(httpRequest);
+    const expiredCachedResponse = httpCache.get<{ name: string }, void>(httpRequest);
     expect(expiredCachedResponse).toBeUndefined();
   });
 

@@ -144,9 +144,9 @@ describe('use-http-client', () => {
 
     await useHttpClientResult.current.request({});
 
-    function checkHttpEventHandlerReqParam(httpRequest: HttpRequest) {
+    function checkHttpEventHandlerReqParam(httpRequest: HttpRequest<void>) {
       expect(httpRequest.baseUrl).toBe('');
-      expect(httpRequest.body).toBeNull();
+      expect(httpRequest.body).toBeUndefined();
       expect(httpRequest.credentials).toBeUndefined();
       expect(httpRequest.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
       expect(httpRequest.maxAge).toBe(0);
@@ -197,9 +197,9 @@ describe('use-http-client', () => {
       });
     } catch (error) {}
 
-    function checkHttpEventHandlerReqParam(httpRequest: HttpRequest) {
+    function checkHttpEventHandlerReqParam(httpRequest: HttpRequest<void>) {
       expect(httpRequest.baseUrl).toBe('');
-      expect(httpRequest.body).toBeNull();
+      expect(httpRequest.body).toBeUndefined();
       expect(httpRequest.credentials).toBeUndefined();
       expect(httpRequest.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
       expect(httpRequest.maxAge).toBe(0);
@@ -287,7 +287,7 @@ describe('use-http-client', () => {
     const { post } = result.current;
 
     const res1 = await post({
-      requestOptions: { body: JSON.stringify({ name: 'Rico' }) },
+      requestOptions: { body: { name: 'Rico' } },
     });
 
     expect(res1).toEqual(fetchResponse);
