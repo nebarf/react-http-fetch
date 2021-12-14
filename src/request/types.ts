@@ -1,4 +1,5 @@
 import { HttpRequestOptions, HttpResponseParser } from '../client';
+import { HttpContext } from '../client/http-context';
 import { HttpRequestState } from './state-reducer';
 
 export interface UseHttpRequestParams<InitialDataT, HttpRequestBodyT> {
@@ -8,6 +9,7 @@ export interface UseHttpRequestParams<InitialDataT, HttpRequestBodyT> {
   requestOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
   initialData: InitialDataT;
   fetchOnBootstrap: boolean;
+  context: HttpContext;
 }
 
 export interface UseHttpAbortableRequestReturn<HttpResponseT> {

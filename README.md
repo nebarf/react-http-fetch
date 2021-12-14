@@ -43,6 +43,7 @@ Just follow links below to get an overview of library features.
   - [Abortable request return](#abortable-request-return)
   - [Example &ndash; Abortable request](#example--abortable-request)
   - [Example &ndash; Get request](#example--get-request)
+  - [Example &ndash; Http context](#example--http-context)
 - [Request hooks](#request-hooks)
   - [Http request hook params](#http-request-hook-params)
   - [Http request hook return](#http-request-hook-return)
@@ -182,6 +183,7 @@ The complete *public API* exposed by the hook:
 | baseUrlOverride | string | The base url of the request. If provided, it would override the [provider](#provider) base url.
 | relativeUrl | string | The url relative to the base one (e.g. posts/1).
 | parser | [HttpResponseParser](src/client/types.ts) | An optional response parser that would override the [provider](#provider) global one. |
+| context | [HttpContext](src/client/http-context.ts) | An optional context that carries arbitrary user defined data. See examples.|
 | requestOptions | [HttpRequestOptions](./src/client/types.ts) | The options carried by the fetch request. |
 
 ### Request return
@@ -285,6 +287,49 @@ function App() {
 export default App;
 ```
 
+### Example &ndash; Http context
+```js
+import React, { useEffect } from 'react';
+import {
+  useHttpClient,
+  useHttpEvent,
+  RequestStartedEvent,
+  HttpContextToken,
+  HttpContext, } from 'react-http-fetch';
+
+const showGlobalLoader = new HttpContextToken(true);
+const reqContext = new HttpContext().set(showGlobalLoader, false);
+
+function App() {
+  const { request } = useHttpClient();
+
+  useHttpEvent(RequestStartedEvent, (payload) => {
+    console.log('Show global loader:', payload.context.get(showGlobalLoader));
+  });
+
+  useEffect(
+    () => {
+      const fetchTodo = async () => {
+        await request({
+          baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+          relativeUrl: 'todos/1',
+          context: reqContext,
+        });
+      };
+
+      fetchTodo();
+    },
+    [request]
+  );
+
+  return (
+    <h1>Http Context</h1>
+  );
+}
+
+export default App;
+```
+
 <br>
 
 ## Request hooks
@@ -296,6 +341,7 @@ The library provides a hook `useHttpRequest` managing the state of the http requ
 | baseUrlOverride | string | The base url of the request. If provided, it would override the [provider](#provider) base url.
 | relativeUrl | string | The url relative to the base one (e.g. posts/1).
 | parser | [HttpResponseParser](src/client/types.ts) | An optional response parser that would override the [provider](#provider) global one. |
+| context | [HttpContext](src/client/http-context.ts) | An optional context that carries arbitrary user defined data. See examples.|
 | requestOptions | [HttpRequestOptions](./src/client/types.ts) | The options carried by the fetch request. |
 | initialData | any | The value that the state assumes initially before the request is send. |
 | fetchOnBootstrap | boolean | Tell if the fetch must be triggered automatically when mounting the component or not. In the second case we would like to have a manual fetch, this is optained by a request function returned by the hook. |
