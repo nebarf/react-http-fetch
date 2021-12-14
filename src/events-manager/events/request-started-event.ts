@@ -1,7 +1,7 @@
 import { HttpRequest } from '../../client';
 import { HttpEvent } from './http-event';
 
-export class RequestStartedEvent<HttpRequestBodyT = unknown> extends HttpEvent<
+export class RequestStartedEvent<HttpRequestBodyT> extends HttpEvent<
   HttpRequest<HttpRequestBodyT>
 > {
   /**

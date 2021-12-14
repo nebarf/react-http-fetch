@@ -1,4 +1,4 @@
-export interface HttpCacheEntry<T> {
+export interface HttpCacheEntry<HttpResponseT> {
   /**
    * The identifier for the cached entry.
    */
@@ -7,7 +7,7 @@ export interface HttpCacheEntry<T> {
   /**
    * The cached parsed reponse for the remote call.
    */
-  response: T;
+  response: HttpResponseT;
 
   /**
    * Keeps track of the Date the entry was cached.

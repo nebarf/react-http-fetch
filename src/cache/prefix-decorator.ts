@@ -34,7 +34,7 @@ export class HttpCacheStorePrefixDecorator implements HttpCacheStore {
   /**
    * @inheritdoc
    */
-  get<T>(entryIdentifier: string): HttpCacheEntry<T> | undefined {
+  get<HttpResponseT>(entryIdentifier: string): HttpCacheEntry<HttpResponseT> | undefined {
     const prefixedIdentifier = this.getPrefixedIdentifier(entryIdentifier);
     return this.store.get(prefixedIdentifier);
   }
@@ -42,7 +42,7 @@ export class HttpCacheStorePrefixDecorator implements HttpCacheStore {
   /**
    * @inheritdoc
    */
-  put<T>(entryIdentifier: string, entry: HttpCacheEntry<T>): () => void {
+  put<HttpResponseT>(entryIdentifier: string, entry: HttpCacheEntry<HttpResponseT>): () => void {
     const prefixedIdentifier = this.getPrefixedIdentifier(entryIdentifier);
     return this.store.put(prefixedIdentifier, entry);
   }
