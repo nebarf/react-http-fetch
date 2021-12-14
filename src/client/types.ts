@@ -4,25 +4,25 @@ export interface UseHttpClientParams {
   baseUrl: string;
 }
 
-export type AbortableHttpRequestReturn<HttpResponse> = [
-  res: Promise<HttpResponse>,
+export type AbortableHttpRequestReturn<HttpResponseT> = [
+  res: Promise<HttpResponseT>,
   abort: AbortController
 ];
 
-export interface PerformHttpRequestParams {
+export interface PerformHttpRequestParams<HttpRequestBodyT> {
   relativeUrl: string;
   parser: HttpResponseParser;
   baseUrlOverride: string;
-  requestOptions: Partial<HttpRequestOptions>;
+  requestOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
 }
 
-export type HttpClientRequest = <HttpResponse = Response>(
-  params: Partial<PerformHttpRequestParams>
-) => Promise<HttpResponse>;
+export type HttpClientRequest = <HttpResponseT, HttpRequestBodyT>(
+  params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+) => Promise<HttpResponseT>;
 
-export type HttpClientAbortableRequest = <HttpResponse = Response>(
-  params: Partial<PerformHttpRequestParams>
-) => AbortableHttpRequestReturn<HttpResponse>;
+export type HttpClientAbortableRequest = <HttpResponseT, HttpRequestBodyT>(
+  params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+) => AbortableHttpRequestReturn<HttpResponseT>;
 
 export interface UseHttpClientReturn {
   request: HttpClientRequest;
@@ -39,7 +39,7 @@ export interface UseHttpClientReturn {
   abortableDelete: HttpClientAbortableRequest;
 }
 
-export interface HttpRequestOptions<RequestBody = unknown> {
+export interface HttpRequestOptions<RequestBody> {
   body: RequestBody | null | undefined;
   credentials: RequestCredentials | undefined;
   headers?: HeadersInit;

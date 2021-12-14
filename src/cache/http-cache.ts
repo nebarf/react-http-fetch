@@ -13,7 +13,7 @@ export class HttpCacheService {
    * Gets the unique key used as idenitifier to store
    * a cached response for the given http request.
    */
-  private getRequestIdentifier(request: HttpRequest): string {
+  private getRequestIdentifier<HttpRequestBodyT>(request: HttpRequest<HttpRequestBodyT>): string {
     const fullUrl = request.urlWithParams;
     return fullUrl;
   }
@@ -21,7 +21,7 @@ export class HttpCacheService {
   /**
    * Tells if a cached entry is expired.
    */
-  private isEntryExpired<T>(entry: HttpCacheEntry<T>): boolean {
+  private isEntryExpired<HttpResponseT>(entry: HttpCacheEntry<HttpResponseT>): boolean {
     const nowTime = new Date().getTime();
     const cachedAtDate = entry.cachedAt instanceof Date ? entry.cachedAt : new Date(entry.cachedAt);
     const cachedTime = cachedAtDate.getTime();
@@ -31,22 +31,24 @@ export class HttpCacheService {
   /**
    * Gets the cached entry associated with the request.
    */
-  private getEntry<T>(request: HttpRequest): HttpCacheEntry<T> | undefined {
+  private getEntry<HttpResponseT, HttpRequestBodyT>(
+    request: HttpRequest<HttpRequestBodyT>
+  ): HttpCacheEntry<HttpResponseT> | undefined {
     const reqIdentifier = this.getRequestIdentifier(request);
-    return this.prefixedStore.get(reqIdentifier) as HttpCacheEntry<T>;
+    return this.prefixedStore.get(reqIdentifier) as HttpCacheEntry<HttpResponseT>;
   }
 
   /**
    * Removes a cached entry.
    */
-  private removeEntry<T>(entry: HttpCacheEntry<T>): void {
+  private removeEntry<HttpResponseT>(entry: HttpCacheEntry<HttpResponseT>): void {
     this.prefixedStore.delete(entry.identifier);
   }
 
   /**
    * Determines if for the given request is available a cached response.
    */
-  has(request: HttpRequest): boolean {
+  has<HttpRequestBodyT>(request: HttpRequest<HttpRequestBodyT>): boolean {
     const key = this.getRequestIdentifier(request);
     return this.prefixedStore.has(key);
   }
@@ -54,7 +56,7 @@ export class HttpCacheService {
   /**
    * Tells if the cached request is expired or not.
    */
-  isExpired(request: HttpRequest): boolean {
+  isExpired<HttpRequestBodyT>(request: HttpRequest<HttpRequestBodyT>): boolean {
     const cachedEntry = this.getEntry(request);
     if (!cachedEntry) {
       return true;
@@ -66,26 +68,31 @@ export class HttpCacheService {
   /**
    * Gets the cached entry in the map for the given request.
    */
-  get<T>(request: HttpRequest): T | undefined {
+  get<HttpResponseT, HttpRequestBodyT>(
+    request: HttpRequest<HttpRequestBodyT>
+  ): HttpResponseT | undefined {
     const cachedEntry = this.getEntry(request);
     if (!cachedEntry) {
       return undefined;
     }
 
     const isExpired = this.isEntryExpired(cachedEntry);
-    return isExpired ? undefined : (cachedEntry.response as T);
+    return isExpired ? undefined : (cachedEntry.response as HttpResponseT);
   }
 
   /**
    * Puts a new cached response for the given request.
    */
-  put<T>(request: HttpRequest, response: T): void {
+  put<HttpResponseT, HttpRequestBodyT>(
+    request: HttpRequest<HttpRequestBodyT>,
+    response: HttpResponseT
+  ): void {
     if (!request.maxAge) {
       return;
     }
 
     const reqKey = this.getRequestIdentifier(request);
-    const entry: HttpCacheEntry<T> = {
+    const entry: HttpCacheEntry<HttpResponseT> = {
       response,
       identifier: reqKey,
       cachedAt: new Date(),

@@ -6,16 +6,16 @@ import fastCompare from 'react-fast-compare';
 import { PerformHttpRequestParams, useHttpClient } from '../client';
 import { useCompareCallback, useCompareMemo, useCompareEffect } from '../shared';
 
-export const useHttpRequest = <HttpResponse>(
-  params: UseHttpRequestParams<HttpResponse>
-): UseHttpRequestReturn<HttpResponse> => {
+export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
+  params: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>
+): UseHttpRequestReturn<HttpResponseT> => {
   /**
    * Grabs the "request" function from the http client.
    */
   const { abortableRequest: httpClientAbortableRequest } = useHttpClient();
 
   // The state of the request.
-  const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponse>, HttpReqActionType>>(
+  const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponseT>, HttpReqActionType>>(
     httpRequestReducer,
     initialState(params.initialData)
   );
@@ -40,7 +40,7 @@ export const useHttpRequest = <HttpResponse>(
   /**
    * Gets the http params needed to perform the request using the http client related method.
    */
-  const performHttpRequestParams: PerformHttpRequestParams = useCompareMemo(
+  const performHttpRequestParams: PerformHttpRequestParams<HttpRequestBodyT> = useCompareMemo(
     () => ({
       baseUrlOverride: params.baseUrlOverride,
       parser: params.parser,
@@ -56,9 +56,9 @@ export const useHttpRequest = <HttpResponse>(
    */
   const mergeParams = useCallback(
     (
-      source: Partial<PerformHttpRequestParams>,
-      override: Partial<PerformHttpRequestParams>
-    ): Partial<PerformHttpRequestParams> => {
+      source: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
+      override: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): Partial<PerformHttpRequestParams<HttpRequestBodyT>> => {
       const { baseUrlOverride, parser, relativeUrl, requestOptions } = override;
 
       return {
@@ -87,14 +87,17 @@ export const useHttpRequest = <HttpResponse>(
    */
   const request = useCompareCallback(
     (
-      paramsOverride?: Partial<PerformHttpRequestParams>
-    ): UseHttpAbortableRequestReturn<HttpResponse> => {
+      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+    ): UseHttpAbortableRequestReturn<HttpResponseT> => {
       safelyDispatch(requestInit());
 
       const mergedParams = paramsOverride
         ? mergeParams(performHttpRequestParams, paramsOverride)
         : performHttpRequestParams;
-      const [reqResult, abortController] = httpClientAbortableRequest<HttpResponse>(mergedParams);
+      const [reqResult, abortController] = httpClientAbortableRequest<
+        HttpResponseT,
+        HttpRequestBodyT
+      >(mergedParams);
 
       // Listen request to be successfully resolved or reject and
       // update the state accordingly.

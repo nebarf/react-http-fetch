@@ -5,8 +5,8 @@ import { HttpRequestOptions, HttpResponseParser } from '../client';
 export type ReqBodySerializerReturn = BodyInit | null;
 export type HttpRequestBodySerializer = (body: unknown) => ReqBodySerializerReturn;
 
-export interface HttpClientConfig {
-  reqOptions: Partial<HttpRequestOptions>;
+export interface HttpClientConfig<HttpRequestBodyT> {
+  reqOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
   baseUrl: string;
   responseParser: HttpResponseParser;
   requestBodySerializer: HttpRequestBodySerializer;
@@ -15,12 +15,12 @@ export interface HttpClientConfig {
 
 export type HttpInterceptor = (request: Promise<Response>) => Promise<void>;
 
-export interface HttpClientContextProps {
-  config: HttpClientConfig;
+export interface HttpClientContextProps<HttpRequestBodyT> {
+  config: HttpClientConfig<HttpRequestBodyT>;
 }
 
-export interface HttpClientProviderConfig {
-  reqOptions: Partial<HttpRequestOptions>;
+export interface HttpClientProviderConfig<HttpRequestBodyT> {
+  reqOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
   baseUrl: string;
   responseParser: HttpResponseParser;
   requestBodySerializer: HttpRequestBodySerializer;
@@ -29,7 +29,7 @@ export interface HttpClientProviderConfig {
   cacheStoreSeparator: string;
 }
 
-export interface HttpClientProviderProps {
+export interface HttpClientProviderProps<HttpRequestBodyT> {
   children: ReactElement;
-  config: Partial<HttpClientProviderConfig>;
+  config: Partial<HttpClientProviderConfig<HttpRequestBodyT>>;
 }

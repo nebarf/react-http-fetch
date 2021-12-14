@@ -9,16 +9,19 @@ import { HttpCacheStorePrefixDecorator } from '../cache/prefix-decorator';
 /**
  * The context to provide the default http client configuration.
  */
-export const HttpClientContext = createContext<HttpClientContextProps>(defaultClientProps);
+export const HttpClientContext = createContext<HttpClientContextProps<unknown>>(defaultClientProps);
 
 /**
  * The provider for the default http client configuration.
  */
-const HttpClientConfigProvider = ({ config, children }: HttpClientProviderProps): ReactElement => {
+const HttpClientConfigProvider = ({
+  config,
+  children,
+}: HttpClientProviderProps<unknown>): ReactElement => {
   /**
    * The merged http config.
    */
-  const mergedHttpConfig: HttpClientConfig = useCompareMemo(
+  const mergedHttpConfig: HttpClientConfig<unknown> = useCompareMemo(
     () => {
       const cacheStore = config.cacheStore || defaultCacheStore;
       const prefixedCacheStore = new HttpCacheStorePrefixDecorator(
@@ -59,7 +62,7 @@ export { memoizedProvider as HttpClientConfigProvider };
 /**
  * A utility hook to get the http client config context.
  */
-export const useHttpClientConfig = (): HttpClientContextProps => {
+export const useHttpClientConfig = (): HttpClientContextProps<unknown> => {
   const config = useContext(HttpClientContext);
   return config;
 };

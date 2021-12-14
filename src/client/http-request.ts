@@ -1,8 +1,8 @@
 import { HttpMethod } from '../enum';
 
-export interface HttpRequestProps {
+export interface HttpRequestProps<HttpRequestBodyT> {
   baseUrl: string;
-  body?: unknown;
+  body?: HttpRequestBodyT;
   credentials?: RequestCredentials;
   headers?: HeadersInit;
   maxAge?: number;
@@ -12,7 +12,7 @@ export interface HttpRequestProps {
   signal?: AbortSignal;
 }
 
-export class HttpRequest implements HttpRequestProps {
+export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpRequestBodyT> {
   /**
    * The base url of the remote call. The subpath is
    * relative to the base url.
@@ -28,7 +28,7 @@ export class HttpRequest implements HttpRequestProps {
   /**
    * The request body.
    */
-  private _body?: unknown;
+  private _body?: HttpRequestBodyT;
 
   /**
    * The request credentials.
@@ -60,7 +60,7 @@ export class HttpRequest implements HttpRequestProps {
    */
   private _signal?: AbortSignal;
 
-  constructor(requestOpts: HttpRequestProps) {
+  constructor(requestOpts: HttpRequestProps<HttpRequestBodyT>) {
     const {
       baseUrl,
       body,
@@ -88,8 +88,8 @@ export class HttpRequest implements HttpRequestProps {
     return this._baseUrl;
   }
 
-  get body(): unknown {
-    return this._body || null;
+  get body(): HttpRequestBodyT | undefined {
+    return this._body;
   }
 
   get credentials(): RequestCredentials | undefined {

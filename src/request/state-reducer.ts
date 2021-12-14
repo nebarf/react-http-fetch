@@ -1,15 +1,15 @@
 import { HttpReqActionType } from './action-creators';
 import { HttpRequestActions } from './actions';
 
-export interface HttpRequestState<T> {
+export interface HttpRequestState<DataT> {
   pristine: boolean;
   errored: boolean;
   isLoading: boolean;
   error: unknown;
-  data: T;
+  data: DataT;
 }
 
-export const initialState = <T>(data: T): HttpRequestState<T> => ({
+export const initialState = <DataT>(data: DataT): HttpRequestState<DataT> => ({
   pristine: true,
   isLoading: false,
   errored: false,
@@ -17,10 +17,10 @@ export const initialState = <T>(data: T): HttpRequestState<T> => ({
   data,
 });
 
-export const httpRequestReducer = <T>(
-  state: HttpRequestState<T>,
+export const httpRequestReducer = <DataT>(
+  state: HttpRequestState<DataT>,
   action: HttpReqActionType
-): HttpRequestState<T> => {
+): HttpRequestState<DataT> => {
   switch (action.type) {
     case HttpRequestActions.RequestInit:
       return {
@@ -34,7 +34,7 @@ export const httpRequestReducer = <T>(
         ...state,
         isLoading: false,
         errored: false,
-        data: action.payload as T,
+        data: action.payload as DataT,
       };
     case HttpRequestActions.RequestError:
       return {
