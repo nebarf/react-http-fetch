@@ -1,4 +1,4 @@
-import { HttpCacheService, HttpInMemoryCacheStore } from '../..';
+import { HttpCacheService, HttpInMemoryCacheStore } from '../../cache';
 import { HttpCacheStorePrefixDecorator } from '../../cache/prefix-decorator';
 
 export class HttpCacheFixture {
