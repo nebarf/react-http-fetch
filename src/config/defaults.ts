@@ -7,7 +7,7 @@ import { HttpMethod } from '../enum';
 
 export const defaultCacheStore = new HttpInMemoryCacheStore();
 
-export const defaultHttpReqConfig: HttpClientConfig = {
+export const defaultHttpReqConfig: HttpClientConfig<void> = {
   baseUrl: '',
   responseParser: httpResponseParser,
   requestBodySerializer: serializeRequestBody,
@@ -20,6 +20,6 @@ export const defaultHttpReqConfig: HttpClientConfig = {
   cache: new HttpCacheService(new HttpCacheStorePrefixDecorator(defaultCacheStore)),
 };
 
-export const defaultClientProps: HttpClientContextProps = {
+export const defaultClientProps: HttpClientContextProps<void> = {
   config: defaultHttpReqConfig,
 };

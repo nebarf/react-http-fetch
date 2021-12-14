@@ -1,7 +1,7 @@
 import { HttpRequest } from '../client';
 import { HttpStatusCode } from '../enum';
 
-export class HttpError<T> extends Error {
+export class HttpError<HttpResponseT, HttpRequestBodyT> extends Error {
   /**
    * The http status code.
    */
@@ -15,12 +15,12 @@ export class HttpError<T> extends Error {
   /**
    * The stringified response body.
    */
-  response?: T;
+  response?: HttpResponseT;
 
   /**
    * The request info.
    */
-  request?: HttpRequest;
+  request?: HttpRequest<HttpRequestBodyT>;
 
   /**
    * The initial error that was catched.
@@ -30,9 +30,9 @@ export class HttpError<T> extends Error {
   constructor(
     message: string,
     status?: HttpStatusCode,
-    requestInfo?: HttpRequest,
+    requestInfo?: HttpRequest<HttpRequestBodyT>,
     statusText?: string,
-    response?: T,
+    response?: HttpResponseT,
     nativeError?: unknown
   ) {
     super(message);

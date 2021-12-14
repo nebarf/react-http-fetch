@@ -4,12 +4,12 @@ export interface HttpCacheStore {
   /**
    * Gets the cached entry for the given identifier.
    */
-  get<T>(identifier: string): HttpCacheEntry<T> | undefined;
+  get<HttpResponseT>(identifier: string): HttpCacheEntry<HttpResponseT> | undefined;
 
   /**
    * Stores the entry.
    */
-  put<T>(identifier: string, entry: HttpCacheEntry<T>): () => void;
+  put<HttpResponseT>(identifier: string, entry: HttpCacheEntry<HttpResponseT>): () => void;
 
   /**
    * Determines if the entry is in the store.

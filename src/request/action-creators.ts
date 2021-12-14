@@ -11,8 +11,8 @@ export const requestInit = (): RequestInitAction => ({
 /**
  * The action to dispatch when a request completes successfully.
  */
-type RequestSuccessAction<Payload> = { type: HttpRequestActions; payload: Payload };
-export const requestSuccess = <Payload>(payload: Payload): RequestSuccessAction<Payload> => ({
+type RequestSuccessAction<PayloadT> = { type: HttpRequestActions; payload: PayloadT };
+export const requestSuccess = <PayloadT>(payload: PayloadT): RequestSuccessAction<PayloadT> => ({
   type: HttpRequestActions.RequestSuccess,
   payload,
 });

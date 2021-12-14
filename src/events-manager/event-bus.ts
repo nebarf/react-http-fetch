@@ -14,15 +14,15 @@ export class EventBus {
   /**
    * Gets the set of subscriptions associated with the provided http event class type.
    */
-  private _ensureEventSubscriptionInit<T>(
-    httpEventType: HttpEventClassType<T>
-  ): Set<HttpEventHandler<T>> {
+  private _ensureEventSubscriptionInit<PayloadT>(
+    httpEventType: HttpEventClassType<PayloadT>
+  ): Set<HttpEventHandler<PayloadT>> {
     const currentEventSubscriptions = this._subscriptions.get(httpEventType);
     if (currentEventSubscriptions) {
       return currentEventSubscriptions;
     }
 
-    const newEventSubscriptionsSet = new Set<HttpEventHandler<T>>();
+    const newEventSubscriptionsSet = new Set<HttpEventHandler<PayloadT>>();
     this._subscriptions.set(httpEventType, newEventSubscriptionsSet);
     return newEventSubscriptionsSet;
   }
@@ -31,7 +31,7 @@ export class EventBus {
    * Gets the number of subscriptions for the given event.
    * @param {*} eventName
    */
-  getEventSubscriptionsCount<T>(httpEventType: HttpEventClassType<T>): number {
+  getEventSubscriptionsCount<PayloadT>(httpEventType: HttpEventClassType<PayloadT>): number {
     const eventSubscriptions = this._subscriptions.get(httpEventType);
     return eventSubscriptions ? eventSubscriptions.size : 0;
   }
@@ -41,7 +41,10 @@ export class EventBus {
    * @param {*} eventName
    * @param {*} handler
    */
-  subscribe<T>(httpEventType: HttpEventClassType<T>, handler: HttpEventHandler<T>): () => void {
+  subscribe<PayloadT>(
+    httpEventType: HttpEventClassType<PayloadT>,
+    handler: HttpEventHandler<PayloadT>
+  ): () => void {
     const eventSubscriptions = this._ensureEventSubscriptionInit(httpEventType);
     eventSubscriptions.add(handler);
 
@@ -53,8 +56,8 @@ export class EventBus {
    * @param {*} eventName
    * @param {*} payload
    */
-  publish<T>(httpEvent: HttpEvent<T>): void {
-    const httpEventType = httpEvent.constructor as HttpEventClassType<T>;
+  publish<PayloadT>(httpEvent: HttpEvent<PayloadT>): void {
+    const httpEventType = httpEvent.constructor as HttpEventClassType<PayloadT>;
     // Do nothing if the subscriptions set for the given event is empty.
     const eventHandlers = this._subscriptions.get(httpEventType);
     if (!eventHandlers || eventHandlers.size === 0) {
@@ -69,7 +72,10 @@ export class EventBus {
    * @param {*} eventName
    * @param {*} subscription
    */
-  unsubscribe<T>(httpEventType: HttpEventClassType<T>, handler: HttpEventHandler<T>): void {
+  unsubscribe<PayloadT>(
+    httpEventType: HttpEventClassType<PayloadT>,
+    handler: HttpEventHandler<PayloadT>
+  ): void {
     const eventSubscriptionsSet = this._subscriptions.get(httpEventType);
     if (!eventSubscriptionsSet || eventSubscriptionsSet.size === 0) {
       return;
@@ -86,7 +92,7 @@ export class EventBus {
    * Detaches all subscriptions for the given event.
    * @param {*} eventName
    */
-  detachEventSubscriptions<T>(httpEventType: HttpEventClassType<T>): void {
+  detachEventSubscriptions<PayloadT>(httpEventType: HttpEventClassType<PayloadT>): void {
     if (!this._subscriptions.has(httpEventType)) {
       return;
     }

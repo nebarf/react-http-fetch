@@ -11,14 +11,14 @@ export class HttpInMemoryCacheStore implements HttpCacheStore {
   /**
    * @inheritdoc
    */
-  get<T>(identifier: string): HttpCacheEntry<T> | undefined {
-    return this.store.get(identifier) as HttpCacheEntry<T>;
+  get<HttpResponseT>(identifier: string): HttpCacheEntry<HttpResponseT> | undefined {
+    return this.store.get(identifier) as HttpCacheEntry<HttpResponseT>;
   }
 
   /**
    * @inheritdoc
    */
-  put<T>(identifier: string, entry: HttpCacheEntry<T>): () => void {
+  put<HttpResponseT>(identifier: string, entry: HttpCacheEntry<HttpResponseT>): () => void {
     this.store.set(identifier, entry);
     return () => this.delete(identifier);
   }

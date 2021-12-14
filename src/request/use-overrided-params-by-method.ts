@@ -2,15 +2,15 @@ import { useMemo } from 'react';
 import { HttpMethod } from '../enum';
 import { UseHttpRequestParams } from './types';
 
-export const useOverridedParamsByMethod = <HttpResponse>(
-  params: UseHttpRequestParams<HttpResponse>,
+export const useOverridedParamsByMethod = <HttpResponseT, HttpRequestBodyT>(
+  params: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>,
   method: HttpMethod
-): UseHttpRequestParams<HttpResponse> => {
+): UseHttpRequestParams<HttpResponseT, HttpRequestBodyT> => {
   /**
    * Override the http method of the provided request params.
    */
   const overridedParams = useMemo(() => {
-    const newParams: UseHttpRequestParams<HttpResponse> = {
+    const newParams: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT> = {
       ...params,
       requestOptions: {
         ...params.requestOptions,

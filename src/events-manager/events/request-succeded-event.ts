@@ -1,18 +1,20 @@
 import { HttpRequest } from '../../client';
 import { HttpEvent } from './http-event';
 
-export interface RequestSuccededEventPayload<T> {
-  request: HttpRequest;
-  response: T;
+export interface RequestSuccededEventPayload<HttpResponseT, HttpRequestBodyT> {
+  request: HttpRequest<HttpRequestBodyT>;
+  response: HttpResponseT;
 }
 
-export class RequestSuccededEvent<T> extends HttpEvent<RequestSuccededEventPayload<T>> {
+export class RequestSuccededEvent<HttpResponseT, HttpRequestBodyT> extends HttpEvent<
+  RequestSuccededEventPayload<HttpResponseT, HttpRequestBodyT>
+> {
   /**
    * @inheritdoc
    */
-  payload: RequestSuccededEventPayload<T>;
+  payload: RequestSuccededEventPayload<HttpResponseT, HttpRequestBodyT>;
 
-  constructor(payload: RequestSuccededEventPayload<T>) {
+  constructor(payload: RequestSuccededEventPayload<HttpResponseT, HttpRequestBodyT>) {
     super();
     this.payload = payload;
   }
