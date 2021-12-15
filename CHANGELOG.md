@@ -5,7 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-beta.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.0...v1.0.0-beta.1)
+## [v1.0.0-beta.3](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.2...v1.0.0-beta.3)
+
+
+### Merged
+
+- Run lib build before npm publish [`#36`](https://github.com/nebarf/react-http-fetch/pull/36)
+
+
+
+## [v1.0.0-beta.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.1...v1.0.0-beta.2) - 2021-12-15
+
+
+### Merged
+
+- Revert exposed api [`#35`](https://github.com/nebarf/react-http-fetch/pull/35)
+- Fix contributing md [`#34`](https://github.com/nebarf/react-http-fetch/pull/34)
+- Http context [`#33`](https://github.com/nebarf/react-http-fetch/pull/33)
+- Expose only consumer facing API [`#32`](https://github.com/nebarf/react-http-fetch/pull/32)
+- Allow to provide unserialized req body to http client [`#31`](https://github.com/nebarf/react-http-fetch/pull/31)
+
+
+### Commits
+
+- Add type for http request body [`5e8a363`](https://github.com/nebarf/react-http-fetch/commit/5e8a36370a84a9758dba311daa6f05cbfc21e8d3)
+- Allow to provide arbitrary user data carried by the http request [`8550f60`](https://github.com/nebarf/react-http-fetch/commit/8550f6059ef79ef4cb565b3d43b42e04f1e03585)
+- Align codebase to generics naming styleguide [`c2042cd`](https://github.com/nebarf/react-http-fetch/commit/c2042cdd604f8393992a68cedd3d8b4e2620182f)
+
+## [v1.0.0-beta.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.0...v1.0.0-beta.1) - 2021-11-24
 
 
 ### Merged

@@ -2,12 +2,20 @@
   "git": {
     "tagName": "v${version}",
     "commitMessage": "Release v${version}",
-    "requireBranch": "main"
+    "requireBranch": "main",
+    "requireCommits": true
   },
   "hooks": {
+    "before:init": [
+      "yarn before-release-init"
+    ],
     "after:bump": [
-      "npm run changelog",
+      "yarn changelog",
       "git add CHANGELOG.md"
+    ],
+    "before:npm:release": [
+      "yarn clean-build",
+      "yarn build"
     ]
   },
   "npm": {
