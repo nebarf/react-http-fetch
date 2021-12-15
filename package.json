@@ -40,10 +40,12 @@
     "react-dom": "^17.0.2",
     "react-hooks-testing-library": "^0.6.0",
     "release-it": "^14.11.6",
+    "rimraf": "^3.0.2",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
   },
   "scripts": {
+    "rim": "rimraf lib",
     "build": "yarn build:esm && yarn build:cjs",
     "build:prod": "yarn build:prod:esm && yarn build:prod:cjs",
     "build:watch": "yarn build:esm -w && yarn build:cjs -w",

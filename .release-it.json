@@ -6,8 +6,12 @@
   },
   "hooks": {
     "after:bump": [
-      "npm run changelog",
+      "yarn changelog",
       "git add CHANGELOG.md"
+    ],
+    "before:npm:release": [
+      "rimraf lib",
+      "yarn build"
     ]
   },
   "npm": {
