@@ -3,6 +3,8 @@ export {
   AbortableHttpRequestReturn,
   HttpClientAbortableRequest,
   HttpClientRequest,
+  HttpContext,
+  HttpContextToken,
   HttpRequest,
   HttpRequestOptions,
   HttpRequestProps,
