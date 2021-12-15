@@ -28,11 +28,16 @@ Contributing
   ```sh
   $ yarn link react-http-fetch
   ```
-7. Link react peer deps to local library
+6. Link react and react-dom:
+  ```sh
+  $ yarn --cwd node_modules/react link
+  $ yarn --cwd node_modules/react-dom link
+  ```
+7. Link react peer deps to local library:
   ```sh
   $ cd ../react-http-fetch
-  $ yarn link ../react-http-fetch-sandbox/node_modules/react
-  $ yarn link ../react-http-fetch-sandbox/node_modules/react-dom
+  $ yarn link react
+  $ yarn link react-dom
   ```
 8. Start library build in watch mode:
   ```sh

@@ -32,6 +32,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
       baseUrlOverride,
       parser,
       relativeUrl,
+      context,
       requestOptions,
     }: Partial<PerformHttpRequestParams<HttpRequestBodyT>>): Promise<HttpResponseT> => {
       /**
@@ -69,6 +70,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
         body: body || undefined,
         baseUrl: computedBaseUrl,
         relativeUrl: relativeUrl || '',
+        context,
       });
 
       /**
@@ -157,6 +159,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
       parser,
       relativeUrl,
       requestOptions,
+      context,
     }: Partial<
       PerformHttpRequestParams<HttpRequestBodyT>
     >): AbortableHttpRequestReturn<HttpResponseT> => {
@@ -167,6 +170,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
         baseUrlOverride,
         parser,
         relativeUrl,
+        context,
         requestOptions: {
           ...requestOptions,
           signal,

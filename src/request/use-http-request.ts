@@ -46,6 +46,7 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
       parser: params.parser,
       relativeUrl: params.relativeUrl,
       requestOptions: params.requestOptions,
+      context: params.context,
     }),
     [params],
     fastCompare
@@ -59,12 +60,13 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
       source: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
       override: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
     ): Partial<PerformHttpRequestParams<HttpRequestBodyT>> => {
-      const { baseUrlOverride, parser, relativeUrl, requestOptions } = override;
+      const { baseUrlOverride, parser, relativeUrl, requestOptions, context } = override;
 
       return {
         baseUrlOverride: baseUrlOverride || source.baseUrlOverride,
         parser: parser || source.parser,
         relativeUrl: relativeUrl || source.relativeUrl,
+        context: context || source.context,
         requestOptions: {
           body: requestOptions?.body || source.requestOptions?.body,
           credentials: requestOptions?.credentials || source.requestOptions?.credentials,
