@@ -1,4 +1,5 @@
 import { HttpMethod } from '../enum';
+import { HttpContext } from './http-context';
 
 export interface UseHttpClientParams {
   baseUrl: string;
@@ -13,6 +14,7 @@ export interface PerformHttpRequestParams<HttpRequestBodyT> {
   relativeUrl: string;
   parser: HttpResponseParser;
   baseUrlOverride: string;
+  context: HttpContext;
   requestOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
 }
 

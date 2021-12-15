@@ -1,4 +1,5 @@
 import { HttpMethod } from '../enum';
+import { HttpContext, HttpContextToken } from './http-context';
 
 export interface HttpRequestProps<HttpRequestBodyT> {
   baseUrl: string;
@@ -10,6 +11,7 @@ export interface HttpRequestProps<HttpRequestBodyT> {
   queryParams?: Record<string, string>;
   relativeUrl: string;
   signal?: AbortSignal;
+  context?: HttpContext;
 }
 
 export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpRequestBodyT> {
@@ -60,6 +62,11 @@ export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpReque
    */
   private _signal?: AbortSignal;
 
+  /**
+   * The request context storing arbitrary user defined data.
+   */
+  private _context?: HttpContext;
+
   constructor(requestOpts: HttpRequestProps<HttpRequestBodyT>) {
     const {
       baseUrl,
@@ -71,6 +78,7 @@ export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpReque
       queryParams,
       relativeUrl,
       signal,
+      context,
     } = requestOpts;
 
     this._baseUrl = baseUrl;
@@ -82,6 +90,7 @@ export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpReque
     this._queryParams = queryParams;
     this._relativeUrl = relativeUrl;
     this._signal = signal;
+    this._context = context;
   }
 
   get baseUrl(): string {
@@ -137,5 +146,15 @@ export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpReque
       return this.url;
     }
     return `${this.url}?${this.serializedQueryParams}`;
+  }
+
+  get context(): HttpContext | undefined {
+    return this._context;
+  }
+
+  getContextValue<ContextTokenValueT>(
+    token: HttpContextToken<ContextTokenValueT>
+  ): ContextTokenValueT | undefined {
+    return this.context ? this.context.get(token) : undefined;
   }
 }
