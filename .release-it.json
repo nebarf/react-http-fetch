@@ -2,15 +2,19 @@
   "git": {
     "tagName": "v${version}",
     "commitMessage": "Release v${version}",
-    "requireBranch": "main"
+    "requireBranch": "main",
+    "requireCommits": true
   },
   "hooks": {
+    "before:init": [
+      "yarn before-release-init"
+    ],
     "after:bump": [
       "yarn changelog",
       "git add CHANGELOG.md"
     ],
     "before:npm:release": [
-      "rimraf lib",
+      "yarn clean-build",
       "yarn build"
     ]
   },
