@@ -10,20 +10,20 @@ export type AbortableHttpRequestReturn<HttpResponseT> = [
   abort: AbortController
 ];
 
-export interface PerformHttpRequestParams<HttpRequestBodyT> {
+export interface PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT> {
   relativeUrl: string;
-  parser: HttpResponseParser;
+  parser: HttpResponseParser<HttpResponseT>;
   baseUrlOverride: string;
   context: HttpContext;
   requestOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
 }
 
 export type HttpClientRequest = <HttpResponseT, HttpRequestBodyT>(
-  params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+  params: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
 ) => Promise<HttpResponseT>;
 
 export type HttpClientAbortableRequest = <HttpResponseT, HttpRequestBodyT>(
-  params: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+  params: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
 ) => AbortableHttpRequestReturn<HttpResponseT>;
 
 export interface UseHttpClientReturn {
@@ -51,4 +51,4 @@ export interface HttpRequestOptions<RequestBody> {
   signal?: AbortSignal;
 }
 
-export type HttpResponseParser = <HttpResponse>(response: Response) => Promise<HttpResponse>;
+export type HttpResponseParser<HttpResponse> = (response: Response) => Promise<HttpResponse>;

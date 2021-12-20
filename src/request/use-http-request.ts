@@ -40,26 +40,27 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   /**
    * Gets the http params needed to perform the request using the http client related method.
    */
-  const performHttpRequestParams: PerformHttpRequestParams<HttpRequestBodyT> = useCompareMemo(
-    () => ({
-      baseUrlOverride: params.baseUrlOverride,
-      parser: params.parser,
-      relativeUrl: params.relativeUrl,
-      requestOptions: params.requestOptions,
-      context: params.context,
-    }),
-    [params],
-    fastCompare
-  );
+  const performHttpRequestParams: PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT> =
+    useCompareMemo(
+      () => ({
+        baseUrlOverride: params.baseUrlOverride,
+        parser: params.parser,
+        relativeUrl: params.relativeUrl,
+        requestOptions: params.requestOptions,
+        context: params.context,
+      }),
+      [params],
+      fastCompare
+    );
 
   /**
    * Merges the overrided http params into the source one.
    */
   const mergeParams = useCallback(
     (
-      source: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
-      override: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
-    ): Partial<PerformHttpRequestParams<HttpRequestBodyT>> => {
+      source: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>,
+      override: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
+    ): Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>> => {
       const { baseUrlOverride, parser, relativeUrl, requestOptions, context } = override;
 
       return {
@@ -89,7 +90,7 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
    */
   const request = useCompareCallback(
     (
-      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
     ): UseHttpAbortableRequestReturn<HttpResponseT> => {
       safelyDispatch(requestInit());
 

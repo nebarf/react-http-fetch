@@ -57,10 +57,19 @@ describe('use-http-client', () => {
     expect(fetch.mock.calls.length).toEqual(1);
 
     const [[fetchUrl, fetchParams]] = fetch.mock.calls;
-    const { method: fetchMethod, headers: fetchHeaders } = fetchParams || {};
+    const {
+      method: fetchMethod,
+      headers: fetchHeaders,
+      credentials: fetchCredentials,
+      body: fetchBody,
+      signal: fetchSignal,
+    } = fetchParams || {};
     expect(fetchUrl).toBe(`${baseUrlOverride}/${relativeUrl}`);
     expect(fetchMethod).toBe(httpMethod);
     expect(fetchHeaders).toEqual(defaultHttpReqConfig.reqOptions.headers);
+    expect(fetchCredentials).toBeUndefined();
+    expect(fetchBody).toBeNull();
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should allow to override provider request params', async () => {
@@ -91,10 +100,19 @@ describe('use-http-client', () => {
     expect(fetch.mock.calls.length).toEqual(1);
 
     const [[fetchUrl, fetchParams]] = fetch.mock.calls;
-    const { method: fetchMethod, headers: fetchHeaders } = fetchParams || {};
+    const {
+      method: fetchMethod,
+      headers: fetchHeaders,
+      signal: fetchSignal,
+      body: fetchBody,
+      credentials: fetchCredentials,
+    } = fetchParams || {};
     expect(fetchUrl).toBe(`${baseUrlOverride}/${relativeUrl}`);
     expect(fetchMethod).toBe(httpMethod);
     expect(fetchHeaders).toEqual(headers);
+    expect(fetchSignal).toBeUndefined();
+    expect(fetchBody).toBeNull();
+    expect(fetchCredentials).toBeUndefined();
   });
 
   test('should return a http error if the response has errors', async () => {
@@ -124,6 +142,9 @@ describe('use-http-client', () => {
     expect(fetchUrl).toBe('/');
     expect(fetchParams?.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
     expect(fetchParams?.method).toBe(defaultHttpReqConfig.reqOptions.method);
+    expect(fetchParams?.body).toBeNull();
+    expect(fetchParams?.credentials).toBeUndefined();
+    expect(fetchParams?.signal).toBeUndefined();
   });
 
   test('should dispatch events when the request starts and succeeds', async () => {
@@ -170,6 +191,20 @@ describe('use-http-client', () => {
     checkHttpEventHandlerReqParam(succededEventRequestParam);
 
     expect(requestErroredEventHandler.mock.calls.length).toBe(0);
+
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Get,
+      body: null,
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
   });
 
   test('should dispatch events when the request starts and goes in error', async () => {
@@ -226,6 +261,20 @@ describe('use-http-client', () => {
     expect(httpError.response).toBeUndefined();
 
     expect(requestSuccededEventHandler.mock.calls.length).toBe(0);
+
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/?orderBy=age%2B');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Get,
+      body: null,
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams,
+    });
   });
 
   test('should put the request response in the cache', async () => {
@@ -242,7 +291,19 @@ describe('use-http-client', () => {
     });
 
     expect(res1).toEqual(fetchResponse);
-    expect(fetch.mock.calls.length).toBe(1);
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Get,
+      body: null,
+      credentials: undefined,
+      maxAge: 6000,
+      signal: undefined,
+      queryParams: undefined,
+    });
 
     const res2 = await request({});
     expect(res2).toEqual(fetchResponse);
@@ -273,12 +334,25 @@ describe('use-http-client', () => {
       expect(error.message.trim()).toBe('The operation was aborted.');
       expect(error.request.url).toBe('/posts');
       expect(error.nativeError.name).toBe('AbortError');
-      expect(fetch.mock.calls.length).toBe(1);
+
+      const fetchCalls = fetch.mock.calls;
+      expect(fetchCalls.length).toBe(1);
+      const [[fetchUrl, fetchParams]] = fetchCalls;
+      expect(fetchUrl).toBe('/posts');
+      expect(fetchParams).toEqual({
+        ...defaultHttpReqConfig.reqOptions,
+        method: HttpMethod.Get,
+        body: null,
+        credentials: undefined,
+        maxAge: 0,
+        signal: abortController.signal,
+        queryParams: undefined,
+      });
     }
   });
 
   test('should perform a post request', async () => {
-    fetch.mockResponseOnce(JSON.stringify(fetchResponse));
+    fetch.mockResponseOnce('');
 
     const { result } = renderHook(() => useHttpClient(), {
       wrapper: HttpClientProviderConfigFixture.create(),
@@ -286,12 +360,158 @@ describe('use-http-client', () => {
 
     const { post } = result.current;
 
-    const res1 = await post({
-      requestOptions: { body: { name: 'Rico' } },
+    const postBody = { body: { name: 'Rico' } };
+
+    const res1 = await post<string, unknown>({
+      requestOptions: postBody,
+      parser: (fetchRes: Response) => {
+        return fetchRes.text();
+      },
+    });
+
+    expect(res1).toBe('');
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Post,
+      body: JSON.stringify(postBody.body),
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
+  });
+
+  test('should perform a patch request', async () => {
+    fetch.mockResponseOnce('');
+
+    const { result } = renderHook(() => useHttpClient(), {
+      wrapper: HttpClientProviderConfigFixture.create(),
+    });
+
+    const { patch } = result.current;
+
+    const patchBody = { body: { name: 'Rico' } };
+
+    const res1 = await patch<string, unknown>({
+      requestOptions: patchBody,
+      parser: (fetchRes: Response) => {
+        return fetchRes.text();
+      },
+    });
+
+    expect(res1).toBe('');
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Patch,
+      body: JSON.stringify(patchBody.body),
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
+  });
+
+  test('should perform a put request', async () => {
+    fetch.mockResponseOnce('');
+
+    const { result } = renderHook(() => useHttpClient(), {
+      wrapper: HttpClientProviderConfigFixture.create(),
+    });
+
+    const { put } = result.current;
+
+    const putBody = { body: { name: 'Rico' } };
+
+    const res1 = await put<string, unknown>({
+      requestOptions: putBody,
+      parser: (fetchRes: Response) => {
+        return fetchRes.text();
+      },
+    });
+
+    expect(res1).toBe('');
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Put,
+      body: JSON.stringify(putBody.body),
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
+  });
+
+  test('should perform a delete request', async () => {
+    fetch.mockResponseOnce('');
+
+    const { result } = renderHook(() => useHttpClient(), {
+      wrapper: HttpClientProviderConfigFixture.create(),
+    });
+
+    const { deleteReq } = result.current;
+
+    const res1 = await deleteReq<string, unknown>({
+      relativeUrl: 'posts/1',
+      parser: (fetchRes: Response) => {
+        return fetchRes.text();
+      },
+    });
+
+    expect(res1).toBe('');
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/posts/1');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Delete,
+      body: null,
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
+  });
+
+  test('should perform a get request', async () => {
+    fetch.mockResponseOnce(JSON.stringify(fetchResponse));
+
+    const { result } = renderHook(() => useHttpClient(), {
+      wrapper: HttpClientProviderConfigFixture.create(),
+    });
+
+    const { get } = result.current;
+
+    const res1 = await get<string, unknown>({
+      relativeUrl: 'posts/1',
     });
 
     expect(res1).toEqual(fetchResponse);
-    expect(fetch.mock.calls.length).toBe(1);
+    const fetchCalls = fetch.mock.calls;
+    expect(fetchCalls.length).toBe(1);
+    const [[fetchUrl, fetchParams]] = fetchCalls;
+    expect(fetchUrl).toBe('/posts/1');
+    expect(fetchParams).toEqual({
+      ...defaultHttpReqConfig.reqOptions,
+      method: HttpMethod.Get,
+      body: null,
+      credentials: undefined,
+      maxAge: 0,
+      signal: undefined,
+      queryParams: undefined,
+    });
   });
 
   test('should perform an abortable get request', async () => {
@@ -317,7 +537,63 @@ describe('use-http-client', () => {
       expect(error.message.trim()).toBe('The operation was aborted.');
       expect(error.request.url).toBe('/posts');
       expect(error.nativeError.name).toBe('AbortError');
-      expect(fetch.mock.calls.length).toBe(1);
+
+      const fetchCalls = fetch.mock.calls;
+      expect(fetchCalls.length).toBe(1);
+      const [[fetchUrl, fetchParams]] = fetchCalls;
+      expect(fetchUrl).toBe('/posts');
+      expect(fetchParams).toEqual({
+        ...defaultHttpReqConfig.reqOptions,
+        method: HttpMethod.Get,
+        body: null,
+        credentials: undefined,
+        maxAge: 0,
+        signal: abortController.signal,
+        queryParams: undefined,
+      });
+    }
+  });
+
+  test('should perform an abortable post request', async () => {
+    fetch.mockAbortOnce();
+
+    const { result } = renderHook(() => useHttpClient(), {
+      wrapper: HttpClientProviderConfigFixture.create(),
+    });
+
+    const fetchBody = { title: 'The post title' };
+
+    const { abortablePost } = result.current;
+    const [requestPromise, abortController] = abortablePost({
+      requestOptions: { body: fetchBody },
+      relativeUrl: 'posts/1',
+    });
+
+    try {
+      abortController.abort();
+      await requestPromise;
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpError);
+      expect(error.status).toBeUndefined();
+      expect(error.statusText).toBeUndefined();
+      expect(error.response).toBeUndefined();
+      expect(error.message.trim()).toBe('The operation was aborted.');
+      expect(error.request.url).toBe('/posts/1');
+      expect(error.nativeError.name).toBe('AbortError');
+
+      const fetchCalls = fetch.mock.calls;
+      expect(fetchCalls.length).toBe(1);
+      const [[fetchUrl, fetchParams]] = fetchCalls;
+      expect(fetchUrl).toBe('/posts/1');
+      expect(fetchParams).toEqual({
+        ...defaultHttpReqConfig.reqOptions,
+        method: HttpMethod.Post,
+        body: JSON.stringify(fetchBody),
+        credentials: undefined,
+        maxAge: 0,
+        signal: abortController.signal,
+        queryParams: undefined,
+      });
     }
   });
 });

@@ -2,13 +2,11 @@ import React, { ReactElement } from 'react';
 import { HttpClientConfigProvider, HttpClientProviderConfig } from '../..';
 
 export class HttpClientProviderConfigFixture {
-  static defaultOptions: Partial<HttpClientProviderConfig<undefined>> = {};
-
-  static create<HttpRequestBodyT = void>(
-    options?: Partial<HttpClientProviderConfig<HttpRequestBodyT>>
+  static create<HttpRequestBodyT = void, HttpResponseT = unknown>(
+    options: Partial<HttpClientProviderConfig<HttpRequestBodyT, HttpResponseT>> = {}
   ): ({ children }: { children: ReactElement }) => ReactElement {
-    const fallenbackOptions: Partial<HttpClientProviderConfig<HttpRequestBodyT>> =
-      options || HttpClientProviderConfigFixture.defaultOptions;
+    const fallenbackOptions: Partial<HttpClientProviderConfig<HttpRequestBodyT, HttpResponseT>> =
+      options;
 
     return ({ children }: { children: ReactElement }): ReactElement => {
       const Provider = (
