@@ -494,7 +494,7 @@ describe('use-http-client', () => {
 
     const { get } = result.current;
 
-    const res1 = await get<string, unknown>({
+    const res1 = await get({
       relativeUrl: 'posts/1',
     });
 
