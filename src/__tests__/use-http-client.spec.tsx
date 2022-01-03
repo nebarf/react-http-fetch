@@ -3,6 +3,8 @@ import { renderHook } from '@testing-library/react-hooks';
 import { FetchMock } from 'jest-fetch-mock';
 import {
   defaultHttpReqConfig,
+  HttpContext,
+  HttpContextToken,
   HttpError,
   HttpMethod,
   HttpRequest,
@@ -123,10 +125,13 @@ describe('use-http-client', () => {
       wrapper: HttpClientProviderConfigFixture.create(),
     });
 
+    const showGlobalLoader = new HttpContextToken(true);
+    const reqContext = new HttpContext().set(showGlobalLoader, false);
+
     const { request } = result.current;
 
     try {
-      await request({});
+      await request({ context: reqContext });
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError);
       expect(error.message).toBe(fetchError.message);
@@ -134,6 +139,7 @@ describe('use-http-client', () => {
       expect(error.statusText).toBeUndefined();
       expect(error.response).toBeUndefined();
       expect(error.request.url).toBe('/');
+      expect(error.request.context).toBe(reqContext);
       expect(error.nativeError).toBe(fetchError);
     }
 

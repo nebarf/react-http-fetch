@@ -7,7 +7,7 @@ import { PerformHttpRequestParams, useHttpClient } from '../client';
 import { useCompareCallback, useCompareMemo, useCompareEffect } from '../shared';
 
 export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
-  params: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>
+  params: Partial<UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>>
 ): UseHttpRequestReturn<HttpResponseT> => {
   /**
    * Grabs the "request" function from the http client.
@@ -40,18 +40,19 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   /**
    * Gets the http params needed to perform the request using the http client related method.
    */
-  const performHttpRequestParams: PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT> =
-    useCompareMemo(
-      () => ({
-        baseUrlOverride: params.baseUrlOverride,
-        parser: params.parser,
-        relativeUrl: params.relativeUrl,
-        requestOptions: params.requestOptions,
-        context: params.context,
-      }),
-      [params],
-      fastCompare
-    );
+  const performHttpRequestParams: Partial<
+    PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>
+  > = useCompareMemo(
+    () => ({
+      baseUrlOverride: params.baseUrlOverride,
+      parser: params.parser,
+      relativeUrl: params.relativeUrl,
+      requestOptions: params.requestOptions,
+      context: params.context,
+    }),
+    [params],
+    fastCompare
+  );
 
   /**
    * Merges the overrided http params into the source one.
@@ -105,7 +106,9 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
       // Listen request to be successfully resolved or reject and
       // update the state accordingly.
       reqResult
-        .then((response) => safelyDispatch(requestSuccess(response)))
+        .then((response) => {
+          safelyDispatch(requestSuccess(response));
+        })
         .catch((error) => {
           safelyDispatch(requestError(error));
         });
