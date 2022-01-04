@@ -2,12 +2,12 @@ import { HttpRequestOptions, HttpResponseParser } from '../client';
 import { HttpContext } from '../client/http-context';
 import { HttpRequestState } from './state-reducer';
 
-export interface UseHttpRequestParams<InitialDataT, HttpRequestBodyT> {
+export interface UseHttpRequestParams<HttpResponseT, HttpRequestBodyT> {
   relativeUrl: string;
-  parser: HttpResponseParser;
+  parser: HttpResponseParser<HttpResponseT>;
   baseUrlOverride: string;
   requestOptions: Partial<HttpRequestOptions<HttpRequestBodyT>>;
-  initialData: InitialDataT;
+  initialData: HttpResponseT;
   fetchOnBootstrap: boolean;
   context: HttpContext;
 }

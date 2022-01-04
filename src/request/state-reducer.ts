@@ -6,10 +6,10 @@ export interface HttpRequestState<DataT> {
   errored: boolean;
   isLoading: boolean;
   error: unknown;
-  data: DataT;
+  data?: DataT;
 }
 
-export const initialState = <DataT>(data: DataT): HttpRequestState<DataT> => ({
+export const initialState = <DataT>(data?: DataT): HttpRequestState<DataT> => ({
   pristine: true,
   isLoading: false,
   errored: false,

@@ -3,14 +3,14 @@ import { HttpMethod } from '../enum';
 import { UseHttpRequestParams } from './types';
 
 export const useOverridedParamsByMethod = <HttpResponseT, HttpRequestBodyT>(
-  params: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>,
+  params: Partial<UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>>,
   method: HttpMethod
-): UseHttpRequestParams<HttpResponseT, HttpRequestBodyT> => {
+): Partial<UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>> => {
   /**
    * Override the http method of the provided request params.
    */
   const overridedParams = useMemo(() => {
-    const newParams: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT> = {
+    const newParams: Partial<UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>> = {
       ...params,
       requestOptions: {
         ...params.requestOptions,

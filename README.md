@@ -626,8 +626,8 @@ export class HttpSessionStorageCacheStore {
    * @inheritdoc
    */
   flush() {
-    this._keys().forEach((entry) => {
-      this.delete(entry.identifier);
+    this._keys().forEach((itemKey) => {
+      this.delete(itemKey);
     });
   }
 }

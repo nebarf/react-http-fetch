@@ -7,7 +7,7 @@ import { PerformHttpRequestParams, useHttpClient } from '../client';
 import { useCompareCallback, useCompareMemo, useCompareEffect } from '../shared';
 
 export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
-  params: UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>
+  params: Partial<UseHttpRequestParams<HttpResponseT, HttpRequestBodyT>>
 ): UseHttpRequestReturn<HttpResponseT> => {
   /**
    * Grabs the "request" function from the http client.
@@ -40,7 +40,9 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   /**
    * Gets the http params needed to perform the request using the http client related method.
    */
-  const performHttpRequestParams: PerformHttpRequestParams<HttpRequestBodyT> = useCompareMemo(
+  const performHttpRequestParams: Partial<
+    PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>
+  > = useCompareMemo(
     () => ({
       baseUrlOverride: params.baseUrlOverride,
       parser: params.parser,
@@ -57,9 +59,9 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
    */
   const mergeParams = useCallback(
     (
-      source: Partial<PerformHttpRequestParams<HttpRequestBodyT>>,
-      override: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
-    ): Partial<PerformHttpRequestParams<HttpRequestBodyT>> => {
+      source: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>,
+      override: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
+    ): Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>> => {
       const { baseUrlOverride, parser, relativeUrl, requestOptions, context } = override;
 
       return {
@@ -89,7 +91,7 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
    */
   const request = useCompareCallback(
     (
-      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT>>
+      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
     ): UseHttpAbortableRequestReturn<HttpResponseT> => {
       safelyDispatch(requestInit());
 
@@ -104,7 +106,9 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
       // Listen request to be successfully resolved or reject and
       // update the state accordingly.
       reqResult
-        .then((response) => safelyDispatch(requestSuccess(response)))
+        .then((response) => {
+          safelyDispatch(requestSuccess(response));
+        })
         .catch((error) => {
           safelyDispatch(requestError(error));
         });

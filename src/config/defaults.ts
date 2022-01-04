@@ -3,10 +3,11 @@ import { httpResponseParser } from './response-parser';
 import { serializeRequestBody } from './request-body-serializer';
 import { HttpCacheService, HttpInMemoryCacheStore } from '../cache';
 import { HttpCacheStorePrefixDecorator } from '../cache/prefix-decorator';
+import { HttpMethod } from '../enum';
 
 export const defaultCacheStore = new HttpInMemoryCacheStore();
 
-export const defaultHttpReqConfig: HttpClientConfig<void> = {
+export const defaultHttpReqConfig: HttpClientConfig<void, unknown> = {
   baseUrl: '',
   responseParser: httpResponseParser,
   requestBodySerializer: serializeRequestBody,
@@ -14,10 +15,11 @@ export const defaultHttpReqConfig: HttpClientConfig<void> = {
     headers: {
       'Content-Type': 'application/json',
     },
+    method: HttpMethod.Get,
   },
   cache: new HttpCacheService(new HttpCacheStorePrefixDecorator(defaultCacheStore)),
 };
 
-export const defaultClientProps: HttpClientContextProps<void> = {
+export const defaultClientProps: HttpClientContextProps<void, unknown> = {
   config: defaultHttpReqConfig,
 };

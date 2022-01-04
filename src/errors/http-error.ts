@@ -22,12 +22,18 @@ export class HttpError<HttpResponseT, HttpRequestBodyT> extends Error {
    */
   request?: HttpRequest<HttpRequestBodyT>;
 
+  /**
+   * The initial error that was catched.
+   */
+  nativeError?: unknown;
+
   constructor(
     message: string,
     status?: HttpStatusCode,
     requestInfo?: HttpRequest<HttpRequestBodyT>,
     statusText?: string,
-    response?: HttpResponseT
+    response?: HttpResponseT,
+    nativeError?: unknown
   ) {
     super(message);
 
@@ -35,6 +41,7 @@ export class HttpError<HttpResponseT, HttpRequestBodyT> extends Error {
     this.request = requestInfo;
     this.statusText = statusText;
     this.response = response;
+    this.nativeError = nativeError;
 
     // Set the prototype explicitly.
     Object.setPrototypeOf(this, HttpError.prototype);

@@ -110,7 +110,7 @@ export class HttpRequest<HttpRequestBodyT> implements HttpRequestProps<HttpReque
   }
 
   get maxAge(): number | undefined {
-    return this._maxAge;
+    return Number.isInteger(this._maxAge) ? this._maxAge : undefined;
   }
 
   get method(): HttpMethod {

@@ -48,8 +48,6 @@ export class HttpInMemoryCacheStore implements HttpCacheStore {
    * @inheritdoc
    */
   flush(): void {
-    this.store.forEach((entry) => {
-      this.delete(entry.identifier);
-    });
+    this.store.clear();
   }
 }
