@@ -50,21 +50,25 @@ describe('use-http-event', () => {
     renderHook(
       () =>
         useHttpEvent(RequestStartedEvent, (request: HttpRequest<void>) => {
-          expect(request.url).toBe('https://phelony.com/comments');
-          expect(request.baseUrl).toBe('https://phelony.com');
-          expect(request.relativeUrl).toBe('comments');
-          expect(request.body).toBeUndefined();
-          expect(request.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
-          expect(request.context).toBe(reqContext);
-          expect(request.getContextValue(showGlobalLoader)).toBe(false);
-          expect(request.credentials).toBeUndefined();
-          expect(request.maxAge).toBe(0);
-          expect(request.method).toBe(HttpMethod.Get);
-          expect(request.queryParams).toBeUndefined();
-          expect(request.serializedQueryParams).toBe('');
-          expect(request.signal).toBeInstanceOf(AbortSignal);
-          expect(request.urlWithParams).toBe('https://phelony.com/comments');
-          done();
+          try {
+            expect(request.url).toBe('https://phelony.com/comments');
+            expect(request.baseUrl).toBe('https://phelony.com');
+            expect(request.relativeUrl).toBe('comments');
+            expect(request.body).toBeUndefined();
+            expect(request.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
+            expect(request.context).toBe(reqContext);
+            expect(request.getContextValue(showGlobalLoader)).toBe(false);
+            expect(request.credentials).toBeUndefined();
+            expect(request.maxAge).toBe(0);
+            expect(request.method).toBe(HttpMethod.Get);
+            expect(request.queryParams).toBeUndefined();
+            expect(request.serializedQueryParams).toBe('');
+            expect(request.signal).toBeInstanceOf(AbortSignal);
+            expect(request.urlWithParams).toBe('https://phelony.com/comments');
+            done();
+          } catch (expectError) {
+            done(expectError);
+          }
         }),
       {
         wrapper: HttpClientProviderConfigFixture.create(),
@@ -102,25 +106,29 @@ describe('use-http-event', () => {
     renderHook(
       () =>
         useHttpEvent(RequestErroredEvent, (error: HttpError<FetchResponse, void>) => {
-          expect(error.status).toBeUndefined();
-          expect(error.statusText).toBeUndefined();
-          expect(error.response).toBeUndefined();
-          expect(error.nativeError).toBe(fetchError);
-          expect(error.request?.url).toBe('https://phelony.com/comments');
-          expect(error.request?.baseUrl).toBe('https://phelony.com');
-          expect(error.request?.relativeUrl).toBe('comments');
-          expect(error.request?.body).toBeUndefined();
-          expect(error.request?.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
-          expect(error.request?.context).toBe(reqContext);
-          expect(error.request?.getContextValue(showGlobalLoader)).toBe(false);
-          expect(error.request?.credentials).toBeUndefined();
-          expect(error.request?.maxAge).toBe(0);
-          expect(error.request?.method).toBe(HttpMethod.Get);
-          expect(error.request?.queryParams).toBeUndefined();
-          expect(error.request?.serializedQueryParams).toBe('');
-          expect(error.request?.signal).toBeInstanceOf(AbortSignal);
-          expect(error.request?.urlWithParams).toBe('https://phelony.com/comments');
-          done();
+          try {
+            expect(error.status).toBeUndefined();
+            expect(error.statusText).toBeUndefined();
+            expect(error.response).toBeUndefined();
+            expect(error.nativeError).toBe(fetchError);
+            expect(error.request?.url).toBe('https://phelony.com/comments');
+            expect(error.request?.baseUrl).toBe('https://phelony.com');
+            expect(error.request?.relativeUrl).toBe('comments');
+            expect(error.request?.body).toBeUndefined();
+            expect(error.request?.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
+            expect(error.request?.context).toBe(reqContext);
+            expect(error.request?.getContextValue(showGlobalLoader)).toBe(false);
+            expect(error.request?.credentials).toBeUndefined();
+            expect(error.request?.maxAge).toBe(0);
+            expect(error.request?.method).toBe(HttpMethod.Get);
+            expect(error.request?.queryParams).toBeUndefined();
+            expect(error.request?.serializedQueryParams).toBe('');
+            expect(error.request?.signal).toBeInstanceOf(AbortSignal);
+            expect(error.request?.urlWithParams).toBe('https://phelony.com/comments');
+            done();
+          } catch (expectError) {
+            done(expectError);
+          }
         }),
       {
         wrapper: HttpClientProviderConfigFixture.create(),
@@ -158,22 +166,26 @@ describe('use-http-event', () => {
         useHttpEvent(
           RequestSuccededEvent,
           ({ request, response }: RequestSuccededEventPayload<FetchResponse, void>) => {
-            expect(request.url).toBe('https://phelony.com/comments');
-            expect(request.baseUrl).toBe('https://phelony.com');
-            expect(request.relativeUrl).toBe('comments');
-            expect(request.body).toBeUndefined();
-            expect(request.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
-            expect(request.context).toBe(reqContext);
-            expect(request.getContextValue(showGlobalLoader)).toBe(false);
-            expect(request.credentials).toBeUndefined();
-            expect(request.maxAge).toBe(0);
-            expect(request.method).toBe(HttpMethod.Get);
-            expect(request.queryParams).toBeUndefined();
-            expect(request.serializedQueryParams).toBe('');
-            expect(request.signal).toBeInstanceOf(AbortSignal);
-            expect(request.urlWithParams).toBe('https://phelony.com/comments');
-            expect(response).toEqual(fetchResponse);
-            done();
+            try {
+              expect(request.url).toBe('https://phelony.com/comments');
+              expect(request.baseUrl).toBe('https://phelony.com');
+              expect(request.relativeUrl).toBe('comments');
+              expect(request.body).toBeUndefined();
+              expect(request.headers).toEqual(defaultHttpReqConfig.reqOptions.headers);
+              expect(request.context).toBe(reqContext);
+              expect(request.getContextValue(showGlobalLoader)).toBe(false);
+              expect(request.credentials).toBeUndefined();
+              expect(request.maxAge).toBe(0);
+              expect(request.method).toBe(HttpMethod.Get);
+              expect(request.queryParams).toBeUndefined();
+              expect(request.serializedQueryParams).toBe('');
+              expect(request.signal).toBeInstanceOf(AbortSignal);
+              expect(request.urlWithParams).toBe('https://phelony.com/comments');
+              expect(response).toEqual(fetchResponse);
+              done();
+            } catch (expectError) {
+              done(expectError);
+            }
           }
         ),
       {
