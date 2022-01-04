@@ -1,7 +1,7 @@
 <h1 align="center">React http fetch</h1>
 
 <p align="center">
-  <img src="assets/img/react-http-fetch-logo.png" alt="react-http-fetch logo"/>
+  <img src="https://github.com/nebarf/react-http-fetch/blob/main/assets/img/react-http-fetch-logo.png?raw=true" alt="react-http-fetch logo"/>
   <br>
   <i>A http library for React JS built on top of JS native fetch.</i>
   <br>
