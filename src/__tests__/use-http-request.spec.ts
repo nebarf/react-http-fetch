@@ -191,7 +191,7 @@ describe('use-http-request', () => {
     expect(fetchHeaders).toEqual(defaultHttpReqConfig.reqOptions.headers);
     expect(fetchCredentials).toBeUndefined();
     expect(fetchBody).toBeNull();
-    expect(fetchSignal).toBeInstanceOf(AbortSignal);
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should merge params provided on hook declaration with the ones provided on request run', async () => {
