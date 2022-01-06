@@ -50,6 +50,8 @@ Just follow links below to get an overview of library features.
   - [Http request state](#http-request-state)
   - [Example &ndash; Http request hook triggered automatically on component mount](#example--http-request-hook-triggered-automatically-on-component-mount)
   - [Example &ndash; Http request hook triggered manually on component mount](#example--http-request-hook-triggered-manually-on-component-mount)
+  - [Example &ndash; Non-abortable http request hook](#example--non-abortable-http-request-hook)
+  - [Example &ndash; Aborting http request triggered by the hook](#example--aborting-http-request-triggered-by-the-hook)
   - [Example &ndash; Http post request hook](#example--http-post-request-hook)
 - [Events](#events)
 - [Caching](#caching)
@@ -347,7 +349,12 @@ The library provides a hook `useHttpRequest` managing the state of the http requ
 | fetchOnBootstrap | boolean | Tell if the fetch must be triggered automatically when mounting the component or not. In the second case we would like to have a manual fetch, this is optained by a request function returned by the hook. |
 
 ### Http request hook return
-Returns an array of two elements, the first one embeds the state of the http request and the second one is a function that can be used to trigger the http request. The table below describes the shape (i.e. properties) of http request state.
+Returns an array of three elements:
+- The first one embeds the state of the http request.
+- The second is a function that can be used to perform an abortable http request 
+- The third is a function that can be used to perform a non-abortable http request.
+
+See examples for further details. The table below describes the shape (i.e. properties) of http request state.
 
 ### Http request state
 | Property | Type | Description |
@@ -373,7 +380,7 @@ function App() {
   });
 
   return (
-    <div>{`Todo name: ${state && state.data && state.data.title}`}</div>
+    <div>{`Todo name: ${(state.data && state.data.title) || 'unknown'}`}</div>
   );
 }
 
@@ -393,16 +400,99 @@ function App() {
     relativeUrl: 'todos/1',
   });
 
-  useEffect(() => request(), [request]);
+  useEffect(() => {
+    const { reqResult, abortController } = request();
+    reqResult
+      .then(res => console.log('request response', res))
+      .catch(err => console.error(err));
+
+    // You can use the returned AbortController instance to abort the request
+    // abortController.abort();
+  }, [request]);
 
   return (
-    <div>{`Todo name: ${state && state.data && state.data.title}`}</div>
+    <div>{`Todo name: ${(state.data && state.data.title) || 'unknown'}`}</div>
   );
 }
 
 export default App;
 ```
 
+### Example &ndash; Non-abortable http request hook
+```js
+Placeholder
+import React, { useEffect } from 'react';
+import { useHttpRequest } from 'react-http-fetch';
+
+function App() {
+  const [state, , request] = useHttpRequest({
+    baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+    relativeUrl: 'todos/1',
+  });
+
+  useEffect(() => request(), [request]);
+
+  return (
+    <div>{`Todo name: ${(state.data && state.data.title) || 'unknown'}`}</div>
+  );
+}
+
+export default App;
+```
+
+### Example &ndash; Aborting http request triggered by the hook
+```js
+import { useHttpRequest } from 'react-http-fetch';
+import React, { useRef } from 'react';
+
+function App() {
+  const [state, request] = useHttpRequest({
+    baseUrlOverride: 'https://jsonplaceholder.typicode.com',
+    relativeUrl: 'todos/1',
+  });
+
+  const abortCtrlRef = useRef();
+
+  const fetchTodo = () => {
+    abortPendingRequest();
+
+    const { reqResult, abortController } = request();
+    abortCtrlRef.current = abortController;
+
+    reqResult
+      // Abort the request will cause the request promise to be rejected with the following error:
+      // "DOMException: The user aborted a request."
+      .catch(err => console.error(err));
+  };
+
+  const abortPendingRequest = () => {
+    if (abortCtrlRef.current) {
+      abortCtrlRef.current.abort();
+    }
+  };
+
+  return (
+    <div style={{ margin: '20px' }}>
+      <div>{`Todo name: ${(state.data && state.data.title) || 'unknown'}`}</div>
+      <button
+        style={{ marginRight: '10px' }}
+        type="button"
+        onClick={fetchTodo}
+      >
+        Do request
+      </button>
+      <button
+        type="button"
+        onClick={abortPendingRequest}
+      >
+        Abort
+      </button>
+    </div>
+  );
+}
+
+export default App;
+```
 ### Example &ndash; Http post request hook
 
 ```js
