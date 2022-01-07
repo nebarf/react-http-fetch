@@ -351,7 +351,7 @@ The library provides a hook `useHttpRequest` managing the state of the http requ
 ### Http request hook return
 Returns an array of three elements:
 - The first one embeds the state of the http request.
-- The second is a function that can be used to perform an abortable http request 
+- The second is a function that can be used to perform an abortable http request.
 - The third is a function that can be used to perform a non-abortable http request.
 
 See examples for further details. The table below describes the shape (i.e. properties) of http request state.
