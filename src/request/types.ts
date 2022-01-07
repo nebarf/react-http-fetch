@@ -19,5 +19,6 @@ export interface UseHttpAbortableRequestReturn<HttpResponseT> {
 
 export type UseHttpRequestReturn<HttpResponseT> = [
   HttpRequestState<HttpResponseT>,
-  () => UseHttpAbortableRequestReturn<HttpResponseT>
+  () => UseHttpAbortableRequestReturn<HttpResponseT>,
+  () => Promise<HttpResponseT>
 ];

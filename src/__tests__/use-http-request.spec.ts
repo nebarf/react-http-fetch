@@ -37,7 +37,7 @@ describe('use-http-request', () => {
       wrapper: HttpClientProviderConfigFixture.create(),
     });
 
-    const [, performRequest] = result.current;
+    const [, , performRequest] = result.current;
 
     expect(result.current[0].data).toBeUndefined();
     expect(result.current[0].error).toBeNull();
@@ -47,8 +47,7 @@ describe('use-http-request', () => {
 
     let reqResult: Promise<{ name: string; role: string }>;
     act(() => {
-      const { reqResult: performRequestRes } = performRequest();
-      reqResult = performRequestRes;
+      reqResult = performRequest();
     });
 
     expect(result.current[0].data).toBeUndefined();
@@ -83,7 +82,7 @@ describe('use-http-request', () => {
     expect(fetchHeaders).toEqual(defaultHttpReqConfig.reqOptions.headers);
     expect(fetchCredentials).toBeUndefined();
     expect(fetchBody).toBeNull();
-    expect(fetchSignal).toBeInstanceOf(AbortSignal);
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should update the request state when it goes in error', async () => {
@@ -94,7 +93,7 @@ describe('use-http-request', () => {
       wrapper: HttpClientProviderConfigFixture.create(),
     });
 
-    const [, performRequest] = result.current;
+    const [, , performRequest] = result.current;
 
     expect(result.current[0].data).toBeUndefined();
     expect(result.current[0].error).toBeNull();
@@ -104,8 +103,7 @@ describe('use-http-request', () => {
 
     let reqResult: Promise<unknown>;
     act(() => {
-      const { reqResult: performRequestRes } = performRequest();
-      reqResult = performRequestRes;
+      reqResult = performRequest();
     });
 
     expect(result.current[0].data).toBeUndefined();
@@ -149,7 +147,7 @@ describe('use-http-request', () => {
     expect(fetchHeaders).toEqual(defaultHttpReqConfig.reqOptions.headers);
     expect(fetchCredentials).toBeUndefined();
     expect(fetchBody).toBeNull();
-    expect(fetchSignal).toBeInstanceOf(AbortSignal);
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should automatically perform the request on mount', async () => {
@@ -191,7 +189,7 @@ describe('use-http-request', () => {
     expect(fetchHeaders).toEqual(defaultHttpReqConfig.reqOptions.headers);
     expect(fetchCredentials).toBeUndefined();
     expect(fetchBody).toBeNull();
-    expect(fetchSignal).toBeInstanceOf(AbortSignal);
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should merge params provided on hook declaration with the ones provided on request run', async () => {
@@ -214,7 +212,7 @@ describe('use-http-request', () => {
       }
     );
 
-    const [, performRequest] = result.current;
+    const [, , performRequest] = result.current;
 
     expect(result.current[0].data).toBeUndefined();
     expect(result.current[0].error).toBeNull();
@@ -224,8 +222,7 @@ describe('use-http-request', () => {
 
     let reqResult: Promise<string>;
     act(() => {
-      const { reqResult: performRequestRes } = performRequest();
-      reqResult = performRequestRes;
+      reqResult = performRequest();
     });
 
     expect(result.current[0].data).toBeUndefined();
@@ -262,7 +259,7 @@ describe('use-http-request', () => {
     });
     expect(fetchCredentials).toBeUndefined();
     expect(fetchBody).toBeNull();
-    expect(fetchSignal).toBeInstanceOf(AbortSignal);
+    expect(fetchSignal).toBeUndefined();
   });
 
   test('should allow to abort the request', async () => {

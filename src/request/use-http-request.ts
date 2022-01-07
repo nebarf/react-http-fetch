@@ -12,7 +12,8 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   /**
    * Grabs the "request" function from the http client.
    */
-  const { abortableRequest: httpClientAbortableRequest } = useHttpClient();
+  const { abortableRequest: httpClientAbortableRequest, request: httpClientRequest } =
+    useHttpClient();
 
   // The state of the request.
   const [state, dispatch] = useReducer<Reducer<HttpRequestState<HttpResponseT>, HttpReqActionType>>(
@@ -89,7 +90,7 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   /**
    * Performs the http request allowing to abort it.
    */
-  const request = useCompareCallback(
+  const abortableRequest = useCompareCallback(
     (
       paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
     ): UseHttpAbortableRequestReturn<HttpResponseT> => {
@@ -120,6 +121,36 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
   );
 
   /**
+   * Performs the http request.
+   */
+  const request = useCompareCallback(
+    (
+      paramsOverride?: Partial<PerformHttpRequestParams<HttpRequestBodyT, HttpResponseT>>
+    ): Promise<HttpResponseT> => {
+      safelyDispatch(requestInit());
+
+      const mergedParams = paramsOverride
+        ? mergeParams(performHttpRequestParams, paramsOverride)
+        : performHttpRequestParams;
+      const reqResult = httpClientRequest<HttpResponseT, HttpRequestBodyT>(mergedParams);
+
+      // Listen request to be successfully resolved or reject and
+      // update the state accordingly.
+      reqResult
+        .then((response) => {
+          safelyDispatch(requestSuccess(response));
+        })
+        .catch((error) => {
+          safelyDispatch(requestError(error));
+        });
+
+      return reqResult;
+    },
+    [httpClientRequest, performHttpRequestParams, safelyDispatch],
+    fastCompare
+  );
+
+  /**
    * Keeps track of the mounting state of the component.
    */
   useCompareEffect(
@@ -139,5 +170,5 @@ export const useHttpRequest = <HttpResponseT, HttpRequestBodyT = unknown>(
     fastCompare
   );
 
-  return [state, request];
+  return [state, abortableRequest, request];
 };
