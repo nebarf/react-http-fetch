@@ -3,7 +3,7 @@
     "tagName": "v${version}",
     "commitMessage": "Release v${version}",
     "requireBranch": "main",
-    "requireCommits": true
+    "requireCommits": false
   },
   "hooks": {
     "before:init": [
