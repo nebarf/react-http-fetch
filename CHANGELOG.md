@@ -5,15 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.0-rc.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.3...v1.0.0-rc.0)
+## [v1.0.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-rc.0...v1.0.0)
 
+### Commits
+
+- Do not require new commits since last release [`2615de7`](https://github.com/nebarf/react-http-fetch/commit/2615de7cace6e3f5b462639bbcc25711a793c0a4)
+
+## [v1.0.0-rc.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.3...v1.0.0-rc.0) - 2022-01-07
 
 ### Merged
 
 - Unabortable request [`#39`](https://github.com/nebarf/react-http-fetch/pull/39)
 - Tests [`#38`](https://github.com/nebarf/react-http-fetch/pull/38)
 - Check if main branch is up to date before releasing [`#37`](https://github.com/nebarf/react-http-fetch/pull/37)
-
 
 ### Commits
 
@@ -23,18 +27,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-beta.3](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.2...v1.0.0-beta.3) - 2021-12-15
 
-
 ### Merged
 
 - Run lib build before npm publish [`#36`](https://github.com/nebarf/react-http-fetch/pull/36)
-
 
 ### Commits
 
 - Release v1.0.0-beta.3 [`1a0b989`](https://github.com/nebarf/react-http-fetch/commit/1a0b989d7d3e74e9468a5485f9887922791d8d52)
 
 ## [v1.0.0-beta.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.1...v1.0.0-beta.2) - 2021-12-15
-
 
 ### Merged
 
@@ -44,7 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Expose only consumer facing API [`#32`](https://github.com/nebarf/react-http-fetch/pull/32)
 - Allow to provide unserialized req body to http client [`#31`](https://github.com/nebarf/react-http-fetch/pull/31)
 
-
 ### Commits
 
 - Add type for http request body [`5e8a363`](https://github.com/nebarf/react-http-fetch/commit/5e8a36370a84a9758dba311daa6f05cbfc21e8d3)
@@ -53,11 +53,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-beta.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-beta.0...v1.0.0-beta.1) - 2021-11-24
 
-
 ### Merged
 
 - Http cache store [`#29`](https://github.com/nebarf/react-http-fetch/pull/29)
-
 
 ### Commits
 
@@ -67,12 +65,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-beta.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.2...v1.0.0-beta.0) - 2021-11-21
 
-
 ### Merged
 
 - Improve readme [`#20`](https://github.com/nebarf/react-http-fetch/pull/20)
 - readme hooks and events sections [`#28`](https://github.com/nebarf/react-http-fetch/pull/28)
-
 
 ### Commits
 
@@ -82,11 +78,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-alpha.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.1...v1.0.0-alpha.2) - 2021-11-02
 
-
 ### Merged
 
 - Subscribe fix [`#21`](https://github.com/nebarf/react-http-fetch/pull/21)
-
 
 ### Commits
 
@@ -96,9 +90,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-alpha.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-alpha.0...v1.0.0-alpha.1) - 2021-11-01
 
-
-
-
 ### Commits
 
 - use-http-request: replace use-effect with use-compare-effect [`96ea896`](https://github.com/nebarf/react-http-fetch/commit/96ea896cf2b346ba85428882705e9e79f71ae3a9)
@@ -106,14 +97,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v1.0.0-alpha.0](https://github.com/nebarf/react-http-fetch/compare/v0.0.1...v1.0.0-alpha.0) - 2021-11-01
 
-
 ### Merged
 
 - README skeleton [`#19`](https://github.com/nebarf/react-http-fetch/pull/19)
 - Alpha release [`#17`](https://github.com/nebarf/react-http-fetch/pull/17)
 - Lock npm deps while executing github actions [`#16`](https://github.com/nebarf/react-http-fetch/pull/16)
 - Setup github actions [`#13`](https://github.com/nebarf/react-http-fetch/pull/13)
-
 
 ### Commits
 
@@ -123,15 +112,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v0.0.1 - 2021-10-31
 
-
 ### Merged
 
 - Configure Renovate [`#1`](https://github.com/nebarf/react-http-fetch/pull/1)
-
 
 ### Commits
 
 - Setup test environment [`baeb3b0`](https://github.com/nebarf/react-http-fetch/commit/baeb3b0623c6620f7ae1aec01bcb9e72e26ad83b)
 - Prepare core dependencies and build environment [`7f8a3e6`](https://github.com/nebarf/react-http-fetch/commit/7f8a3e6a996c418b256b46f7d212bd835394239b)
 - Move from http interceptors to reactive events [`04c0333`](https://github.com/nebarf/react-http-fetch/commit/04c0333f05547263b2dd2fcac96dc251396e246a)
-
