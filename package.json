@@ -44,7 +44,7 @@
     "release-it": "^14.11.6",
     "shelljs": "^0.8.4",
     "shx": "^0.3.3",
-    "ts-jest": "^27.0.5",
+    "ts-jest": "27.1.4",
     "typescript": "^4.4.3"
   },
   "scripts": {
