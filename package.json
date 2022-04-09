@@ -16,7 +16,7 @@
     "/lib"
   ],
   "engines": {
-    "node": ">=16 <17"
+    "node": ">=14 <17"
   },
   "dependencies": {
     "react-fast-compare": "^3.2.0"
