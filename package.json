@@ -15,13 +15,19 @@
   "files": [
     "/lib"
   ],
+  "engines": {
+    "node": ">=16 <17"
+  },
+  "dependencies": {
+    "react-fast-compare": "^3.2.0"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/react": "^13.0.0",
     "@testing-library/react-hooks": "^7.0.2",
     "@types/jest": "^27.0.2",
-    "@types/react": "^17.0.27",
-    "@types/react-dom": "^17.0.9",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "auto-changelog": "^2.3.0",
@@ -38,8 +44,8 @@
     "jest-mock-extended": "^2.0.4",
     "lint-staged": "^11.2.0",
     "prettier": "^2.4.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-hooks-testing-library": "^0.6.0",
     "release-it": "^14.11.6",
     "shelljs": "^0.8.4",
@@ -70,11 +76,8 @@
     "test:watch": "jest -c ./jest.config.js --watch --env=jsdom"
   },
   "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "dependencies": {
-    "react-fast-compare": "^3.2.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "keywords": [
     "react-http",
