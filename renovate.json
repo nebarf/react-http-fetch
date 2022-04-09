@@ -8,5 +8,6 @@
   "lockFileMaintenance": {
     "enabled": true
   },
+  "rangeStrategy": "update-lockfile",
   "schedule": ["after 10pm every weekday", "before 4am every weekday", "every weekend"]
 }
