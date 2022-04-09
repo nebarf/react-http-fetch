@@ -15,6 +15,28 @@
   "files": [
     "/lib"
   ],
+  "scripts": {
+    "before-release-init": "node ./bin/before-release-init.mjs",
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:prod": "yarn build:prod:esm && yarn build:prod:cjs",
+    "build:watch": "yarn build:esm -w && yarn build:cjs -w",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
+    "build:prod:esm": "tsc -p tsconfig.prod.json",
+    "build:prod:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir lib/cjs",
+    "clean-build": "shx rm -rf lib",
+    "changelog": "auto-changelog -p --template ./changelog.template.hbs",
+    "prepare": "husky install",
+    "pre-commit": "lint-staged",
+    "pre-push": "yarn test",
+    "release": "release-it",
+    "release:dry-run": "release-it --dry-run",
+    "release:patch": "release-it patch",
+    "release:minor": "release-it minor",
+    "release:major": "release-it major",
+    "test": "jest -c ./jest.config.js --env=jsdom",
+    "test:watch": "jest -c ./jest.config.js --watch --env=jsdom"
+  },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
@@ -40,6 +62,7 @@
     "prettier": "^2.4.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-fast-compare": "^3.2.0",
     "react-hooks-testing-library": "^0.6.0",
     "release-it": "^14.11.6",
     "shelljs": "^0.8.4",
@@ -47,33 +70,9 @@
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.3"
   },
-  "scripts": {
-    "before-release-init": "node ./bin/before-release-init.mjs",
-    "build": "yarn build:esm && yarn build:cjs",
-    "build:prod": "yarn build:prod:esm && yarn build:prod:cjs",
-    "build:watch": "yarn build:esm -w && yarn build:cjs -w",
-    "build:esm": "tsc",
-    "build:cjs": "tsc --module commonjs --outDir lib/cjs",
-    "build:prod:esm": "tsc -p tsconfig.prod.json",
-    "build:prod:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir lib/cjs",
-    "clean-build": "shx rm -rf lib",
-    "changelog": "auto-changelog -p --template ./changelog.template.hbs",
-    "prepare": "husky install",
-    "pre-commit": "lint-staged",
-    "pre-push": "yarn test",
-    "release": "release-it",
-    "release:dry-run": "release-it --dry-run",
-    "release:patch": "release-it patch",
-    "release:minor": "release-it minor",
-    "release:major": "release-it major",
-    "test": "jest -c ./jest.config.js --env=jsdom",
-    "test:watch": "jest -c ./jest.config.js --watch --env=jsdom"
-  },
   "peerDependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
-  "dependencies": {
+    "react-dom": "^17.0.2",
     "react-fast-compare": "^3.2.0"
   },
   "keywords": [
