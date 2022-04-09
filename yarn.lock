@@ -287,6 +287,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.4.2":
+  version "7.17.9"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.9.tgz#d19fbf802d01a8cb6cf053a64e472d42c434ba72"
+  integrity sha512-lSiBBvodq29uShpWGNbgFdKYNiFDo5/HIYsaCEY9ff4sb10x9jizo2+pRrSyF4jKZCXqgzuqBOQKbUm90gQwJg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.16.0", "@babel/template@^7.3.3":
   version "7.16.0"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.16.0.tgz#d16a35ebf4cd74e202083356fab21dd89363ddd6"
@@ -743,6 +750,15 @@
     "@types/react-test-renderer" ">=16.9.0"
     react-error-boundary "^3.1.0"
 
+"@testing-library/react-hooks@~1.0.2":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@testing-library/react-hooks/-/react-hooks-1.0.4.tgz#5e91df44c3cee305c50b1b0e1fa9d97578024309"
+  integrity sha512-yFulIcOY7oTtkUHRzmWb0nPWpt0mA/WMm6BWCzoZopLptlSk6LrGC3P53bdN7UTcYqyExszSwMz3o8PYYQeeEA==
+  dependencies:
+    "@babel/runtime" "^7.4.2"
+    "@types/react" "^16.8.22"
+    "@types/react-test-renderer" "^16.8.2"
+
 "@testing-library/react@^13.0.0":
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/@testing-library/react/-/react-13.0.0.tgz#8cdaf4667c6c2b082eb0513731551e9db784e8bc"
@@ -895,7 +911,14 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@>=16.9.0", "@types/react@^18.0.0":
+"@types/react-test-renderer@^16.8.2":
+  version "16.9.5"
+  resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.9.5.tgz#edab67da470f7c3e997f58d55dcfe2643cc30a68"
+  integrity sha512-C4cN7C2uSSGOYelp2XfdtJb5TsCP+QiZ+0Bm4U3ZfUswN8oN9O/l86XO/OvBSFCmWY7w75fzsQvZ50eGkFN34A==
+  dependencies:
+    "@types/react" "^16"
+
+"@types/react@*", "@types/react@>=16.9.0", "@types/react@^16", "@types/react@^16.8.22", "@types/react@^18.0.0":
   version "18.0.0"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.0.tgz#4be8aa3a2d04afc3ac2cc1ca43d39b0bd412890c"
   integrity sha512-7+K7zEQYu7NzOwQGLR91KwWXXDzmTFODRVizJyIALf6RfLv2GDpqpknX64pvRVILXCpXi7O/pua8NGk44dLvJw==
@@ -4377,6 +4400,13 @@ react-fast-compare@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
+
+react-hooks-testing-library@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/react-hooks-testing-library/-/react-hooks-testing-library-0.6.0.tgz#2e96dbd32c405d8f1b3949e1fc22f6924305e28b"
+  integrity sha512-VzOF4ZYMWR2B0RQgRXmxolmSMy7uvUPgmVm/CqSeyTRiITMQXiTywK65sjoIHzsQ6tW1R8hbljSYU02PgGdvCA==
+  dependencies:
+    "@testing-library/react-hooks" "~1.0.2"
 
 react-is@^16.8.1:
   version "16.13.1"
