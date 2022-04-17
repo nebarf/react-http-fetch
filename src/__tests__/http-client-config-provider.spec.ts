@@ -1,5 +1,4 @@
-import { cleanup } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { cleanup, renderHook } from '@testing-library/react';
 import { FetchMock } from 'jest-fetch-mock';
 import { mock } from 'jest-mock-extended';
 import { defaultHttpReqConfig, HttpCacheStore, HttpMethod, useHttpClient } from '..';

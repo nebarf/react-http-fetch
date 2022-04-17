@@ -1,5 +1,4 @@
-import { cleanup } from '@testing-library/react';
-import { renderHook, act } from '@testing-library/react-hooks';
+import { cleanup, renderHook, act, waitFor } from '@testing-library/react';
 import { FetchMock } from 'jest-fetch-mock';
 import {
   defaultHttpReqConfig,
@@ -153,7 +152,7 @@ describe('use-http-request', () => {
   test('should automatically perform the request on mount', async () => {
     fetch.mockResponseOnce(JSON.stringify(fetchResponse));
 
-    const { result, waitForNextUpdate } = renderHook(
+    const { result } = renderHook(
       () => useHttpRequest({ fetchOnBootstrap: true, initialData: {} }),
       {
         wrapper: HttpClientProviderConfigFixture.create(),
@@ -166,7 +165,13 @@ describe('use-http-request', () => {
     expect(result.current[0].isLoading).toBe(true);
     expect(result.current[0].pristine).toBe(false);
 
-    await waitForNextUpdate();
+    // await waitForNextUpdate();
+    await waitFor(
+      () => {
+        expect(result.current[0].isLoading).toBe(false);
+      },
+      { interval: 1 }
+    );
 
     expect(result.current[0].data).toEqual(fetchResponse);
     expect(result.current[0].error).toBeNull();
