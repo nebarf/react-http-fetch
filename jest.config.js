@@ -31,6 +31,5 @@ if (process.env.REACT_VERSION === 'v17') {
     ...module.exports.moduleNameMapper,
     '^react-dom((\\/.*)?)$': 'react-dom-17$1',
     '^react((\\/.*)?)$': 'react-17$1',
-    '^@testing-library/react((\\/.*)?)$': '@testing-library/react-12$1',
   };
 }
