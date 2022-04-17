@@ -5,11 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.3](https://github.com/nebarf/react-http-fetch/compare/v1.0.2...v1.0.3)
+## [v1.0.4](https://github.com/nebarf/react-http-fetch/compare/v1.0.3...v1.0.4)
+
+### Merged
+
+- Upgrade to React 18 [`#40`](https://github.com/nebarf/react-http-fetch/pull/40)
+
+### Commits
+
+- Remove @testing-library/react-hooks dependency. Update tests suite by using the new renderHook API [`aa2618e`](https://github.com/nebarf/react-http-fetch/commit/aa2618e702380f961525d5d54855880949ba9cdb)
+- Temporary force resolution of react and react-dom typings [`cf29065`](https://github.com/nebarf/react-http-fetch/commit/cf2906546d487babf216b3ed2f2acfe233c6323d)
+- Run tests against multiple React versions [`7da8b91`](https://github.com/nebarf/react-http-fetch/commit/7da8b910f0d4861efebb6227361d39c0b74e233a)
+
+## [v1.0.3](https://github.com/nebarf/react-http-fetch/compare/v1.0.2...v1.0.3) - 2022-04-10
 
 ### Merged
 
 - Move react-fast-compare from peer dependency to standard dependency [`#54`](https://github.com/nebarf/react-http-fetch/pull/54)
+
+### Commits
+
+- Release v1.0.3 [`0014f7c`](https://github.com/nebarf/react-http-fetch/commit/0014f7c0f15561d0892a1ad216f9c88be7289f6d)
 
 ## [v1.0.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.1...v1.0.2) - 2022-04-09
 

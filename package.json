@@ -1,6 +1,6 @@
 {
   "name": "react-http-fetch",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "An http library for React JS built on top of native JS fetch",
   "main": "index.js",
   "module": "./lib/esm/index.js",
