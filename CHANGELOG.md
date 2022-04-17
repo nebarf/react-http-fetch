@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0...v1.0.1)
+## [v1.0.3](https://github.com/nebarf/react-http-fetch/compare/v1.0.2...v1.0.3)
+
+### Merged
+
+- Move react-fast-compare from peer dependency to standard dependency [`#54`](https://github.com/nebarf/react-http-fetch/pull/54)
+
+## [v1.0.2](https://github.com/nebarf/react-http-fetch/compare/v1.0.1...v1.0.2) - 2022-04-09
+
+### Merged
+
+- prevent renovate to pin dependencies [`#42`](https://github.com/nebarf/react-http-fetch/pull/42)
+- Move react-fast-compare to peer dependencies [`#41`](https://github.com/nebarf/react-http-fetch/pull/41)
+
+### Commits
+
+- Release v1.0.2 [`35c3a43`](https://github.com/nebarf/react-http-fetch/commit/35c3a43fd1436599a7d4314ee2a5b58f448db1b4)
+
+## [v1.0.1](https://github.com/nebarf/react-http-fetch/compare/v1.0.0...v1.0.1) - 2022-02-26
+
+### Commits
+
+- Release v1.0.1 [`dc02938`](https://github.com/nebarf/react-http-fetch/commit/dc02938c7c27cc91d540ab4c9028d3842fed811e)
 
 ## [v1.0.0](https://github.com/nebarf/react-http-fetch/compare/v1.0.0-rc.0...v1.0.0) - 2022-02-26
 

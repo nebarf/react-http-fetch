@@ -1,6 +1,6 @@
 {
   "name": "react-http-fetch",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "An http library for React JS built on top of native JS fetch",
   "main": "index.js",
   "module": "./lib/esm/index.js",
@@ -17,6 +17,9 @@
   ],
   "engines": {
     "node": ">=14 <17"
+  },
+  "dependencies": {
+    "react-fast-compare": "^3.2.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.14.1",
@@ -45,7 +48,6 @@
     "react-17": "npm:react@^17.0.2",
     "react-dom": "^18.0.0",
     "react-dom-17": "npm:react-dom@^17.0.2",
-    "react-fast-compare": "^3.2.0",
     "release-it": "^14.11.6",
     "shelljs": "^0.8.4",
     "shx": "^0.3.3",
@@ -80,9 +82,8 @@
     "test:watch": "jest -c ./jest.config.js --watch --env=jsdom"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0",
-    "react-fast-compare": "^3.2.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "keywords": [
     "react-http",
