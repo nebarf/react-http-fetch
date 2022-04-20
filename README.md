@@ -124,7 +124,7 @@ Below the complete set of options you can provide to the `HttpClientConfigProvid
 |responseParser|A function that maps the native fetch response. The default parser transform the fetch response stream into a json (https://developer.mozilla.org/en-US/docs/Web/API/Response/json)|[httpResponseParser](src/config/response-parser.ts)
 |requestBodySerializer|A function used to serialize request body. The default serializer take into account a wide range of data types to figure out which type of serialization to perform|[serializeRequestBody](src/config/request-body-serializer.ts)
 |reqOptions|The default request option that will be carried by any request dispatched by the client. See [HttpRequestOptions](src/client/types.ts)|```{ headers: { 'Content-Type': 'application/json' } }```
-|cacheStore|The store for cached http responses. By default an in-memory cache store is used.|[HttpInMemoryCacheService](src/cache/http-in-memory-cache-store.ts)
+|cacheStore|The store for cached http responses. By default an in-memory cache store is used.|[HttpInMemoryCacheStore](src/cache/http-in-memory-cache-store.ts)
 |cacheStorePrefix|The prefix concatenated to any cached entry.|`rfh`
 |cacheStoreSeparator|Separates the store prefix and the cached entry identifier|`__`
 
