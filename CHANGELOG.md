@@ -5,7 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.4](https://github.com/nebarf/react-http-fetch/compare/v1.0.3...v1.0.4)
+## [v1.0.5](https://github.com/nebarf/react-http-fetch/compare/v1.0.4...v1.0.5)
+
+### Commits
+
+- Refactor before-release script by using simple-git library [`65b49db`](https://github.com/nebarf/react-http-fetch/commit/65b49db4b79918b4a45a2388066a903a15b6fb6b)
+
+## [v1.0.4](https://github.com/nebarf/react-http-fetch/compare/v1.0.3...v1.0.4) - 2022-04-17
 
 ### Merged
 
