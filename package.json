@@ -22,6 +22,8 @@
     "react-fast-compare": "^3.2.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.1.1",
     "@testing-library/react-12": "npm:@testing-library/react@^12.1.2",
@@ -32,6 +34,8 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "auto-changelog": "^2.3.0",
+    "commitizen": "^4.2.4",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-import-resolver-typescript": "^2.5.0",
@@ -67,6 +71,9 @@
     "build:prod:cjs": "tsc -p tsconfig.prod.json --module commonjs --outDir lib/cjs",
     "clean-build": "shx rm -rf lib",
     "changelog": "auto-changelog -p --template ./changelog.template.hbs",
+    "commit": "cz",
+    "commitlint": "commitlint",
+    "commitizen": "commitizen",
     "prepare": "husky install",
     "pre-commit": "lint-staged",
     "pre-push": "yarn test",
