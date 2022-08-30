@@ -80,7 +80,7 @@ export const useHttpClient = (): UseHttpClientReturn => {
        */
       const cachedResponse = cache.get<HttpResponseT, HttpRequestBodyT>(requestInfo);
       if (cachedResponse) {
-        return cachedResponse;
+        return Promise.resolve(cachedResponse);
       }
 
       try {
