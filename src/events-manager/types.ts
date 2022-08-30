@@ -8,4 +8,5 @@ export enum HttpEventIdentifier {
 
 export type HttpEventHandler<PayloadT> = (payload: PayloadT) => void;
 
-export type HttpEventClassType<PayloadT> = new (...args: unknown[]) => HttpEvent<PayloadT>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type HttpEventClassType<PayloadT> = new (...args: any[]) => HttpEvent<PayloadT>;
