@@ -5,11 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v1.0.5](https://github.com/nebarf/react-http-fetch/compare/v1.0.4...v1.0.5)
+## [v1.0.6](https://github.com/nebarf/react-http-fetch/compare/v1.0.5...v1.0.6)
+
+### Merged
+
+- refactor(use-http-event): remove useless unsubscribe ref [`#83`](https://github.com/nebarf/react-http-fetch/pull/83)
+- Update dependency shelljs to v0.8.5 [SECURITY] [`#73`](https://github.com/nebarf/react-http-fetch/pull/73)
+- Update dependency release-it to v14.14.2 [`#66`](https://github.com/nebarf/react-http-fetch/pull/66)
+- Update actions/setup-node action to v3 [`#71`](https://github.com/nebarf/react-http-fetch/pull/71)
+- Update dependency ts-jest to v27.1.4 [`#67`](https://github.com/nebarf/react-http-fetch/pull/67)
+- Update actions/cache action to v3 [`#69`](https://github.com/nebarf/react-http-fetch/pull/69)
+- Update actions/checkout action to v3 [`#70`](https://github.com/nebarf/react-http-fetch/pull/70)
+- Update dependency eslint-plugin-react to v7.29.4 [`#63`](https://github.com/nebarf/react-http-fetch/pull/63)
+- Update dependency typescript to v4.6.3 [`#68`](https://github.com/nebarf/react-http-fetch/pull/68)
+- Update dependency eslint-plugin-react-hooks to v4.4.0 [`#64`](https://github.com/nebarf/react-http-fetch/pull/64)
+- Update dependency prettier to v2.6.2 [`#65`](https://github.com/nebarf/react-http-fetch/pull/65)
+- chore(git-commit): lint git commits to enforce convetional messages [`#62`](https://github.com/nebarf/react-http-fetch/pull/62)
+- Update jest monorepo [`#53`](https://github.com/nebarf/react-http-fetch/pull/53)
+- Update dependency @types/react-dom to v18.0.2 [`#58`](https://github.com/nebarf/react-http-fetch/pull/58)
+- Update dependency @types/react to v18.0.6 [`#57`](https://github.com/nebarf/react-http-fetch/pull/57)
+- Update dependency eslint-plugin-import to v2.26.0 [`#61`](https://github.com/nebarf/react-http-fetch/pull/61)
+- Update dependency auto-changelog to v2.4.0 [`#51`](https://github.com/nebarf/react-http-fetch/pull/51)
+- Update dependency simple-git to v3.7.1 [`#60`](https://github.com/nebarf/react-http-fetch/pull/60)
+- Update dependency @testing-library/jest-dom to v5.16.4 [`#50`](https://github.com/nebarf/react-http-fetch/pull/50)
+- Update dependency shx to v0.3.4 [`#49`](https://github.com/nebarf/react-http-fetch/pull/49)
+- Update Node.js to v16.14.2 [`#56`](https://github.com/nebarf/react-http-fetch/pull/56)
+- Update dependency jest-mock-extended to v2.0.5 [`#48`](https://github.com/nebarf/react-http-fetch/pull/48)
+- Update dependency eslint-config-prettier to v8.5.0 [`#52`](https://github.com/nebarf/react-http-fetch/pull/52)
+- Update dependency eslint-import-resolver-typescript to v2.7.1 [`#59`](https://github.com/nebarf/react-http-fetch/pull/59)
+
+### Commits
+
+- chore(package.json): fix react peer dep version [`8c0130a`](https://github.com/nebarf/react-http-fetch/commit/8c0130adab6d55fe9cc368279a01a44976c50125)
+- chore(renovate): configure renovate to use semantic commits [`65a6f62`](https://github.com/nebarf/react-http-fetch/commit/65a6f62e5543ee989be831d9b78cce83e74b272a)
+- chore(release-script): modify release commit message to be compliant with conventional commit [`d23309a`](https://github.com/nebarf/react-http-fetch/commit/d23309ae6f4d345916c2779c0a375045ca787d3c)
+
+## [v1.0.5](https://github.com/nebarf/react-http-fetch/compare/v1.0.4...v1.0.5) - 2022-04-20
 
 ### Commits
 
 - Refactor before-release script by using simple-git library [`65b49db`](https://github.com/nebarf/react-http-fetch/commit/65b49db4b79918b4a45a2388066a903a15b6fb6b)
+- Release v1.0.5 [`cf85e8b`](https://github.com/nebarf/react-http-fetch/commit/cf85e8b3ffadd9a2d338ac24f1edd3885d8a50a2)
 
 ## [v1.0.4](https://github.com/nebarf/react-http-fetch/compare/v1.0.3...v1.0.4) - 2022-04-17
 
