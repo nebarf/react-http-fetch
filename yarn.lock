@@ -3862,9 +3862,9 @@ jest-message-util@^27.5.1:
     stack-utils "^2.0.3"
 
 jest-mock-extended@^2.0.4:
-  version "2.0.5"
-  resolved "https://registry.yarnpkg.com/jest-mock-extended/-/jest-mock-extended-2.0.5.tgz#1feca6866ecbb4e5e79e57d9286969fde53a07cf"
-  integrity sha512-cQjKRqzZ/hUyy3AdmB7Aa+0DB45dt/eEApwfZFZzup9oefGnw2QodW/BLR39aCpPkK0Qb54P5OKYRXJ98kQ8cQ==
+  version "2.0.9"
+  resolved "https://registry.yarnpkg.com/jest-mock-extended/-/jest-mock-extended-2.0.9.tgz#bc0e4a269cdb6047d7cc086e1d9722f7215ca795"
+  integrity sha512-eRZq7/FgwHbxOMm3Lo4DpQX6S2zi4OvwMVFHEb3FgDLp0Xy3P1WARkF93xxO5uD4nAHiEPYHZ25qVU9mAVxoLQ==
   dependencies:
     ts-essentials "^7.0.3"
 
